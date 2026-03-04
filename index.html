@@ -1,0 +1,2044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gulf Aviation Crisis — Live</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+
+
+:root {
+  --red:#ef4444; --amber:#f59e0b; --green:#22c55e; --blue:#3b82f6;
+  --bg:#08111f; --panel:rgba(8,14,28,0.97); --panel2:rgba(13,20,38,0.96);
+  --border:rgba(255,255,255,0.07); --text:#dde6f0; --muted:#5a6a80; --muted2:#8096b0;
+  --font:'Inter',sans-serif; --mono:'JetBrains Mono',monospace;
+  --hdr: 50px; --sbar: 28px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; overflow: hidden; font-family: var(--font); background: var(--bg); color: var(--text); }
+
+/* ── MAP fills everything ── */
+#map { position: absolute; inset: 0; z-index: 1; }
+
+/* ── LEAFLET OVERRIDES ── */
+.leaflet-popup-content-wrapper {
+  background: var(--panel) !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 28px 80px rgba(0,0,0,0.85) !important;
+  color: var(--text) !important;
+  font-family: var(--font) !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+.leaflet-popup-content { margin: 0 !important; width: 360px !important; }
+.leaflet-popup-tip-container { display: none !important; }
+.leaflet-popup-close-button {
+  color: var(--muted) !important; font-size: 20px !important;
+  right: 12px !important; top: 12px !important; z-index: 10 !important;
+  line-height: 1 !important;
+}
+.leaflet-popup-close-button:hover { color: var(--text) !important; }
+.leaflet-control-attribution { font-size: 9px !important; background: rgba(0,0,0,0.6) !important; color: #444 !important; }
+.leaflet-control-attribution a { color: #666 !important; }
+.leaflet-control-layers {
+  background: var(--panel) !important; border: 1px solid var(--border) !important;
+  border-radius: 10px !important; box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important;
+}
+.leaflet-control-layers-expanded { padding: 10px 14px !important; }
+.leaflet-control-layers label {
+  color: var(--text) !important; font-family: var(--font) !important;
+  font-size: 12px !important; display: flex !important; align-items: center !important;
+  gap: 8px !important; padding: 4px 0 !important;
+}
+.leaflet-control-layers-separator { border-top: 1px solid var(--border) !important; margin: 5px 0 !important; }
+.leaflet-control-layers-selector { accent-color: var(--blue) !important; }
+.leaflet-bar a { background: var(--panel) !important; color: var(--text) !important; border-color: var(--border) !important; }
+.leaflet-bar a:hover { background: var(--panel2) !important; }
+
+/* ── HEADER ── */
+#hdr {
+  position: absolute; top: 0; left: 0; right: 0; height: var(--hdr);
+  background: rgba(6,10,22,0.97); border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 16px; z-index: 1000; backdrop-filter: blur(16px);
+}
+.h-left { display: flex; align-items: center; gap: 12px; }
+.h-logo { width: 28px; height: 28px; background: linear-gradient(135deg,#1e40af,#6d28d9); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+.h-title { font-size: 13px; font-weight: 700; letter-spacing: -0.015em; }
+.h-sub   { font-size: 10px; color: var(--muted); margin-top: 1px; }
+.live-pill {
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.22);
+  border-radius: 20px; padding: 3px 10px; font-size: 9px; font-weight: 700;
+  letter-spacing: .12em; color: var(--red); text-transform: uppercase;
+}
+.ldot { width: 5px; height: 5px; background: var(--red); border-radius: 50%; animation: blink 1.2s step-end infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+.h-right { display: flex; align-items: center; gap: 8px; }
+.stat-chip {
+  display: flex; align-items: center; gap: 5px;
+  background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+  border-radius: 6px; padding: 4px 9px; font-size: 11px; font-weight: 500;
+  cursor: pointer; transition: background .15s;
+}
+.stat-chip:hover { background: rgba(255,255,255,0.08); }
+.sc-dot { width: 6px; height: 6px; border-radius: 50%; }
+.sc-dot.r { background: var(--red);   box-shadow: 0 0 5px rgba(239,68,68,.5); }
+.sc-dot.a { background: var(--amber); box-shadow: 0 0 5px rgba(245,158,11,.5); }
+.sc-dot.g { background: var(--green); box-shadow: 0 0 5px rgba(34,197,94,.5); }
+.sc-dot.r + span { color: var(--red); }
+.sc-dot.a + span { color: var(--amber); }
+.sc-dot.g + span { color: var(--green); }
+#hts { font-family: var(--mono); font-size: 10px; color: var(--muted); min-width: 70px; text-align: right; }
+
+/* ── SIDEBAR ── */
+#sb {
+  position: absolute;
+  top: var(--hdr); left: 0; bottom: var(--sbar);
+  width: 280px;
+  background: var(--panel); border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; z-index: 500;
+  overflow: hidden;
+}
+
+/* Location section */
+.loc-sec { padding: 12px 14px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.sec-label { font-size: 9px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 9px; }
+.loc-row { display: flex; gap: 6px; margin-bottom: 5px; }
+#linput {
+  flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+  border-radius: 7px; padding: 7px 11px; font-family: var(--font); font-size: 12px;
+  color: var(--text); outline: none; transition: border-color .2s;
+}
+#linput:focus { border-color: rgba(59,130,246,0.45); }
+#linput::placeholder { color: var(--muted); }
+#pbtn {
+  background: var(--blue); border: none; border-radius: 7px;
+  padding: 7px 12px; font-size: 11px; font-weight: 600; color: #fff;
+  cursor: pointer; transition: background .15s; flex-shrink: 0;
+}
+#pbtn:hover { background: #2563eb; }
+#pbtn:disabled { opacity: .5; cursor: default; }
+#lmsg { font-size: 10px; color: var(--muted); min-height: 13px; }
+#lmsg.ok { color: var(--green); } #lmsg.er { color: var(--red); }
+#pinlist { display: flex; flex-direction: column; gap: 4px; margin-top: 7px; }
+.pin-item {
+  display: flex; align-items: center; gap: 7px;
+  background: rgba(59,130,246,0.07); border: 1px solid rgba(59,130,246,0.14);
+  border-radius: 7px; padding: 6px 9px;
+}
+.pin-dot { color: var(--blue); font-size: 12px; flex-shrink: 0; }
+.pin-lbl { flex: 1; font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pin-go  { background: rgba(59,130,246,0.15); border: none; border-radius: 4px; padding: 2px 7px; font-size: 9px; font-weight: 600; color: var(--blue); cursor: pointer; flex-shrink: 0; }
+.pin-go:hover { background: rgba(59,130,246,0.3); }
+.pin-del { background: rgba(239,68,68,0.1); border: none; border-radius: 4px; width: 20px; height: 20px; font-size: 11px; color: var(--red); cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background .12s; }
+.pin-del:hover { background: rgba(239,68,68,0.25); }
+
+/* Filter tabs */
+.filter-row { display: flex; gap: 4px; padding: 9px 14px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.ftab {
+  flex: 1; padding: 5px 3px; border-radius: 6px;
+  background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+  font-size: 9px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+  cursor: pointer; text-align: center; transition: all .15s; color: var(--muted);
+}
+.ftab.on.all   { background: rgba(59,130,246,.1);  border-color: rgba(59,130,246,.3);  color: var(--blue); }
+.ftab.on.r     { background: rgba(239,68,68,.1);   border-color: rgba(239,68,68,.3);   color: var(--red); }
+.ftab.on.a     { background: rgba(245,158,11,.1);  border-color: rgba(245,158,11,.3);  color: var(--amber); }
+.ftab.on.g     { background: rgba(34,197,94,.1);   border-color: rgba(34,197,94,.3);   color: var(--green); }
+
+/* Airport scroll list */
+#alist {
+  flex: 1; overflow-y: auto; padding: 6px 8px;
+}
+#alist::-webkit-scrollbar { width: 3px; }
+#alist::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 2px; }
+
+.ap-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px; border-radius: 7px; cursor: pointer;
+  border: 1px solid transparent; margin-bottom: 2px; transition: all .12s;
+}
+.ap-row:hover  { background: rgba(255,255,255,0.04); border-color: var(--border); }
+.ap-row.on     { background: rgba(59,130,246,0.07);  border-color: rgba(59,130,246,0.2); }
+.ap-pip { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.ap-pip.r { background: var(--red);   box-shadow: 0 0 6px rgba(239,68,68,.55); }
+.ap-pip.a { background: var(--amber); box-shadow: 0 0 6px rgba(245,158,11,.55); }
+.ap-pip.g { background: var(--green); box-shadow: 0 0 6px rgba(34,197,94,.55); }
+.ap-iata { font-family: var(--mono); font-size: 11px; font-weight: 600; width: 32px; flex-shrink: 0; }
+.ap-info { flex: 1; min-width: 0; }
+.ap-name { font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ap-city { font-size: 9px; color: var(--muted); margin-top: 1px; }
+.ap-badge { font-size: 8px; padding: 2px 5px; border-radius: 3px; font-weight: 700; letter-spacing: .05em; flex-shrink: 0; }
+.ap-badge.r { background: rgba(239,68,68,.1);  color: var(--red); }
+.ap-badge.a { background: rgba(245,158,11,.1); color: var(--amber); }
+.ap-badge.g { background: rgba(34,197,94,.1);  color: var(--green); }
+
+/* ── POPUP ── */
+.pu-hdr { padding: 16px 18px 12px; border-bottom: 1px solid var(--border); }
+.pu-hdr.r { background: rgba(239,68,68,.05); }
+.pu-hdr.a { background: rgba(245,158,11,.05); }
+.pu-hdr.g { background: rgba(34,197,94,.05); }
+.pu-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+.pu-iata { font-family: var(--mono); font-size: 26px; font-weight: 700; line-height: 1; }
+.pu-iata.r { color: var(--red); }
+.pu-iata.a { color: var(--amber); }
+.pu-iata.g { color: var(--green); }
+.pu-badge { font-size: 9px; padding: 3px 9px; border-radius: 5px; font-weight: 700; letter-spacing: .08em; align-self: flex-start; margin-top: 3px; }
+.pu-badge.r { background: rgba(239,68,68,.15);  color: var(--red);   border: 1px solid rgba(239,68,68,.2); }
+.pu-badge.a { background: rgba(245,158,11,.15); color: var(--amber); border: 1px solid rgba(245,158,11,.2); }
+.pu-badge.g { background: rgba(34,197,94,.15);  color: var(--green); border: 1px solid rgba(34,197,94,.2); }
+.pu-name { font-size: 13px; font-weight: 600; margin-top: 5px; }
+.pu-city { font-size: 10px; color: var(--muted2); margin-top: 2px; }
+
+/* Status grid */
+.pu-grid { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--border); }
+.pu-cell { padding: 9px 14px; border-right: 1px solid var(--border); }
+.pu-cell:nth-child(even) { border-right: none; }
+.pu-cell:nth-child(n+3) { border-top: 1px solid var(--border); }
+.pu-cell-k { font-size: 8px; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 3px; }
+.pu-cell-v { font-size: 11px; font-weight: 500; line-height: 1.3; }
+.pu-cell-v.r { color: var(--red); }
+.pu-cell-v.a { color: var(--amber); }
+.pu-cell-v.g { color: var(--green); }
+
+/* News section */
+.pu-news { padding: 12px 16px; border-bottom: 1px solid var(--border); }
+.pu-news-title { font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 9px; }
+.news-item { display: flex; gap: 9px; margin-bottom: 10px; }
+.news-item:last-child { margin-bottom: 0; }
+.news-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+.news-dot.r { background: var(--red); }
+.news-dot.a { background: var(--amber); }
+.news-dot.g { background: var(--green); }
+.news-dot.b { background: var(--blue); }
+.news-body { flex: 1; }
+.news-text { font-size: 11px; color: var(--text); line-height: 1.5; }
+.news-meta { font-size: 9px; color: var(--muted); margin-top: 2px; font-family: var(--mono); }
+
+
+/* Links row */
+.pu-links { padding: 10px 14px; display: flex; flex-wrap: wrap; gap: 6px; border-bottom: 1px solid var(--border); }
+.pu-link {
+  display: flex; align-items: center; gap: 5px;
+  background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+  border-radius: 6px; padding: 6px 11px; font-size: 11px; font-weight: 500;
+  color: var(--text); text-decoration: none; transition: all .15s; cursor: pointer;
+}
+.pu-link:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.15); color: #fff; }
+.pu-link.primary { background: rgba(59,130,246,0.15); border-color: rgba(59,130,246,0.3); color: var(--blue); }
+.pu-link.primary:hover { background: rgba(59,130,246,0.25); }
+
+/* Footer */
+.pu-foot { padding: 7px 16px; display: flex; justify-content: space-between; font-size: 9px; color: rgba(90,106,128,.55); font-family: var(--mono); }
+
+/* ── STATUS BAR ── */
+#sbar {
+  position: absolute; bottom: 0; left: 280px; right: 0; height: var(--sbar);
+  background: rgba(5,8,18,.97); border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 14px; z-index: 500; font-size: 10px; color: var(--muted);
+}
+.prog-wrap { width: 80px; height: 2px; background: rgba(255,255,255,.06); border-radius: 1px; }
+.prog-fill { height: 100%; background: var(--blue); border-radius: 1px; transition: width 1s linear; }
+#rfbtn {
+  display: flex; align-items: center; gap: 5px;
+  background: rgba(255,255,255,.05); border: 1px solid var(--border);
+  color: var(--muted); padding: 3px 10px; border-radius: 5px;
+  font-family: var(--font); font-size: 9px; cursor: pointer; transition: all .15s;
+}
+#rfbtn:hover { background: rgba(255,255,255,.1); color: var(--text); }
+#rfbtn.spin svg { animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+
+/* ── BORDER CROSSINGS TOGGLE BUTTON ── */
+#border-toggle {
+  position: absolute; top: 60px; right: 0; z-index: 600;
+  background: var(--panel); border: 1px solid var(--border);
+  border-right: none; border-radius: 8px 0 0 8px;
+  padding: 10px 8px; cursor: pointer; writing-mode: vertical-rl;
+  text-orientation: mixed; transform: rotate(180deg);
+  font-size: 10px; font-weight: 700; letter-spacing: .1em;
+  color: var(--muted2); text-transform: uppercase;
+  display: flex; align-items: center; gap: 6px;
+  transition: all .2s; backdrop-filter: blur(12px);
+}
+#border-toggle:hover { color: var(--text); background: var(--panel2); }
+#border-toggle.active { color: var(--amber); border-color: rgba(245,158,11,.3); background: rgba(245,158,11,.07); }
+.bt-icon { font-size: 14px; }
+
+/* ── BORDER CROSSINGS PANEL ── */
+#border-panel {
+  position: absolute; top: var(--hdr); right: -340px; bottom: var(--sbar);
+  width: 340px; z-index: 550;
+  background: var(--panel); border-left: 1px solid var(--border);
+  display: flex; flex-direction: column; overflow: hidden;
+  transition: right .3s cubic-bezier(.4,0,.2,1);
+  backdrop-filter: blur(16px);
+}
+#border-panel.open { right: 0; }
+
+.bp-head {
+  padding: 14px 16px 12px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0; background: rgba(0,0,0,.2);
+}
+.bp-title { font-size: 13px; font-weight: 700; }
+.bp-sub   { font-size: 10px; color: var(--muted); margin-top: 2px; }
+.bp-close {
+  background: rgba(255,255,255,.05); border: 1px solid var(--border);
+  border-radius: 6px; width: 26px; height: 26px; font-size: 14px;
+  color: var(--muted); cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all .15s; flex-shrink: 0;
+}
+.bp-close:hover { background: rgba(255,255,255,.12); color: var(--text); }
+
+/* Border filter tabs */
+.bp-filters {
+  display: flex; gap: 4px; padding: 9px 14px;
+  border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+.bft {
+  flex: 1; padding: 5px 3px; border-radius: 6px;
+  background: rgba(255,255,255,.03); border: 1px solid var(--border);
+  font-size: 9px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+  cursor: pointer; text-align: center; transition: all .15s; color: var(--muted);
+}
+.bft.on.all { background: rgba(59,130,246,.1);  border-color: rgba(59,130,246,.3);  color: var(--blue); }
+.bft.on.r   { background: rgba(239,68,68,.1);   border-color: rgba(239,68,68,.3);   color: var(--red); }
+.bft.on.a   { background: rgba(245,158,11,.1);  border-color: rgba(245,158,11,.3);  color: var(--amber); }
+.bft.on.g   { background: rgba(34,197,94,.1);   border-color: rgba(34,197,94,.3);   color: var(--green); }
+
+/* Border crossing list */
+#blist { flex: 1; overflow-y: auto; padding: 6px 8px; }
+#blist::-webkit-scrollbar { width: 3px; }
+#blist::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 2px; }
+
+/* Country group header */
+.b-country {
+  font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--muted); padding: 10px 10px 5px; margin-top: 4px;
+}
+.b-country:first-child { margin-top: 0; }
+
+/* Crossing card */
+.b-card {
+  border-radius: 8px; border: 1px solid transparent;
+  padding: 9px 11px; margin-bottom: 3px; cursor: pointer;
+  transition: all .15s;
+}
+.b-card:hover  { background: rgba(255,255,255,.04); border-color: var(--border); }
+.b-card.on     { background: rgba(59,130,246,.07);  border-color: rgba(59,130,246,.2); }
+.b-card-top    { display: flex; align-items: flex-start; gap: 8px; }
+.b-pip { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 3px; }
+.b-pip.r { background: var(--red);   box-shadow: 0 0 6px rgba(239,68,68,.55); }
+.b-pip.a { background: var(--amber); box-shadow: 0 0 6px rgba(245,158,11,.55); }
+.b-pip.g { background: var(--green); box-shadow: 0 0 6px rgba(34,197,94,.55); }
+.b-name { flex: 1; font-size: 11px; font-weight: 600; line-height: 1.3; }
+.b-badge { font-size: 8px; padding: 2px 6px; border-radius: 3px; font-weight: 700; flex-shrink: 0; }
+.b-badge.r { background: rgba(239,68,68,.1);  color: var(--red); }
+.b-badge.a { background: rgba(245,158,11,.1); color: var(--amber); }
+.b-badge.g { background: rgba(34,197,94,.1);  color: var(--green); }
+.b-route { font-size: 10px; color: var(--muted2); margin-top: 2px; margin-left: 16px; }
+.b-note  { font-size: 10px; color: var(--muted);  margin-top: 4px; margin-left: 16px; line-height: 1.5; }
+
+/* Expanded detail within a card */
+.b-detail {
+  margin-top: 10px; margin-left: 16px;
+  border-top: 1px solid var(--border); padding-top: 10px;
+  display: none;
+}
+.b-card.on .b-detail { display: block; }
+.b-detail-row { display: flex; gap: 8px; margin-bottom: 6px; font-size: 10px; }
+.b-detail-k   { color: var(--muted); flex-shrink: 0; min-width: 72px; }
+.b-detail-v   { color: var(--text); line-height: 1.4; }
+.b-detail-v.r { color: var(--red); }
+.b-detail-v.a { color: var(--amber); }
+.b-detail-v.g { color: var(--green); }
+
+/* Border news */
+.b-news { margin-top: 8px; }
+.b-news-title { font-size: 8px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.b-news-item  { display: flex; gap: 7px; margin-bottom: 7px; }
+.b-news-dot   { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+.b-news-dot.r { background: var(--red); }
+.b-news-dot.a { background: var(--amber); }
+.b-news-dot.g { background: var(--green); }
+.b-news-dot.b { background: var(--blue); }
+.b-news-text  { flex: 1; font-size: 10px; color: var(--text); line-height: 1.5; }
+.b-news-meta  { font-size: 8px; color: var(--muted); margin-top: 1px; font-family: var(--mono); }
+.b-news-loading { display: flex; align-items: center; gap: 7px; color: var(--muted); font-size: 10px; padding: 4px 0; }
+
+/* Border panel footer */
+.bp-foot {
+  padding: 8px 16px; font-size: 9px; color: rgba(90,106,128,.45);
+  font-family: var(--mono); border-top: 1px solid var(--border);
+  display: flex; justify-content: space-between; flex-shrink: 0;
+}
+
+
+/* ── BORDER TOGGLE BUTTON ── */
+#border-toggle {
+  position: absolute; top: 60px; right: 0; z-index: 600;
+  background: var(--panel); border: 1px solid var(--border);
+  border-right: none; border-radius: 8px 0 0 8px;
+  padding: 12px 7px; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  transition: all .2s; backdrop-filter: blur(12px);
+  writing-mode: vertical-rl; text-orientation: mixed; transform: rotate(180deg);
+}
+#border-toggle:hover { background: var(--panel2); border-color: rgba(245,158,11,.3); }
+#border-toggle.active { color: var(--amber); border-color: rgba(245,158,11,.3); background: rgba(245,158,11,.07); }
+.bt-label { font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: inherit; }
+
+/* ── BORDER PANEL ── */
+#border-panel {
+  position: absolute; top: var(--hdr); right: -340px; bottom: var(--sbar);
+  width: 340px; z-index: 550;
+  background: var(--panel); border-left: 1px solid var(--border);
+  display: flex; flex-direction: column; overflow: hidden;
+  transition: right .28s cubic-bezier(.4,0,.2,1);
+}
+#border-panel.open { right: 0; }
+
+.bp-head {
+  padding: 14px 16px 12px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: flex-start; justify-content: space-between;
+  flex-shrink: 0; background: rgba(0,0,0,.2);
+}
+.bp-title { font-size: 13px; font-weight: 700; }
+.bp-sub   { font-size: 10px; color: var(--muted); margin-top: 2px; }
+.bp-close {
+  background: rgba(255,255,255,.05); border: 1px solid var(--border);
+  border-radius: 6px; width: 26px; height: 26px; font-size: 14px;
+  color: var(--muted); cursor: pointer; display: flex; align-items: center;
+  justify-content: center; transition: all .15s; flex-shrink: 0; margin-left: 8px;
+}
+.bp-close:hover { background: rgba(255,255,255,.12); color: var(--text); }
+
+.bp-filters {
+  display: flex; gap: 4px; padding: 9px 14px;
+  border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+.bft {
+  flex: 1; padding: 5px 3px; border-radius: 6px;
+  background: rgba(255,255,255,.03); border: 1px solid var(--border);
+  font-size: 9px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+  cursor: pointer; text-align: center; transition: all .15s; color: var(--muted);
+}
+.bft.on.all { background: rgba(59,130,246,.1);  border-color: rgba(59,130,246,.3);  color: var(--blue); }
+.bft.on.r   { background: rgba(239,68,68,.1);   border-color: rgba(239,68,68,.3);   color: var(--red); }
+.bft.on.a   { background: rgba(245,158,11,.1);  border-color: rgba(245,158,11,.3);  color: var(--amber); }
+.bft.on.g   { background: rgba(34,197,94,.1);   border-color: rgba(34,197,94,.3);   color: var(--green); }
+
+#blist { flex: 1; overflow-y: auto; padding: 6px 8px; }
+#blist::-webkit-scrollbar { width: 3px; }
+#blist::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 2px; }
+
+.b-country {
+  font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--muted); padding: 10px 10px 4px; margin-top: 2px;
+}
+.b-card {
+  border-radius: 8px; border: 1px solid transparent;
+  padding: 9px 11px; margin-bottom: 3px; cursor: pointer; transition: all .12s;
+}
+.b-card:hover { background: rgba(255,255,255,.04); border-color: var(--border); }
+.b-card.on    { background: rgba(59,130,246,.07); border-color: rgba(59,130,246,.2); }
+.b-top { display: flex; align-items: flex-start; gap: 8px; }
+.b-pip { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 3px; }
+.b-pip.r { background: var(--red);   box-shadow: 0 0 6px rgba(239,68,68,.5); }
+.b-pip.a { background: var(--amber); box-shadow: 0 0 6px rgba(245,158,11,.5); }
+.b-pip.g { background: var(--green); box-shadow: 0 0 6px rgba(34,197,94,.5); }
+.b-name { flex: 1; font-size: 11px; font-weight: 600; line-height: 1.3; }
+.b-badge { font-size: 8px; padding: 2px 6px; border-radius: 3px; font-weight: 700; flex-shrink: 0; }
+.b-badge.r { background: rgba(239,68,68,.1);  color: var(--red); }
+.b-badge.a { background: rgba(245,158,11,.1); color: var(--amber); }
+.b-badge.g { background: rgba(34,197,94,.1);  color: var(--green); }
+.b-route { font-size: 10px; color: var(--muted2); margin: 2px 0 3px 16px; }
+.b-note  { font-size: 10px; color: var(--muted);  line-height: 1.55; margin-left: 16px; }
+
+.b-detail { margin-top: 10px; margin-left: 16px; border-top: 1px solid var(--border); padding-top: 10px; display: none; }
+.b-card.on .b-detail { display: block; }
+.b-drow { display: flex; gap: 8px; margin-bottom: 5px; font-size: 10px; }
+.b-dk   { color: var(--muted); flex-shrink: 0; min-width: 64px; }
+.b-dv   { color: var(--text); line-height: 1.4; }
+.b-dv.r { color: var(--red); } .b-dv.a { color: var(--amber); } .b-dv.g { color: var(--green); }
+
+.b-news { margin-top: 8px; }
+.b-news-lbl { font-size: 8px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.b-ni { display: flex; gap: 7px; margin-bottom: 6px; }
+.b-ndot   { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+.b-ndot.r { background: var(--red); }
+.b-ndot.a { background: var(--amber); }
+.b-ndot.g { background: var(--green); }
+.b-ndot.b { background: var(--blue); }
+.b-ntext  { flex: 1; font-size: 10px; color: var(--text); line-height: 1.5; }
+.b-nmeta  { font-size: 8px; color: var(--muted); margin-top: 1px; font-family: var(--mono); }
+
+.bp-foot { padding: 7px 16px; font-size: 9px; color: rgba(90,106,128,.4); font-family: var(--mono); border-top: 1px solid var(--border); flex-shrink: 0; }
+
+/* ── MARKERS ── */
+.mi { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.mc { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; border: 2px solid rgba(255,255,255,.22); }
+.mc.r { background: var(--red);   box-shadow: 0 0 14px rgba(239,68,68,.5), 0 2px 6px rgba(0,0,0,.5); }
+.mc.a { background: var(--amber); box-shadow: 0 0 14px rgba(245,158,11,.5),0 2px 6px rgba(0,0,0,.5); }
+.mc.g { background: var(--green); box-shadow: 0 0 14px rgba(34,197,94,.5), 0 2px 6px rgba(0,0,0,.5); }
+.ml { font-family: 'JetBrains Mono',monospace; font-size: 9px; font-weight: 700; color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,.95), 0 0 8px rgba(0,0,0,.8); white-space: nowrap; }
+.locdot { width: 13px; height: 13px; border-radius: 50%; background: var(--blue); border: 2.5px solid #fff; box-shadow: 0 0 0 4px rgba(59,130,246,.3), 0 2px 8px rgba(0,0,0,.6); }
+
+
+/* ── BORDER TOGGLE ── */
+#border-toggle {
+  position: absolute; top: 64px; right: 0; z-index: 600;
+  background: var(--panel); border: 1px solid var(--border);
+  border-right: none; border-radius: 8px 0 0 8px;
+  padding: 12px 8px; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  transition: all .2s; backdrop-filter: blur(12px); color: var(--muted2);
+}
+#border-toggle:hover { color: var(--text); background: var(--panel2); }
+#border-toggle.active { color: var(--amber); border-color: rgba(245,158,11,.35); background: rgba(245,158,11,.08); }
+#border-toggle .bt-icon { font-size: 15px; }
+#border-toggle .bt-lbl  { font-size: 8px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; writing-mode: vertical-rl; transform: rotate(180deg); }
+
+/* ── BORDER PANEL ── */
+#border-panel {
+  position: absolute; top: var(--hdr); right: -340px; bottom: var(--sbar);
+  width: 340px; z-index: 550;
+  background: var(--panel); border-left: 1px solid var(--border);
+  display: flex; flex-direction: column; overflow: hidden;
+  transition: right .28s cubic-bezier(.4,0,.2,1);
+}
+#border-panel.open { right: 0; }
+
+.bp-head {
+  padding: 13px 15px 11px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: flex-start; justify-content: space-between;
+  flex-shrink: 0; background: rgba(0,0,0,.2);
+}
+.bp-title { font-size: 13px; font-weight: 700; }
+.bp-sub   { font-size: 10px; color: var(--muted); margin-top: 2px; }
+.bp-close {
+  background: rgba(255,255,255,.05); border: 1px solid var(--border);
+  border-radius: 6px; width: 26px; height: 26px; font-size: 13px;
+  color: var(--muted); cursor: pointer; display: flex; align-items: center;
+  justify-content: center; flex-shrink: 0; margin-left: 8px; transition: all .15s;
+}
+.bp-close:hover { background: rgba(255,255,255,.1); color: var(--text); }
+
+.bp-filters {
+  display: flex; gap: 4px; padding: 8px 13px;
+  border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+.bft {
+  flex: 1; padding: 5px 3px; border-radius: 6px;
+  background: rgba(255,255,255,.03); border: 1px solid var(--border);
+  font-size: 9px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+  cursor: pointer; text-align: center; transition: all .15s; color: var(--muted);
+}
+.bft.on.all { background: rgba(59,130,246,.1);  border-color: rgba(59,130,246,.3);  color: var(--blue); }
+.bft.on.r   { background: rgba(239,68,68,.1);   border-color: rgba(239,68,68,.3);   color: var(--red); }
+.bft.on.a   { background: rgba(245,158,11,.1);  border-color: rgba(245,158,11,.3);  color: var(--amber); }
+.bft.on.g   { background: rgba(34,197,94,.1);   border-color: rgba(34,197,94,.3);   color: var(--green); }
+
+#blist { flex: 1; overflow-y: auto; padding: 6px 8px; }
+#blist::-webkit-scrollbar { width: 3px; }
+#blist::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 2px; }
+
+.b-country-hdr {
+  font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--muted); padding: 10px 10px 4px; margin-top: 2px;
+}
+.b-card {
+  border-radius: 8px; border: 1px solid transparent;
+  padding: 9px 11px; margin-bottom: 3px; cursor: pointer; transition: all .12s;
+}
+.b-card:hover { background: rgba(255,255,255,.04); border-color: var(--border); }
+.b-card.open  { background: rgba(59,130,246,.07); border-color: rgba(59,130,246,.2); }
+.b-top   { display: flex; align-items: flex-start; gap: 8px; }
+.b-pip   { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 3px; }
+.b-pip.r { background: var(--red);   box-shadow: 0 0 6px rgba(239,68,68,.5); }
+.b-pip.a { background: var(--amber); box-shadow: 0 0 6px rgba(245,158,11,.5); }
+.b-pip.g { background: var(--green); box-shadow: 0 0 6px rgba(34,197,94,.5); }
+.b-name  { flex: 1; font-size: 11px; font-weight: 600; line-height: 1.3; }
+.b-badge { font-size: 8px; padding: 2px 6px; border-radius: 3px; font-weight: 700; flex-shrink: 0; }
+.b-badge.r { background: rgba(239,68,68,.1);  color: var(--red); }
+.b-badge.a { background: rgba(245,158,11,.1); color: var(--amber); }
+.b-badge.g { background: rgba(34,197,94,.1);  color: var(--green); }
+.b-route { font-size: 10px; color: var(--muted2); margin: 2px 0 3px 16px; }
+.b-note  { font-size: 10px; color: var(--muted); line-height: 1.55; margin-left: 16px; }
+
+.b-detail {
+  margin-top: 9px; margin-left: 16px;
+  border-top: 1px solid var(--border); padding-top: 9px;
+  display: none;
+}
+.b-card.open .b-detail { display: block; }
+.b-drow { display: flex; gap: 8px; margin-bottom: 5px; font-size: 10px; }
+.b-dk   { color: var(--muted); flex-shrink: 0; min-width: 64px; }
+.b-dv   { color: var(--text); line-height: 1.4; }
+.b-dv.r { color: var(--red); } .b-dv.a { color: var(--amber); } .b-dv.g { color: var(--green); }
+
+.b-news-hdr { font-size: 8px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 8px 0 6px; }
+.b-ni       { display: flex; gap: 7px; margin-bottom: 6px; }
+.b-ndot     { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+.b-ndot.r   { background: var(--red); }
+.b-ndot.a   { background: var(--amber); }
+.b-ndot.g   { background: var(--green); }
+.b-ndot.b   { background: var(--blue); }
+.b-ntext    { flex: 1; font-size: 10px; color: var(--text); line-height: 1.5; }
+.b-nmeta    { font-size: 8px; color: var(--muted); margin-top: 1px; font-family: var(--mono); }
+
+.bp-foot {
+  padding: 7px 15px; font-size: 9px; color: rgba(90,106,128,.4);
+  font-family: var(--mono); border-top: 1px solid var(--border); flex-shrink: 0;
+}
+
+
+
+
+/* ── BORDER TOGGLE BUTTON ── */
+#border-toggle {
+  position:absolute; top:64px; right:0; z-index:600;
+  background:var(--panel); border:1px solid var(--border);
+  border-right:none; border-radius:8px 0 0 8px;
+  padding:12px 8px; cursor:pointer;
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+  transition:all .2s; color:var(--muted2);
+}
+#border-toggle:hover { color:var(--text); background:var(--panel2); }
+#border-toggle.active { color:var(--amber); border-color:rgba(245,158,11,.35); background:rgba(245,158,11,.08); }
+.bt-icon { font-size:15px; }
+.bt-lbl  { font-size:8px; font-weight:700; letter-spacing:.12em; text-transform:uppercase;
+           writing-mode:vertical-rl; transform:rotate(180deg); }
+
+/* ── BORDER PANEL ── */
+#border-panel {
+  position:absolute; top:var(--hdr); right:-340px; bottom:var(--sbar);
+  width:340px; z-index:550;
+  background:var(--panel); border-left:1px solid var(--border);
+  display:flex; flex-direction:column; overflow:hidden;
+  transition:right .28s cubic-bezier(.4,0,.2,1);
+}
+#border-panel.open { right:0; }
+.bp-head { padding:13px 15px 11px; border-bottom:1px solid var(--border);
+  display:flex; align-items:flex-start; justify-content:space-between;
+  flex-shrink:0; background:rgba(0,0,0,.2); }
+.bp-title { font-size:13px; font-weight:700; }
+.bp-sub   { font-size:10px; color:var(--muted); margin-top:2px; }
+.bp-close { background:rgba(255,255,255,.05); border:1px solid var(--border);
+  border-radius:6px; width:26px; height:26px; font-size:13px; color:var(--muted);
+  cursor:pointer; display:flex; align-items:center; justify-content:center;
+  flex-shrink:0; margin-left:8px; transition:all .15s; }
+.bp-close:hover { background:rgba(255,255,255,.1); color:var(--text); }
+.bp-filters { display:flex; gap:4px; padding:8px 13px;
+  border-bottom:1px solid var(--border); flex-shrink:0; }
+.bft { flex:1; padding:5px 3px; border-radius:6px;
+  background:rgba(255,255,255,.03); border:1px solid var(--border);
+  font-size:9px; font-weight:700; letter-spacing:.07em; text-transform:uppercase;
+  cursor:pointer; text-align:center; transition:all .15s; color:var(--muted); }
+.bft.on.all { background:rgba(59,130,246,.1);  border-color:rgba(59,130,246,.3);  color:var(--blue); }
+.bft.on.r   { background:rgba(239,68,68,.1);   border-color:rgba(239,68,68,.3);   color:var(--red); }
+.bft.on.a   { background:rgba(245,158,11,.1);  border-color:rgba(245,158,11,.3);  color:var(--amber); }
+.bft.on.g   { background:rgba(34,197,94,.1);   border-color:rgba(34,197,94,.3);   color:var(--green); }
+#blist { flex:1; overflow-y:auto; padding:6px 8px; }
+#blist::-webkit-scrollbar { width:3px; }
+#blist::-webkit-scrollbar-thumb { background:rgba(255,255,255,.1); border-radius:2px; }
+.b-country-hdr { font-size:9px; font-weight:700; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--muted); padding:10px 10px 4px; }
+.b-card { border-radius:8px; border:1px solid transparent;
+  padding:9px 11px; margin-bottom:3px; cursor:pointer; transition:all .12s; }
+.b-card:hover { background:rgba(255,255,255,.04); border-color:var(--border); }
+.b-card.bopen { background:rgba(59,130,246,.07); border-color:rgba(59,130,246,.2); }
+.b-top  { display:flex; align-items:flex-start; gap:8px; }
+.b-pip  { width:8px; height:8px; border-radius:50%; flex-shrink:0; margin-top:3px; }
+.b-pip.r { background:var(--red);   box-shadow:0 0 6px rgba(239,68,68,.5); }
+.b-pip.a { background:var(--amber); box-shadow:0 0 6px rgba(245,158,11,.5); }
+.b-pip.g { background:var(--green); box-shadow:0 0 6px rgba(34,197,94,.5); }
+.b-name  { flex:1; font-size:11px; font-weight:600; line-height:1.3; }
+.b-badge { font-size:8px; padding:2px 6px; border-radius:3px; font-weight:700; flex-shrink:0; }
+.b-badge.r { background:rgba(239,68,68,.1);  color:var(--red); }
+.b-badge.a { background:rgba(245,158,11,.1); color:var(--amber); }
+.b-badge.g { background:rgba(34,197,94,.1);  color:var(--green); }
+.b-route { font-size:10px; color:var(--muted2); margin:2px 0 3px 16px; }
+.b-note  { font-size:10px; color:var(--muted); line-height:1.55; margin-left:16px; }
+.b-detail { margin-top:9px; margin-left:16px; border-top:1px solid var(--border);
+  padding-top:9px; display:none; }
+.b-card.bopen .b-detail { display:block; }
+.b-drow { display:flex; gap:8px; margin-bottom:5px; font-size:10px; }
+.b-dk   { color:var(--muted); flex-shrink:0; min-width:64px; }
+.b-dv   { color:var(--text); line-height:1.4; }
+.b-dv.r { color:var(--red); } .b-dv.a { color:var(--amber); } .b-dv.g { color:var(--green); }
+.b-news-hdr { font-size:8px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--muted); margin:8px 0 6px; }
+.b-ni  { display:flex; gap:7px; margin-bottom:6px; }
+.b-ndot   { width:5px; height:5px; border-radius:50%; flex-shrink:0; margin-top:4px; }
+.b-ndot.r { background:var(--red); }
+.b-ndot.a { background:var(--amber); }
+.b-ndot.g { background:var(--green); }
+.b-ndot.b { background:var(--blue); }
+.b-ntext  { flex:1; font-size:10px; color:var(--text); line-height:1.5; }
+.b-nmeta  { font-size:8px; color:var(--muted); margin-top:1px; font-family:var(--mono); }
+.bp-foot  { padding:7px 15px; font-size:9px; color:rgba(90,106,128,.4);
+  font-family:var(--mono); border-top:1px solid var(--border); flex-shrink:0; }
+</style>
+</head>
+<body>
+<!-- HEADER -->
+<div id="hdr">
+  <div class="h-left">
+    <div class="h-logo">✈</div>
+    <div>
+      <div class="h-title">Gulf &amp; Middle East Aviation</div>
+      <div class="h-sub">Crisis status tracker · <span id="hdate">—</span> · Click any airport for details</div>
+    </div>
+  </div>
+  <div class="h-right">
+    <div class="live-pill"><div class="ldot"></div>Live</div>
+    <div class="stat-chip" onclick="setFilter('closed')"><div class="sc-dot r"></div><span id="cc">—</span></div>
+    <div class="stat-chip" onclick="setFilter('disrupted')"><div class="sc-dot a"></div><span id="cd">—</span></div>
+    <div class="stat-chip" onclick="setFilter('open')"><div class="sc-dot g"></div><span id="co">—</span></div>
+    <span id="hts">—</span>
+  </div>
+</div>
+
+<div id="map"></div>
+
+<!-- SIDEBAR -->
+<div id="sb">
+  <!-- Location pin -->
+  <div class="loc-sec">
+    <div class="sec-label">📍 Pin your location</div>
+    <div class="loc-row">
+      <input id="linput" type="text" placeholder="Address, hotel, landmark…" autocomplete="off"/>
+      <button id="pbtn" onclick="doPin()">Pin</button>
+    </div>
+    <div id="lmsg"></div>
+    <div id="pinlist"></div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filter-row">
+    <div class="ftab on all" onclick="setFilter('all',   this)">All</div>
+    <div class="ftab r"      onclick="setFilter('closed',this)">Closed</div>
+    <div class="ftab a"      onclick="setFilter('disrupted',this)">Disrupted</div>
+    <div class="ftab g"      onclick="setFilter('open',  this)">Open</div>
+  </div>
+
+  <!-- Airport list (scrolls) -->
+  <div id="alist"></div>
+</div>
+
+<!-- STATUS BAR -->
+<div id="sbar">
+  <div style="display:flex;align-items:center;gap:9px">
+    <div class="prog-wrap"><div class="prog-fill" id="pf" style="width:100%"></div></div>
+    <span id="pcd" style="font-family:var(--mono)">60s</span>
+  </div>
+  <span style="font-family:var(--mono);font-size:9px;color:rgba(90,106,128,.35)">EPSG:4326 · OSM / CARTO</span>
+  <button id="rfbtn" onclick="manualRefresh()">
+    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <path d="M23 4v6h-6M1 20v-6h6"/>
+      <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+    </svg>
+    Refresh
+  </button>
+</div>
+
+<!-- BORDER TOGGLE BUTTON -->
+<button id="border-toggle" onclick="toggleBorderPanel()" title="Border Crossings">
+  <span class="bt-icon">&#x1F6C3;</span>
+  <span class="bt-lbl">Borders</span>
+</button>
+
+<!-- BORDER PANEL -->
+<div id="border-panel">
+  <div class="bp-head">
+    <div>
+      <div class="bp-title">&#x1F6C3; Border Crossings</div>
+      <div class="bp-sub">Gulf &amp; Middle East &middot; click a crossing for details</div>
+    </div>
+    <button class="bp-close" onclick="toggleBorderPanel()">&times;</button>
+  </div>
+  <div class="bp-filters">
+    <div class="bft on all" onclick="setBorderFilter('all',this)">All</div>
+    <div class="bft r"      onclick="setBorderFilter('closed',this)">Closed</div>
+    <div class="bft a"      onclick="setBorderFilter('disrupted',this)">Disrupted</div>
+    <div class="bft g"      onclick="setBorderFilter('open',this)">Open</div>
+  </div>
+  <div id="blist"></div>
+  <div class="bp-foot" id="bp-foot">&mdash;</div>
+</div>
+
+<script>
+
+
+// ═══════════════════════════════════════════════════════════════════
+//  AIRPORT DATA — Gulf & immediate region only
+// ═══════════════════════════════════════════════════════════════════
+const AP = [
+
+  // ── UAE — all closed ──────────────────────────────────────────
+  { id:'DXB', name:'Dubai International',           city:'Dubai, UAE',            lat:25.2532, lon:55.3657, s:'disrupted',
+    carrier:'Emirates · flydubai · Multiple',  res:'Repatriation only. Scheduled services suspended until 23:59 UAE time 4 Mar.',
+    detail:{
+      airspace:'UAE airspace fully closed by UAE GCAA',
+      ops:'All commercial and cargo operations suspended',
+      carrier_status:'Emirates halted all DXB ops. flydubai grounded.',
+      last_flight:'Outbound EK001 departed 01 Mar 22:48; no arrivals since 02 Mar 00:30',
+    },
+    news:[
+      { dot:'r', text:'Fresh ballistic missile wave 03 Mar early morning — three inbound flights held outside UAE airspace before diverting.',                  time:'03 Mar · 03:30' },
+      { dot:'g', text:'114 flights scheduled today (4 Mar): 52 flydubai, 41 Emirates, 21 other airlines. 17,498 passengers repatriated on 60 prior flights.',    time:'04 Mar · 08:30' },
+      { dot:'a', text:'Emirates issued statement: "All Emirates flights are suspended until further notice. Customers may rebook free of charge for travel to 20 Mar."', time:'02 Mar · 04:10' },
+      { dot:'r', text:'DO NOT go to DXB unless airline has contacted you with a confirmed departure time. Dubai Airports enforcing access control.',               time:'04 Mar · 08:30' },
+    ],
+    links:[
+      { label:'✈ Emirates flight status',  url:'https://www.emirates.com/uk/english/manage-booking/flight-status/' },
+      { label:'📋 Dubai Airports',         url:'https://www.dubaiairports.ae/' },
+      { label:'📊 FlightAware DXB',         url:'https://www.flightaware.com/live/airport/OMDB' },
+      { label:'🛬 Dubai Airports status',    url:'https://dubaiairports.ae/flight-status' },
+      { label:'✈ Emirates updates',             url:'https://www.emirates.com/english/help/travel-updates/' },
+      { label:'✈ flydubai updates',             url:'https://www.flydubai.com/en/plan/travel-updates' },
+    ]
+  },
+
+  { id:'DWC', name:'Al Maktoum Intl (Dubai South)', city:'Dubai, UAE',            lat:24.8963, lon:55.1610, s:'closed',
+    carrier:'flydubai · Cargo airlines',       res:'TBD — aligned with DXB',
+    detail:{
+      airspace:'UAE airspace closed',
+      ops:'All operations suspended',
+      carrier_status:'All operators halted. Cargo ops also suspended.',
+      last_flight:'Last recorded departure 01 Mar 23:55 (cargo)',
+    },
+    news:[
+      { dot:'r', text:'UAE GCAA extended airspace closure to all UAE airports including DWC.',        time:'02 Mar · 02:45' },
+      { dot:'a', text:'DWC cargo hub operations suspended. Airfreight being rerouted via Muscat.',    time:'02 Mar · 06:00' },
+    ],
+    links:[
+      { label:'📊 FlightAware DWC board', url:'https://www.flightaware.com/live/airport/OMDW' },
+      { label:'📋 Dubai South',          url:'https://www.dubaisouth.ae/' },
+    ]
+  },
+
+  { id:'AUH', name:'Zayed International',           city:'Abu Dhabi, UAE',        lat:24.4330, lon:54.6511, s:'closed',
+    carrier:'Etihad Airways · Multiple',       res:'TBD',
+    detail:{
+      airspace:'UAE airspace closed',
+      ops:'All operations suspended following drone strike',
+      carrier_status:'Etihad suspended all departures and arrivals. Rebooking waivers active.',
+      last_flight:'Etihad EY002 to LHR was taxiing when airport shut 02 Mar 02:50; returned to gate',
+    },
+    news:[
+      { dot:'a', text:'Etihad: scheduled flights suspended until 14:00 UAE time 5 Mar. Repatriation and cargo may operate under strict approval only.',            time:'03 Mar · 06:00' },
+      { dot:'a', text:'Do NOT travel to AUH unless Etihad contacts you directly with confirmed ticket details. Airport access restricted.',                        time:'03 Mar · 09:00' },
+      { dot:'b', text:'Etihad free rebooking on Etihad flights through 31 March 2026. Contact booking channel used for original reservation.',                    time:'03 Mar · 06:00' },
+    ],
+    links:[
+      { label:'✈ Etihad flight status',  url:'https://www.etihad.com/en-us/manage/check-your-flight-status' },
+      { label:'📋 Abu Dhabi Airports',   url:'https://www.abudhabiairport.ae/' },
+      { label:'📊 FlightAware AUH',          url:'https://www.flightaware.com/live/airport/OMAA' },
+      { label:'✈ Etihad travel updates',         url:'https://www.etihad.com/en/travel-updates' },
+      { label:'🏛 Abu Dhabi Airports',        url:'https://www.abudhabiairport.ae/en' },
+    ]
+  },
+
+  { id:'SHJ', name:'Sharjah International',         city:'Sharjah, UAE',          lat:25.3286, lon:55.5172, s:'disrupted',
+    carrier:'Air Arabia · Cargo',              res:'TBD',
+    detail:{
+      airspace:'UAE airspace closed',
+      ops:'All Air Arabia flights suspended. Cargo ops halted.',
+      carrier_status:'Air Arabia halted all flights from SHJ and all Gulf destinations.',
+      last_flight:'G9 432 to AMM was final departure 01 Mar 23:20',
+    },
+    news:[
+      { dot:'r', text:'UAE-wide airspace closure grounded Air Arabia\'s entire fleet at Sharjah.',    time:'02 Mar · 02:45' },
+      { dot:'b', text:'Limited Air Arabia flights may operate subject to approval. Affected passengers contacted directly. Check airarabia.com for status.',        time:'04 Mar · 00:00' },
+    ],
+    links:[
+      { label:'✈ Air Arabia status', url:'https://www.airarabia.com/en/flight-status' },
+      { label:'📊 FlightAware SHJ',          url:'https://www.flightaware.com/live/airport/OMSJ' },
+      { label:'✈ Air Arabia updates',            url:'https://www.airarabia.com/en/travel-alerts' },
+    ]
+  },
+
+  { id:'RKT', name:'Ras Al Khaimah International',  city:'Ras Al Khaimah, UAE',   lat:25.6135, lon:55.9388, s:'closed',
+    carrier:'Various charter operators',       res:'TBD',
+    detail:{
+      airspace:'UAE airspace closed',
+      ops:'Charter and low-cost ops suspended',
+      carrier_status:'Wizz Air Abu Dhabi and charter operators grounded.',
+      last_flight:'No scheduled commercial movements in 12 hours',
+    },
+    news:[
+      { dot:'r', text:'UAE airspace closure included RKT in scope. Airport authority confirmed suspension.', time:'02 Mar · 02:45' },
+    ],
+    links:[
+      { label:'📊 FlightAware RKT', url:'https://www.flightaware.com/live/airport/OMRK' },
+    ]
+  },
+
+  { id:'FJR', name:'Fujairah International',        city:'Fujairah, UAE',          lat:25.1122, lon:56.3240, s:'closed',
+    carrier:'Various · Cargo',                 res:'TBD',
+    detail:{
+      airspace:'UAE airspace closed',
+      ops:'All ops suspended',
+      carrier_status:'Fujairah primarily a cargo/general aviation airport; all ops suspended.',
+      last_flight:'No scheduled commercial movements',
+    },
+    news:[
+      { dot:'g', text:'Fujairah International confirmed fully operational by UAE authorities.',                                                                    time:'03 Mar · 18:00' },
+      { dot:'a', text:'Fire at Fujairah oil storage tank from drone interception debris — airport operations unaffected. SpiceJet running FJR–India specials.',time:'04 Mar · 06:00' },
+    ],
+    links:[
+      { label:'📊 FlightAware FJR', url:'https://www.flightaware.com/live/airport/OMFJ' },
+    ]
+  },
+
+  // ── Qatar ────────────────────────────────────────────────────
+  { id:'DOH', name:'Hamad International',           city:'Doha, Qatar',            lat:25.2731, lon:51.6080, s:'closed',
+    carrier:'Qatar Airways · Multiple',        res:'When Qatar CAA confirms safe reopening',
+    detail:{
+      airspace:'Qatar airspace closed by Qatar CAA',
+      ops:'Qatar Airways fully grounded. All other operators suspended.',
+      carrier_status:'Qatar Airways suspended all operations. CEO statement issued.',
+      last_flight:'QR007 to JFK was mid-flight; diverted to Muscat (MCT) 02 Mar 03:40',
+    },
+    news:[
+      { dot:'r', text:'Qatar CAA closed national airspace following regional escalation. All inbound and outbound flights halted.', time:'02 Mar · 03:00' },
+      { dot:'r', text:'Qatar Airways CEO: "We have suspended all operations until the Qatar CAA declares it safe to fly."',         time:'02 Mar · 04:30' },
+      { dot:'a', text:'Al Udeid Air Base (largest US base in Middle East, located in Qatar) on elevated force-protection status.',  time:'02 Mar · 02:30' },
+      { dot:'b', text:'Qatar offering all stranded travellers free accommodation through Qatari hospitality programme.',             time:'02 Mar · 08:00' },
+    ],
+    links:[
+      { label:'✈ Qatar Airways status', url:'https://www.qatarairways.com/en-us/flight-status.html' },
+      { label:'📋 Hamad Airport',       url:'https://dohahamadairport.com/' },
+      { label:'📊 FlightAware DOH',     url:'https://www.flightaware.com/live/airport/OTHH' },
+    ]
+  },
+
+  // ── Bahrain ──────────────────────────────────────────────────
+  { id:'BAH', name:'Bahrain International',         city:'Manama, Bahrain',        lat:26.2708, lon:50.6336, s:'closed',
+    carrier:'Gulf Air · Multiple',             res:'TBD',
+    detail:{
+      airspace:'Bahrain airspace closed by Bahrain CAA',
+      ops:'Gulf Air fully suspended. All operators halted.',
+      carrier_status:'Gulf Air grounded entire fleet. No ETA for resumption.',
+      last_flight:'GF 009 to LHR departed 01 Mar 23:50 — final departure before closure',
+    },
+    news:[
+      { dot:'r', text:'Bahrain CAA declared national airspace closure. Gulf Air grounded entire fleet.',                                   time:'02 Mar · 02:50' },
+      { dot:'r', text:'US Naval Forces Central Command (NAVCENT), headquartered in Bahrain, confirmed it is on highest readiness.',        time:'02 Mar · 02:20' },
+      { dot:'a', text:'Bahraini government urges citizens to follow official instructions; no curfew declared but public gatherings banned.', time:'02 Mar · 06:00' },
+    ],
+    links:[
+      { label:'✈ Gulf Air status',     url:'https://www.gulfair.com/manage-travel/check-in-and-status/flight-status' },
+      { label:'📋 Bahrain Airport',    url:'https://www.bahrainairport.bh/' },
+      { label:'📊 FlightAware BAH',    url:'https://www.flightaware.com/live/airport/OBBI' },
+    ]
+  },
+
+  // ── Kuwait ───────────────────────────────────────────────────
+  { id:'KWI', name:'Kuwait International',          city:'Kuwait City, Kuwait',    lat:29.2267, lon:47.9689, s:'closed',
+    carrier:'Kuwait Airways · Jazeera Airways',res:'TBD',
+    detail:{
+      airspace:'Kuwait airspace closed',
+      ops:'All commercial flights suspended. Airport in emergency posture.',
+      carrier_status:'Kuwait Airways and Jazeera Airways grounded all flights.',
+      last_flight:'KU 111 to LHR was airborne when closure announced; continued to London',
+    },
+    news:[
+      { dot:'r', text:'Iranian strike targeted the area around Ali Al Salem Air Base, 40km north of KWI. Airport confirmed operational damage to ground equipment.', time:'02 Mar · 03:10' },
+      { dot:'r', text:'Kuwait DGCA declared immediate airspace closure. All flights halted.',                                                                        time:'02 Mar · 03:15' },
+      { dot:'a', text:'Kuwait Airways suspended all flights including those in the air; aircraft diverted to Cairo (CAI) and Muscat (MCT).',                          time:'02 Mar · 03:30' },
+    ],
+    links:[
+      { label:'✈ Kuwait Airways status', url:'https://www.kuwaitairways.com/en/check-flight-status' },
+      { label:'📊 FlightAware KWI',      url:'https://www.flightaware.com/live/airport/OKBK' },
+    ]
+  },
+
+  // ── Iraq ─────────────────────────────────────────────────────
+  { id:'BGW', name:'Baghdad International',         city:'Baghdad, Iraq',          lat:33.2625, lon:44.2346, s:'closed',
+    carrier:'Iraqi Airways · Multiple',        res:'TBD',
+    detail:{
+      airspace:'Iraq airspace fully closed',
+      ops:'All commercial ops suspended',
+      carrier_status:'Iraqi Airways grounded. All foreign carriers suspended Iraq routes.',
+      last_flight:'IA 001 to BEY cancelled; airport evacuated of non-essential personnel',
+    },
+    news:[
+      { dot:'r', text:'Iraq CAAI closed all national airspace following strike activity over Iranian border regions. Baghdad airport evacuated non-essential staff.', time:'02 Mar · 03:30' },
+      { dot:'a', text:'Several Iraqi militia groups announced retaliatory posture; US Embassy Baghdad on ordered departure.',                                         time:'02 Mar · 04:00' },
+    ],
+    links:[
+      { label:'📊 FlightAware BGW', url:'https://www.flightaware.com/live/airport/ORBI' },
+    ]
+  },
+
+  { id:'EBL', name:'Erbil International',           city:'Erbil, Iraq',            lat:36.2376, lon:43.9632, s:'closed',
+    carrier:'Multiple (Lufthansa, flydubai, Turkish)', res:'TBD — Lufthansa suspended to Mar 8',
+    detail:{
+      airspace:'Iraq airspace closed',
+      ops:'All ops suspended',
+      carrier_status:'Lufthansa suspended until Mar 8. flydubai, Turkish Airlines halted.',
+      last_flight:'TK 787 was last departure 01 Mar 22:10',
+    },
+    news:[
+      { dot:'r', text:'Iraqi airspace closure included Erbil. Kurdish regional government on security alert.', time:'02 Mar · 03:30' },
+      { dot:'a', text:'Lufthansa Group suspended all Erbil flights until at least 8 March.',                    time:'02 Mar · 05:00' },
+    ],
+    links:[
+      { label:'📊 FlightAware EBL', url:'https://www.flightaware.com/live/airport/ORER' },
+    ]
+  },
+
+  { id:'BSR', name:'Basra International',           city:'Basra, Iraq',            lat:30.5491, lon:47.6621, s:'closed',
+    carrier:'Iraqi Airways · flydubai',        res:'TBD',
+    detail:{
+      airspace:'Iraq airspace closed',
+      ops:'All ops suspended',
+      carrier_status:'Iraqi Airways and flydubai halted all Basra services.',
+      last_flight:'No movements in 24 hours',
+    },
+    news:[
+      { dot:'r', text:'Basra airport closed under nationwide Iraq airspace closure.',      time:'02 Mar · 03:30' },
+      { dot:'a', text:'Oil sector workers in Basra advised by employers to shelter in place.', time:'02 Mar · 07:00' },
+    ],
+    links:[
+      { label:'📊 FlightAware BSR', url:'https://www.flightaware.com/live/airport/ORMM' },
+    ]
+  },
+
+  // ── Iran ─────────────────────────────────────────────────────
+  { id:'IKA', name:'Imam Khomeini International',   city:'Tehran, Iran',           lat:35.4161, lon:51.1522, s:'closed',
+    carrier:'IranAir · Mahan Air · Multiple',  res:'TBD',
+    detail:{
+      airspace:'Iran airspace fully closed by ICAO notice',
+      ops:'All commercial flights suspended',
+      carrier_status:'IranAir and Mahan Air grounded. All foreign carriers suspended Iran routes months ago.',
+      last_flight:'No foreign carriers operating; domestic last flight 02 Mar 01:00',
+    },
+    news:[
+      { dot:'r', text:'US and Israeli strikes hit multiple military and nuclear facilities across Iran. ICAO issued NOTAM closing Iranian airspace.', time:'01 Mar · 23:00' },
+      { dot:'r', text:'Isfahan and Natanz strike sites confirmed by US DoD. IranAir suspended all operations.',                                      time:'02 Mar · 00:30' },
+      { dot:'a', text:'Iran CAO issued emergency closure of all Iranian airspace for 72 hours, extendable.',                                          time:'02 Mar · 01:00' },
+    ],
+    links:[
+      { label:'📊 FlightAware IKA', url:'https://www.flightaware.com/live/airport/OIIE' },
+    ]
+  },
+
+  { id:'MHD', name:'Mashhad International',         city:'Mashhad, Iran',          lat:36.2352, lon:59.6400, s:'closed',
+    carrier:'IranAir · Kish Air',              res:'TBD',
+    detail:{
+      airspace:'Iran airspace fully closed',
+      ops:'All ops suspended',
+      carrier_status:'All carriers grounded under national closure.',
+      last_flight:'No movements since 02 Mar 01:00',
+    },
+    news:[
+      { dot:'r', text:'Iran nationwide airspace closure includes Mashhad.', time:'02 Mar · 01:00' },
+    ],
+    links:[
+      { label:'📊 FlightAware MHD', url:'https://www.flightaware.com/live/airport/OIMM' },
+    ]
+  },
+
+  // ── Israel ───────────────────────────────────────────────────
+  { id:'TLV', name:'Ben Gurion International',      city:'Tel Aviv, Israel',       lat:32.0055, lon:34.8854, s:'closed',
+    carrier:'El Al · Multiple',                res:'TBD — El Al suspended ticket sales to Mar 21',
+    detail:{
+      airspace:'Israeli airspace closed by Israel Airports Authority',
+      ops:'All commercial flights suspended. Iron Dome and Arrow systems active.',
+      carrier_status:'El Al grounded. All foreign carriers suspended Israel routes.',
+      last_flight:'LY 315 (El Al) to JFK departed 01 Mar 22:30 — last flight before closure',
+    },
+    news:[
+      { dot:'r', text:'Israel Airports Authority closed TLV under emergency war regulations. Iron Dome batteries deployed around airport perimeter.', time:'01 Mar · 23:45' },
+      { dot:'r', text:'El Al suspended ticket sales for all flights through 21 March. Passengers advised not to travel to the airport.',              time:'02 Mar · 01:00' },
+      { dot:'a', text:'Multiple carriers — Lufthansa, Air France, Ryanair, easyJet — have already been suspending Israel routes for months.',         time:'Ongoing' },
+    ],
+    links:[
+      { label:'✈ El Al flight status', url:'https://www.elal.com/en/Flight-Status/' },
+      { label:'📋 Israel Airports',    url:'https://www.iaa.gov.il/en/' },
+      { label:'📊 FlightAware TLV',    url:'https://www.flightaware.com/live/airport/LLBG' },
+    ]
+  },
+
+  // ── Lebanon ──────────────────────────────────────────────────
+  { id:'BEY', name:'Beirut–Rafic Hariri International', city:'Beirut, Lebanon',  lat:33.8208, lon:35.4884, s:'closed',
+    carrier:'Middle East Airlines',            res:'TBD',
+    detail:{
+      airspace:'Lebanon airspace closed',
+      ops:'Middle East Airlines (MEA) halted all operations.',
+      carrier_status:'MEA grounded all aircraft. Airport closed to commercial traffic.',
+      last_flight:'ME 201 to Paris departed 01 Mar 23:55 — final departure',
+    },
+    news:[
+      { dot:'r', text:'Lebanon CAA closed airspace. Beirut airport shut following regional escalation.', time:'02 Mar · 01:30' },
+      { dot:'a', text:'Middle East Airlines (MEA) suspended all flights with immediate effect.',          time:'02 Mar · 01:45' },
+    ],
+    links:[
+      { label:'✈ MEA flight status', url:'https://www.mea.com.lb/' },
+      { label:'📊 FlightAware BEY',  url:'https://www.flightaware.com/live/airport/OLBA' },
+    ]
+  },
+
+  // ── Jordan — disrupted ───────────────────────────────────────
+  { id:'AMM', name:'Queen Alia International',      city:'Amman, Jordan',          lat:31.7226, lon:35.9932, s:'disrupted',
+    carrier:'Royal Jordanian · Multiple',      res:'Partial operations — verify with airline',
+    detail:{
+      airspace:'Jordan temporarily closed, now partially reopened — monitoring closely',
+      ops:'Some flights resumed. Many cancellations ongoing.',
+      carrier_status:'Royal Jordanian operating reduced schedule. Several European carriers still suspended.',
+      last_flight:'RJ 108 to LHR resumed operations 02 Mar 09:00',
+    },
+    news:[
+      { dot:'a', text:'Jordan closed airspace 02 Mar 01:00. Partial reopening announced 02 Mar 08:30 for specific corridors only.', time:'02 Mar · 08:30' },
+      { dot:'a', text:'Royal Jordanian resumed limited schedule but advised passengers to check status before travelling to airport.', time:'02 Mar · 09:15' },
+      { dot:'b', text:'Jordan is coordinating with Egypt and Cyprus to establish safe routing corridors away from conflict zones.',     time:'02 Mar · 10:00' },
+    ],
+    links:[
+      { label:'✈ Royal Jordanian status', url:'https://www.rj.com/en/flight-information/flight-status' },
+      { label:'📋 Jordan Airports',       url:'https://www.qaiairport.com/' },
+      { label:'📊 FlightAware AMM',       url:'https://www.flightaware.com/live/airport/OJAI' },
+    ]
+  },
+
+  // ── Saudi Arabia — disrupted ─────────────────────────────────
+  { id:'RUH', name:'King Khalid International',     city:'Riyadh, Saudi Arabia',   lat:24.9579, lon:46.6988, s:'disrupted',
+    carrier:'Saudia · Multiple',               res:'Operational with precautionary restrictions',
+    detail:{
+      airspace:'Saudi airspace open with GACA managing deconfliction corridors',
+      ops:'Reduced operations. Significant diversion traffic inbound from Gulf.',
+      carrier_status:'Saudia operating reduced schedule. Lufthansa suspended until Mar 8. Air India until Mar 2.',
+      last_flight:'Ongoing operations — last Saudia departure 02 Mar 11:00',
+    },
+    news:[
+      { dot:'a', text:'Saudi GACA keeping airspace open but restricting routes over eastern border. Eastbound departures rerouted south.',              time:'02 Mar · 04:00' },
+      { dot:'a', text:'Lufthansa Group suspended all Saudi routes until 8 March citing "unacceptable risk" in regional airspace.',                       time:'02 Mar · 03:00' },
+      { dot:'b', text:'Riyadh airport managing surge of diverted and rerouted flights from UAE, Qatar and Bahrain. Extra ground staff deployed.',        time:'02 Mar · 08:00' },
+      { dot:'b', text:'Air India resumed Riyadh services 02 Mar having suspended briefly. IndiGo reviewing network.',                                   time:'02 Mar · 10:30' },
+    ],
+    links:[
+      { label:'✈ Saudia flight status', url:'https://www.saudia.com/planning-a-trip/check-in-and-boarding/flight-status' },
+      { label:'📋 Saudi GACA',          url:'https://www.gaca.gov.sa/en/index' },
+      { label:'📊 FlightAware RUH',     url:'https://www.flightaware.com/live/airport/OERK' },
+    ]
+  },
+
+  { id:'JED', name:'King Abdulaziz International',  city:'Jeddah, Saudi Arabia',   lat:21.6796, lon:39.1565, s:'disrupted',
+    carrier:'Saudia · flynas · Multiple',      res:'Operational — heavy diversion congestion',
+    detail:{
+      airspace:'Saudi airspace open — Jeddah serving as key diversion hub',
+      ops:'Heavily elevated traffic from Gulf and Israeli airspace diversions.',
+      carrier_status:'Saudia, flynas, flyadeal operating. Many European carriers rerouting via JED.',
+      last_flight:'Ongoing operations — heavy traffic throughput',
+    },
+    news:[
+      { dot:'b', text:'Jeddah has become the primary diversion and rerouting hub as flights avoid closed Gulf and Israeli airspace. Congestion reported.', time:'02 Mar · 06:00' },
+      { dot:'a', text:'Saudi GACA warns of significant delays at JED due to rerouted traffic. Ground holds of 60–90 minutes reported.',                    time:'02 Mar · 09:00' },
+      { dot:'a', text:'Lufthansa, Air France and British Airways all rerouting ME-bound flights via JED corridor rather than Gulf.',                       time:'02 Mar · 08:30' },
+    ],
+    links:[
+      { label:'✈ Saudia flight status', url:'https://www.saudia.com/planning-a-trip/check-in-and-boarding/flight-status' },
+      { label:'📊 FlightAware JED',     url:'https://www.flightaware.com/live/airport/OEJN' },
+    ]
+  },
+
+  { id:'DMM', name:'King Fahd International',       city:'Dammam, Saudi Arabia',   lat:26.4712, lon:49.7979, s:'disrupted',
+    carrier:'Saudia · flyadeal · Multiple',    res:'Operational (reduced)',
+    detail:{
+      airspace:'Saudi airspace open — Eastern Province under monitoring',
+      ops:'Limited operations. Several European carriers suspended.',
+      carrier_status:'Saudia and flyadeal operating. Lufthansa suspended to Mar 8.',
+      last_flight:'Saudia SV 001 to RUH operated 02 Mar 10:30',
+    },
+    news:[
+      { dot:'a', text:'Dammam in Saudi\'s Eastern Province — close to Bahraini and Kuwaiti airspace closures. Risk elevated.',                       time:'02 Mar · 03:00' },
+      { dot:'a', text:'Lufthansa suspended all Dammam services until 8 March. Emirates, Etihad, Qatar Airways already grounded.',                     time:'02 Mar · 03:00' },
+      { dot:'b', text:'Oil industry workers based in Eastern Province advised by Saudi Aramco security team to minimise travel.',                      time:'02 Mar · 08:00' },
+    ],
+    links:[
+      { label:'📊 FlightAware DMM', url:'https://www.flightaware.com/live/airport/OEDF' },
+    ]
+  },
+
+  { id:'MED', name:'Prince Mohammad bin Abdulaziz', city:'Medina, Saudi Arabia',   lat:24.5534, lon:39.7051, s:'disrupted',
+    carrier:'Saudia · flynas · International charters', res:'Operational (reduced)',
+    detail:{
+      airspace:'Saudi airspace open — Medina operations reduced',
+      ops:'Hajj and Umrah charter flights severely disrupted.',
+      carrier_status:'Saudia operating limited schedule. Charter operators suspended.',
+      last_flight:'Saudia operating domestic routes; international severely reduced',
+    },
+    news:[
+      { dot:'a', text:'Medina airport disruptions affecting Umrah pilgrim flights. Saudi Ministry of Hajj advising pilgrims not to travel.', time:'02 Mar · 08:00' },
+    ],
+    links:[
+      { label:'📊 FlightAware MED', url:'https://www.flightaware.com/live/airport/OEMA' },
+    ]
+  },
+
+  { id:'AHB', name:'Abha International',            city:'Abha, Saudi Arabia',     lat:18.2404, lon:42.6566, s:'disrupted',
+    carrier:'Saudia · flyadeal',               res:'Operational (reduced)',
+    detail:{
+      airspace:'Saudi airspace open — southwest region monitored',
+      ops:'Limited operations. Proximity to Yemen conflict zone adds risk.',
+      carrier_status:'Saudia and flyadeal operating reduced schedule.',
+      last_flight:'Saudia SV domestic service operated 02 Mar 09:00',
+    },
+    news:[
+      { dot:'a', text:'Abha airport in Saudi\'s Asir region has previously been targeted by Houthi drones from Yemen. Elevated threat posture maintained.', time:'02 Mar · 06:00' },
+      { dot:'a', text:'Saudi GACA issued NOTAM restricting approach paths over Yemen border. All Abha arrivals from south rerouted.', time:'02 Mar · 07:30' },
+    ],
+    links:[
+      { label:'📊 FlightAware AHB', url:'https://www.flightaware.com/live/airport/OEAB' },
+    ]
+  },
+
+  { id:'TUU', name:'Tabuk Regional Airport',        city:'Tabuk, Saudi Arabia',    lat:28.3654, lon:36.6189, s:'disrupted',
+    carrier:'Saudia · flynas',                 res:'Operational (reduced)',
+    detail:{
+      airspace:'Saudi airspace open — northwest border region monitored',
+      ops:'Reduced operations. Jordan airspace closure affecting routing.',
+      carrier_status:'Saudia and flynas operating limited domestic schedule.',
+      last_flight:'flynas XY 401 to RUH operated 02 Mar 10:15',
+    },
+    news:[
+      { dot:'a', text:'Tabuk sits near Jordanian border. Jordan\'s airspace partial closure affects routing for flights to/from Tabuk.', time:'02 Mar · 05:00' },
+      { dot:'a', text:'Lufthansa Group and several European carriers have suspended all northwest Saudi routes until further notice.',    time:'02 Mar · 03:00' },
+    ],
+    links:[
+      { label:'📊 FlightAware TUU', url:'https://www.flightaware.com/live/airport/OETB' },
+    ]
+  },
+
+  { id:'GIZ', name:'Jizan Regional Airport',        city:'Jizan, Saudi Arabia',    lat:16.9011, lon:42.5858, s:'disrupted',
+    carrier:'Saudia',                          res:'Operational (reduced)',
+    detail:{
+      airspace:'Saudi airspace open — far southwest, Yemen proximity risk',
+      ops:'Limited scheduled operations. Heightened security.',
+      carrier_status:'Saudia operating domestic-only schedule.',
+      last_flight:'Saudia SV domestic arrival 02 Mar 08:40',
+    },
+    news:[
+      { dot:'a', text:'Jizan is Saudi Arabia\'s southernmost commercial airport, ~50 km from Yemen border. Regional conflict risk assessment elevated.', time:'02 Mar · 06:00' },
+    ],
+    links:[
+      { label:'📊 FlightAware GIZ', url:'https://www.flightaware.com/live/airport/OEGN' },
+    ]
+  },
+
+  { id:'ELQ', name:'Prince Naif bin Abdulaziz Intl', city:'Qassim, Saudi Arabia',  lat:26.3025, lon:43.7744, s:'disrupted',
+    carrier:'Saudia · flyadeal',               res:'Operational (reduced)',
+    detail:{
+      airspace:'Saudi airspace open — central region',
+      ops:'Domestic and limited regional operations.',
+      carrier_status:'Saudia operating domestic schedule. Regional disruptions ongoing.',
+      last_flight:'Saudia SV 221 to JED operated 02 Mar 09:30',
+    },
+    news:[
+      { dot:'a', text:'Qassim airport disruptions reflect Saudi-wide precautionary airspace management in response to Gulf crisis.', time:'02 Mar · 04:00' },
+    ],
+    links:[
+      { label:'📊 FlightAware ELQ', url:'https://www.flightaware.com/live/airport/OEGS' },
+    ]
+  },
+
+  { id:'HAS', name:"Ha'il Regional Airport",        city:"Ha'il, Saudi Arabia",    lat:27.4379, lon:41.6863, s:'disrupted',
+    carrier:'Saudia · flynas',                 res:'Operational (reduced)',
+    detail:{
+      airspace:'Saudi airspace open — northern region',
+      ops:'Domestic operations maintained. Limited international connectivity.',
+      carrier_status:'Saudia and flynas operating domestic services.',
+      last_flight:'flynas XY domestic service 02 Mar 10:00',
+    },
+    news:[
+      { dot:'a', text:'Ha\'il disruptions in line with Saudi-wide precautionary aviation measures.', time:'02 Mar · 04:00' },
+    ],
+    links:[
+      { label:'📊 FlightAware HAS', url:'https://www.flightaware.com/live/airport/OEHL' },
+    ]
+  },
+
+  { id:'TIF', name:'Taif Regional Airport',         city:'Taif, Saudi Arabia',     lat:21.4834, lon:40.5443, s:'disrupted',
+    carrier:'Saudia · flynas',                 res:'Operational (reduced)',
+    detail:{
+      airspace:'Saudi airspace open — Hejaz region',
+      ops:'Limited scheduled operations.',
+      carrier_status:'Saudia and flynas operating domestic-only schedule.',
+      last_flight:'Saudia SV domestic service operated 02 Mar 09:15',
+    },
+    news:[
+      { dot:'a', text:'Taif disruptions reflect Saudi-wide precautionary measures. Some military activity at adjacent air base noted.', time:'02 Mar · 05:00' },
+    ],
+    links:[
+      { label:'📊 FlightAware TIF', url:'https://www.flightaware.com/live/airport/OETF' },
+    ]
+  },
+
+  { id:'YNB', name:'Yanbu Airport',                 city:'Yanbu, Saudi Arabia',    lat:24.1445, lon:38.0634, s:'disrupted',
+    carrier:'Saudia',                          res:'Operational (reduced)',
+    detail:{
+      airspace:'Saudi airspace open — Red Sea coast',
+      ops:'Limited operations serving oil industry workers.',
+      carrier_status:'Saudia operating domestic schedule only.',
+      last_flight:'Saudia SV domestic arrival 02 Mar 08:00',
+    },
+    news:[
+      { dot:'a', text:'Yanbu is a key industrial city serving Saudi Aramco\'s Red Sea operations. Workers advised to minimise non-essential travel.', time:'02 Mar · 07:00' },
+    ],
+    links:[
+      { label:'📊 FlightAware YNB', url:'https://www.flightaware.com/live/airport/OEYN' },
+    ]
+  },
+
+  { id:'AQI', name:'Al Qaisumah / Hafr Al-Batin',   city:'Hafr Al-Batin, Saudi Arabia', lat:28.3352, lon:46.1251, s:'disrupted',
+    carrier:'Saudia',                          res:'Operational (reduced)',
+    detail:{
+      airspace:'Saudi airspace open — near Kuwaiti border',
+      ops:'Very limited operations. High risk proximity to Kuwaiti closure zone.',
+      carrier_status:'Saudia operating domestic-only. All regional services halted.',
+      last_flight:'Saudia SV domestic service 01 Mar 20:00; reduced since',
+    },
+    news:[
+      { dot:'a', text:'Hafr Al-Batin is Saudi Arabia\'s closest commercial airport to Kuwait. Kuwait\'s airspace closure and nearby strikes create elevated risk.', time:'02 Mar · 04:00' },
+    ],
+    links:[
+      { label:'📊 FlightAware AQI', url:'https://www.flightaware.com/live/airport/OEPA' },
+    ]
+  },
+
+  // ── Oman — OPEN ──────────────────────────────────────────────
+  { id:'MCT', name:'Muscat International',          city:'Muscat, Oman',           lat:23.5933, lon:58.2844, s:'open',
+    carrier:'Oman Air · Multiple',             res:'N/A — Fully operational',
+    detail:{
+      airspace:'Oman airspace fully open — not participating in conflict',
+      ops:'Normal operations. Receiving significant diverted traffic.',
+      carrier_status:'Oman Air operating normally. All major international carriers diverted to MCT.',
+      last_flight:'Active — continuous operations. Handling diverted QR007, KU-diverts, others',
+    },
+    news:[
+      { dot:'g', text:'Oman announced neutrality and kept airspace fully open. MCT is the nearest operational major airport to Dubai (~350 km via E11 highway).', time:'02 Mar · 03:00' },
+      { dot:'g', text:'Oman Air deployed additional ground staff to handle surge in diverted flights. Two Qatar Airways aircraft confirmed on ground at MCT.',      time:'02 Mar · 05:30' },
+      { dot:'b', text:'Overland route Dubai → Muscat via E11/E55 confirmed open by UAE and Oman border agencies. Drive time approx 4–5 hours.',                   time:'02 Mar · 07:00' },
+      { dot:'b', text:'Muscat airport hotel capacity filling fast. Oman Tourism Ministry coordinating emergency accommodation.',                                   time:'02 Mar · 10:00' },
+      { dot:'a', text:'Drone strike hit fuel tank at Duqm commercial port 3 Mar — limited damage, no casualties. MCT airport unaffected.',             time:'03 Mar · 12:00' },
+      { dot:'g', text:'Iran denied Duqm attack. Oman maintaining strict neutrality. MCT remains the primary open major Gulf hub.',                          time:'03 Mar · 15:00' },
+    ],
+    links:[
+      { label:'✈ Oman Air status',       url:'https://www.omanair.com/en/flightstatusresults' },
+      { label:'📋 Muscat Airport',        url:'https://www.muscatairport.co.om/' },
+      { label:'📊 FlightAware MCT',          url:'https://www.flightaware.com/live/airport/OOMS' },
+      { label:'🌐 FR24 airspace live blog',   url:'https://www.flightradar24.com/blog/live/israel-launches-pre-emptive-strikes-on-iran-airspace-closures-going-into-place/' },
+    ]
+  },
+
+  { id:'SLL', name:'Salalah Airport',               city:'Salalah, Oman',          lat:17.0387, lon:54.0913, s:'open',
+    carrier:'Oman Air · Air Arabia',           res:'N/A — Fully operational',
+    detail:{
+      airspace:'Oman airspace fully open',
+      ops:'Normal operations',
+      carrier_status:'Oman Air and Air Arabia operating normally.',
+      last_flight:'Active — Oman Air WY 111 arrived 02 Mar 10:45',
+    },
+    news:[
+      { dot:'g', text:'Salalah operating normally under Oman\'s neutral airspace policy.', time:'02 Mar · 03:00' },
+    ],
+    links:[
+      { label:'📊 FlightAware SLL', url:'https://www.flightaware.com/live/airport/OOSA' },
+    ]
+  },
+
+  // ── Egypt — open ──────────────────────────────────────────────
+  { id:'CAI', name:'Cairo International',           city:'Cairo, Egypt',           lat:30.1219, lon:31.4056, s:'open',
+    carrier:'EgyptAir · Multiple',             res:'N/A — Fully operational',
+    detail:{
+      airspace:'Egypt airspace fully open — acting as regional diversion hub',
+      ops:'Heavy elevated traffic. EgyptAir and all international carriers operating.',
+      carrier_status:'EgyptAir operating all routes. Multiple diverted Gulf flights landed.',
+      last_flight:'Active — continuous operations including diverted Kuwait Airways aircraft',
+    },
+    news:[
+      { dot:'g', text:'Cairo International receiving significant diverted traffic from Gulf, Israeli and Jordanian airspace closures.',                        time:'02 Mar · 04:00' },
+      { dot:'g', text:'EgyptAir adding extra capacity and issuing flexible rebooking policies for passengers rerouting through Cairo.',                       time:'02 Mar · 07:00' },
+      { dot:'b', text:'Egypt has offered overflight corridors to European carriers needing to avoid Gulf airspace. Cairo-London and Cairo-Frankfurt demand up.', time:'02 Mar · 09:00' },
+    ],
+    links:[
+      { label:'✈ EgyptAir status',  url:'https://www.egyptair.com/en/Pages/flight-status.aspx' },
+      { label:'📊 FlightAware CAI', url:'https://www.flightaware.com/live/airport/HECA' },
+    ]
+  },
+
+  { id:'SSH', name:'Sharm El-Sheikh International', city:'Sharm El-Sheikh, Egypt', lat:27.9773, lon:34.3950, s:'open',
+    carrier:'Multiple charter operators',      res:'N/A — Fully operational',
+    detail:{
+      airspace:'Egypt airspace fully open',
+      ops:'Normal charter and scheduled operations',
+      carrier_status:'All operators normal. Some rerouting over Sinai due to Israeli airspace closure.',
+      last_flight:'Active operations',
+    },
+    news:[
+      { dot:'g', text:'Sharm El-Sheikh operating normally. Some aircraft rerouting around southern Israel.', time:'02 Mar · 05:00' },
+    ],
+    links:[
+      { label:'📊 FlightAware SSH', url:'https://www.flightaware.com/live/airport/HESH' },
+    ]
+  },
+
+  // ── Turkey — open ─────────────────────────────────────────────
+  { id:'IST', name:'Istanbul Airport',              city:'Istanbul, Turkey',       lat:41.2608, lon:28.7418, s:'open',
+    carrier:'Turkish Airlines · Multiple',     res:'N/A — Fully operational',
+    detail:{
+      airspace:'Turkey airspace fully open',
+      ops:'Normal operations. Turkish Airlines cancelled some Middle East routes but IST hub fully operational.',
+      carrier_status:'Turkish Airlines operating. Cancelled select Iran, Israel, Lebanon, Iraq routes.',
+      last_flight:'Active — continuous hub operations',
+    },
+    news:[
+      { dot:'g', text:'Istanbul Airport fully operational. Turkish Airlines cancelled routes to IKA, TLV, BEY, BGW citing force majeure.', time:'02 Mar · 04:30' },
+      { dot:'b', text:'IST becoming a major stopover hub for passengers rerouting from the Gulf via alternative paths.',                    time:'02 Mar · 08:00' },
+    ],
+    links:[
+      { label:'✈ Turkish Airlines status', url:'https://www.turkishairlines.com/en-gb/flights/flight-status/' },
+      { label:'🌐 ops.group airspace brief',  url:'https://ops.group/blog/middle-east-airspace-update/' },
+      { label:'🌐 FR24 airspace live blog',    url:'https://www.flightradar24.com/blog/live/israel-launches-pre-emptive-strikes-on-iran-airspace-closures-going-into-place/' },
+      { label:'📋 Istanbul Airport',       url:'https://www.istairport.com/en' },
+      { label:'📊 FlightAware IST',        url:'https://www.flightaware.com/live/airport/LTFM' },
+    ]
+  },
+
+  { id:'SAW', name:'Istanbul Sabiha Gökçen',        city:'Istanbul, Turkey',       lat:40.8983, lon:29.3092, s:'open',
+    carrier:'Pegasus · SunExpress · Multiple', res:'N/A — Fully operational',
+    detail:{
+      airspace:'Turkey airspace fully open',
+      ops:'Normal operations. Asia-side hub handling overflow from IST.',
+      carrier_status:'Pegasus Airlines and SunExpress operating all routes normally.',
+      last_flight:'Active — continuous operations',
+    },
+    news:[
+      { dot:'g', text:'Sabiha Gökçen fully operational. Pegasus Airlines operating all scheduled services.', time:'02 Mar · 05:00' },
+      { dot:'b', text:'SAW handling overflow from IST as passenger volumes surge due to Gulf rerouting.',    time:'02 Mar · 09:00' },
+    ],
+    links:[
+      { label:'✈ Pegasus flight status', url:'https://www.flypgs.com/en/flight-information/flight-status' },
+      { label:'📋 Sabiha Gökçen Airport',url:'https://www.sabihagokcen.aero/homepage' },
+      { label:'📊 FlightAware SAW',      url:'https://www.flightaware.com/live/airport/LTFJ' },
+    ]
+  },
+
+  { id:'AYT', name:'Antalya Airport',               city:'Antalya, Turkey',        lat:36.8987, lon:30.8003, s:'open',
+    carrier:'Turkish Airlines · Pegasus · Multiple', res:'N/A — Fully operational',
+    detail:{
+      airspace:'Turkey airspace fully open',
+      ops:'Normal operations. Charter-heavy airport operating as usual.',
+      carrier_status:'All carriers operating. No disruptions reported.',
+      last_flight:'Active — continuous operations including high charter volumes',
+    },
+    news:[
+      { dot:'g', text:'Antalya fully operational. Major European charter destination unaffected by Gulf crisis.', time:'02 Mar · 05:00' },
+    ],
+    links:[
+      { label:'📋 Antalya Airport',  url:'https://www.antalya-airport.aero/en' },
+      { label:'📊 FlightAware AYT', url:'https://www.flightaware.com/live/airport/LTAI' },
+    ]
+  },
+
+  { id:'ADB', name:'Izmir Adnan Menderes',          city:'Izmir, Turkey',          lat:38.2924, lon:27.1570, s:'open',
+    carrier:'Turkish Airlines · Pegasus · SunExpress', res:'N/A — Fully operational',
+    detail:{
+      airspace:'Turkey airspace fully open',
+      ops:'Normal operations.',
+      carrier_status:'All carriers operating normally.',
+      last_flight:'Active — continuous operations',
+    },
+    news:[
+      { dot:'g', text:'Izmir Adnan Menderes fully operational. No disruptions reported.', time:'02 Mar · 05:00' },
+    ],
+    links:[
+      { label:'📊 FlightAware ADB', url:'https://www.flightaware.com/live/airport/LTBJ' },
+    ]
+  },
+
+  { id:'ESB', name:'Ankara Esenboğa',               city:'Ankara, Turkey',         lat:40.1281, lon:32.9951, s:'open',
+    carrier:'Turkish Airlines · Pegasus',      res:'N/A — Fully operational',
+    detail:{
+      airspace:'Turkey airspace fully open',
+      ops:'Normal operations. Capital city airport serving government and commercial traffic.',
+      carrier_status:'Turkish Airlines and Pegasus operating full schedules.',
+      last_flight:'Active — continuous operations',
+    },
+    news:[
+      { dot:'g', text:'Ankara Esenboğa fully operational. Turkish government monitoring Gulf situation closely; no airspace measures announced.', time:'02 Mar · 06:00' },
+      { dot:'b', text:'Turkish Ministry of Foreign Affairs issued travel advisory urging citizens to avoid Iran, Iraq, Israel, Lebanon and Gulf states.', time:'02 Mar · 08:00' },
+    ],
+    links:[
+      { label:'📋 Ankara Airport',  url:'https://www.esenbogaairport.com/en/' },
+      { label:'📊 FlightAware ESB', url:'https://www.flightaware.com/live/airport/LTAC' },
+    ]
+  },
+
+  { id:'GZT', name:'Gaziantep Oğuzeli International', city:'Gaziantep, Turkey',    lat:36.9473, lon:37.4787, s:'open',
+    carrier:'Turkish Airlines · Pegasus · SunExpress', res:'N/A — Fully operational',
+    detail:{
+      airspace:'Turkey airspace fully open — southeast Turkey monitoring Syria border',
+      ops:'Normal commercial operations. Turkish military on elevated readiness near Syrian border.',
+      carrier_status:'All carriers operating normally.',
+      last_flight:'Active — continuous operations',
+    },
+    news:[
+      { dot:'g', text:'Gaziantep airport operating normally despite proximity to Syrian border and regional tensions.', time:'02 Mar · 05:00' },
+      { dot:'a', text:'Turkish Armed Forces on heightened alert along entire Syrian and Iraqi border regions.', time:'02 Mar · 04:00' },
+    ],
+    links:[
+      { label:'📊 FlightAware GZT', url:'https://www.flightaware.com/live/airport/LTAJ' },
+    ]
+  },
+
+  { id:'GZP', name:'Alanya Gazipaşa Airport',       city:'Alanya, Turkey',         lat:36.2993, lon:32.3002, s:'open',
+    carrier:'Pegasus · SunExpress · Charters',  res:'N/A — Fully operational',
+    detail:{
+      airspace:'Turkey airspace fully open',
+      ops:'Normal charter and scheduled operations.',
+      carrier_status:'Pegasus and charter operators running normal schedules.',
+      last_flight:'Active — ongoing charter traffic',
+    },
+    news:[
+      { dot:'g', text:'Alanya Gazipaşa fully operational. Tourist season charter traffic unaffected.', time:'02 Mar · 05:00' },
+    ],
+    links:[
+      { label:'📊 FlightAware GZP', url:'https://www.flightaware.com/live/airport/LTFG' },
+    ]
+  },
+
+  { id:'TZX', name:'Trabzon Airport',               city:'Trabzon, Turkey',        lat:40.9950, lon:39.7897, s:'open',
+    carrier:'Turkish Airlines · Pegasus',      res:'N/A — Fully operational',
+    detail:{
+      airspace:'Turkey airspace fully open — Black Sea coast',
+      ops:'Normal operations.',
+      carrier_status:'Turkish Airlines and Pegasus operating normally.',
+      last_flight:'Active — continuous operations',
+    },
+    news:[
+      { dot:'g', text:'Trabzon fully operational. Black Sea region unaffected by Gulf crisis.', time:'02 Mar · 05:00' },
+    ],
+    links:[
+      { label:'📊 FlightAware TZX', url:'https://www.flightaware.com/live/airport/LTCG' },
+    ]
+  },
+];
+
+// ═══════════════════════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════════════════════
+const C  = {r:'var(--red)',  a:'var(--amber)',  g:'var(--green)'};
+const CL = {closed:'r', disrupted:'a', open:'g'};
+const LB = {closed:'CLOSED', disrupted:'DISRUPTED', open:'OPEN'};
+const ST = {closed:'SUSPENDED', disrupted:'DISRUPTED', open:'OPERATIONAL'};
+
+// ═══════════════════════════════════════════════════════════════════
+// MAP
+// ═══════════════════════════════════════════════════════════════════
+const map = L.map('map', { center:[28,50], zoom:5, zoomControl:false });
+L.control.zoom({ position:'topright' }).addTo(map);
+
+const cartoDark  = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',  { attribution:'© OpenStreetMap © CARTO', subdomains:'abcd', maxZoom:20 });
+const cartoLight = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { attribution:'© OpenStreetMap © CARTO', subdomains:'abcd', maxZoom:20 });
+const osmStd     = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',             { attribution:'© OpenStreetMap contributors', maxZoom:19 });
+const satellite  = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution:'© Esri', maxZoom:19 });
+cartoDark.addTo(map);
+
+const lgC = L.layerGroup().addTo(map);
+const lgD = L.layerGroup().addTo(map);
+const lgO = L.layerGroup().addTo(map);
+const lgP = L.layerGroup().addTo(map);
+
+L.control.layers(
+  { '🌑 Dark (CartoDB)': cartoDark, '☀️ Light (CartoDB)': cartoLight, '🗺️ Street (OSM)': osmStd, '🛰️ Satellite (Esri)': satellite },
+  { '🔴 Closed': lgC, '🟡 Disrupted': lgD, '🟢 Open': lgO, '📍 My locations': lgP },
+  { position:'topright', collapsed:false }
+).addTo(map);
+
+// ═══════════════════════════════════════════════════════════════════
+// MARKERS
+// ═══════════════════════════════════════════════════════════════════
+const MKR = {};
+
+function mkIcon(ap) {
+  const c = CL[ap.s];
+  return L.divIcon({
+    className: '',
+    html: `<div class="mi"><div class="mc ${c}">✈</div><div class="ml">${ap.id}</div></div>`,
+    iconSize: [40,36], iconAnchor:[20,10], popupAnchor:[0,-8]
+  });
+}
+
+function buildMarkers() {
+  lgC.clearLayers(); lgD.clearLayers(); lgO.clearLayers();
+  AP.forEach(ap => {
+    const m = L.marker([ap.lat,ap.lon], { icon:mkIcon(ap) });
+    m.bindPopup(makePopup(ap), { maxWidth:400, minWidth:360, autoPan:true });
+    m.on('click', () => hilite(ap.id));
+    const lg = ap.s==='closed'?lgC : ap.s==='disrupted'?lgD : lgO;
+    lg.addLayer(m);
+    MKR[ap.id] = m;
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// POPUP
+// ═══════════════════════════════════════════════════════════════════
+function makePopup(ap) {
+  const c  = CL[ap.s];
+  const sc = c==='r'?'r' : c==='a'?'a' : 'g';
+  const d  = ap.detail;
+
+  const linksHtml = ap.links.map((l,i) => `
+    <a class="pu-link${i===0?' primary':''}" href="${l.url}" target="_blank" rel="noopener">${l.label}</a>`
+  ).join('');
+
+  return `
+    <div class="pu-hdr ${c}">
+      <div class="pu-top">
+        <div>
+          <div class="pu-iata ${c}">${ap.id}</div>
+          <div class="pu-name">${ap.name}</div>
+          <div class="pu-city">${ap.city}</div>
+        </div>
+        <div class="pu-badge ${c}">${ST[ap.s]}</div>
+      </div>
+    </div>
+
+    <div class="pu-grid">
+      <div class="pu-cell">
+        <div class="pu-cell-k">Airspace</div>
+        <div class="pu-cell-v">${d.airspace}</div>
+      </div>
+      <div class="pu-cell">
+        <div class="pu-cell-k">Operations</div>
+        <div class="pu-cell-v ${sc}">${d.ops}</div>
+      </div>
+      <div class="pu-cell">
+        <div class="pu-cell-k">Carriers</div>
+        <div class="pu-cell-v">${d.carrier_status}</div>
+      </div>
+      <div class="pu-cell">
+        <div class="pu-cell-k">Last flight</div>
+        <div class="pu-cell-v">${d.last_flight}</div>
+      </div>
+    </div>
+
+
+
+    <div class="pu-links">
+      ${linksHtml}
+      <a class="pu-link" href="https://www.flightradar24.com/" target="_blank" rel="noopener">🗺 Flightradar24 live</a>
+    </div>
+
+    <div class="pu-foot">
+      <span>${ap.lat.toFixed(3)}°N  ${ap.lon.toFixed(3)}°E</span>
+      <span id="pfoot-${ap.id}">Updated —</span>
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// SIDEBAR LIST
+// ═══════════════════════════════════════════════════════════════════
+let curFilter = 'all';
+
+function buildList(filter='all') {
+  curFilter = filter;
+  const el = document.getElementById('alist');
+  el.innerHTML = '';
+  const shown = filter==='all' ? AP : AP.filter(a => a.s===filter);
+  shown.forEach(ap => {
+    const c = CL[ap.s];
+    const row = document.createElement('div');
+    row.className = 'ap-row'; row.id = 'row-'+ap.id;
+    row.innerHTML = `
+      <div class="ap-pip ${c}"></div>
+      <div class="ap-iata">${ap.id}</div>
+      <div class="ap-info">
+        <div class="ap-name">${ap.name}</div>
+        <div class="ap-city">${ap.city}</div>
+      </div>
+      <div class="ap-badge ${c}">${LB[ap.s]}</div>`;
+    row.addEventListener('click', () => {
+      const m = MKR[ap.id];
+      if(m) { map.setView([ap.lat,ap.lon], Math.max(map.getZoom(),8), {animate:true}); setTimeout(()=>m.openPopup(),280); }
+      hilite(ap.id);
+    });
+    el.appendChild(row);
+  });
+}
+
+function hilite(id) {
+  document.querySelectorAll('.ap-row').forEach(r => r.classList.remove('on'));
+  const r = document.getElementById('row-'+id);
+  if(r) { r.classList.add('on'); r.scrollIntoView({block:'nearest',behavior:'smooth'}); }
+}
+
+function setFilter(f, el) {
+  document.querySelectorAll('.ftab').forEach(t => t.classList.remove('on'));
+  if(el) el.classList.add('on');
+  else {
+    // called from header chip — find correct tab
+    const map2 = {closed:'.ftab.r',disrupted:'.ftab.a',open:'.ftab.g'};
+    const t = document.querySelector(map2[f]);
+    if(t) t.classList.add('on');
+  }
+  buildList(f);
+}
+
+function updateStats() {
+  document.getElementById('cc').textContent = AP.filter(a=>a.s==='closed').length    + ' Closed';
+  document.getElementById('cd').textContent = AP.filter(a=>a.s==='disrupted').length + ' Disrupted';
+  document.getElementById('co').textContent = AP.filter(a=>a.s==='open').length      + ' Open';
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// LOCATION PINS
+// ═══════════════════════════════════════════════════════════════════
+let pins = [];
+
+async function doPin() {
+  const q = document.getElementById('linput').value.trim();
+  if(!q) return;
+  const btn=document.getElementById('pbtn'), msg=document.getElementById('lmsg');
+  btn.disabled=true; btn.textContent='…';
+  msg.textContent='Searching…'; msg.className='';
+  try {
+    const r = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=1`,
+      { headers:{'Accept-Language':'en','User-Agent':'GulfAviationMap/3.1'} });
+    const data = await r.json();
+    if(!data.length) throw new Error('Location not found — try a more specific address');
+    const {lat,lon,display_name} = data[0];
+    const ll = [parseFloat(lat),parseFloat(lon)];
+    const label = q.length>32 ? q.slice(0,30)+'…' : q;
+    const icon = L.divIcon({ className:'', html:`<div class="locdot"></div>`, iconSize:[13,13], iconAnchor:[6,6], popupAnchor:[0,-10] });
+    const marker = L.marker(ll, {icon, zIndexOffset:2000})
+      .bindPopup(`<div class="pu-hdr" style="background:rgba(59,130,246,.06)"><div class="pu-iata" style="color:var(--blue);font-size:20px">📍</div><div class="pu-name">${label}</div><div class="pu-city">${display_name.split(',').slice(0,3).join(', ')}</div></div><div class="pu-foot"><span>${parseFloat(lat).toFixed(5)}°N  ${parseFloat(lon).toFixed(5)}°E</span><span>Nominatim geocoder</span></div>`)
+      .addTo(lgP);
+    const id = Date.now();
+    pins.push({id, label, ll, marker});
+    renderPins();
+    map.setView(ll, Math.max(map.getZoom(),11), {animate:true});
+    setTimeout(()=>marker.openPopup(),380);
+    msg.textContent='✓ Pinned: '+label; msg.className='ok';
+    document.getElementById('linput').value='';
+  } catch(e) {
+    msg.textContent='✗ '+e.message; msg.className='er';
+  } finally {
+    btn.disabled=false; btn.textContent='Pin';
+  }
+}
+
+function renderPins() {
+  const el = document.getElementById('pinlist');
+  el.innerHTML='';
+  pins.forEach(p => {
+    const row = document.createElement('div');
+    row.className='pin-item';
+    row.innerHTML=`<span class="pin-dot">📍</span><span class="pin-lbl" title="${p.label}">${p.label}</span><button class="pin-go" onclick="gotoPin(${p.id})">Go</button><button class="pin-del" title="Remove pin" onclick="delPin(${p.id})">✕</button>`;
+    el.appendChild(row);
+  });
+}
+
+function gotoPin(id) {
+  const p=pins.find(x=>x.id===id);
+  if(!p) return;
+  map.setView(p.ll, Math.max(map.getZoom(),12), {animate:true});
+  setTimeout(()=>p.marker.openPopup(),300);
+}
+
+function delPin(id) {
+  const p=pins.find(x=>x.id===id);
+  if(p) lgP.removeLayer(p.marker);
+  pins=pins.filter(x=>x.id!==id);
+  renderPins();
+  const msg=document.getElementById('lmsg');
+  msg.textContent='Pin removed.'; msg.className='';
+  setTimeout(()=>{ if(msg.textContent==='Pin removed.') msg.textContent=''; },1800);
+}
+
+document.getElementById('linput').addEventListener('keydown', e=>{ if(e.key==='Enter') doPin(); });
+
+// ═══════════════════════════════════════════════════════════════════
+// CLOCK & TIME HELPERS  (Gulf Standard Time = UTC+4, no DST)
+// ═══════════════════════════════════════════════════════════════════
+function gulfNow() {
+  // Returns a Date object whose UTC fields represent Gulf time (UTC+4)
+  return new Date(Date.now() + 4 * 3600 * 1000);
+}
+
+function gulfTimeStr(d) {
+  // HH:MM:SS in Gulf time
+  const g = d || gulfNow();
+  const hh = String(g.getUTCHours()).padStart(2,'0');
+  const mm = String(g.getUTCMinutes()).padStart(2,'0');
+  const ss = String(g.getUTCSeconds()).padStart(2,'0');
+  return `${hh}:${mm}:${ss}`;
+}
+
+function gulfDateStr(d) {
+  const g = d || gulfNow();
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const day  = String(g.getUTCDate()).padStart(2,'0');
+  const mon  = months[g.getUTCMonth()];
+  const yr   = g.getUTCFullYear();
+  return `${day} ${mon} ${yr}`;
+}
+
+function gulfShort() {
+  // e.g. "03 Mar · 14:22 GST"
+  const g = gulfNow();
+  return `${gulfDateStr(g)} · ${gulfTimeStr(g).slice(0,5)} GST`;
+}
+
+function tick() {
+  const g = gulfNow();
+  // Header clock
+  document.getElementById('hts').textContent = gulfTimeStr(g) + ' GST';
+  // Header date
+  const dateEl = document.getElementById('hdate');
+  if (dateEl) dateEl.textContent = gulfDateStr(g);
+}
+
+
+const SECS=60; let cd=SECS; let tmr;
+function startTimer() {
+  clearInterval(tmr); cd=SECS;
+  tmr=setInterval(()=>{
+    cd--;
+    document.getElementById('pf').style.width = (cd/SECS*100)+'%';
+    document.getElementById('pcd').textContent = cd+'s';
+    if(cd<=0){ doRefresh(); cd=SECS; }
+  },1000);
+}
+function doRefresh() {
+  tick();
+  const b=document.getElementById('rfbtn');
+  b.classList.add('spin'); setTimeout(()=>b.classList.remove('spin'),700);
+}
+function manualRefresh() { doRefresh(); startTimer(); }
+
+// ═══════════════════════════════════════════════════════════════════
+// BOOT
+// ═══════════════════════════════════════════════════════════════════
+buildMarkers();
+buildList();
+updateStats();
+tick();
+startTimer();
+setInterval(tick,1000);
+
+
+
+// ═══════════════════════════════════════════════════════
+// BORDER CROSSINGS
+// ═══════════════════════════════════════════════════════
+const BORDERS = [
+  { id:'b01', country:'UAE / Oman',            name:'Hatta / Al Wajajah',           route:'Dubai \u2192 Muscat via Hatta',        s:'open',
+    hours:'24 hrs', types:'Car \xb7 Truck \xb7 Bus',
+    note:'Primary overland route from Dubai to Oman. Fully open. ~4.5 hrs to Muscat. Recommended evacuation route for stranded Dubai passengers.',
+    news:[ {dot:'g',text:'Border confirmed open. Queue times ~30\u201345 min.',time:'02 Mar \xb7 09:00'},
+           {dot:'b',text:'Recommended evacuation route. MCT airport ~350 km via E11/E55.',time:'02 Mar \xb7 07:00'} ] },
+  { id:'b02', country:'UAE / Oman',            name:'Al Ain / Mahdah',              route:'Al Ain (UAE) \u2192 Buraimi (Oman)', s:'open',
+    hours:'24 hrs', types:'Car \xb7 Truck',
+    note:'Second UAE\u2013Oman crossing. Open and operational. Lighter traffic than Hatta route.',
+    news:[ {dot:'g',text:'Al Ain / Mahdah crossing fully operational. No delays.',time:'02 Mar \xb7 08:00'} ] },
+  { id:'b03', country:'UAE / Saudi Arabia',    name:'Al Ghuwaifat / As Silah',      route:'Abu Dhabi \u2192 Dammam',             s:'open',
+    hours:'24 hrs', types:'Car \xb7 Truck \xb7 Bus',
+    note:'Main UAE\u2013Saudi land crossing. Open. Enhanced security checks \u2014 allow extra crossing time.',
+    news:[ {dot:'g',text:'Ghuwaifat crossing open. Saudi security heightened \u2014 allow 1\u20132 hrs.',time:'02 Mar \xb7 07:30'} ] },
+  { id:'b04', country:'Saudi Arabia / Kuwait', name:'Nuwaiseeb / Abdali',           route:'Dammam \u2192 Kuwait City',           s:'closed',
+    hours:'Suspended', types:'Car \xb7 Truck',
+    note:'Closed. Kuwait imposed land border shutdown alongside airspace closure following Iranian strikes near Ali Al Salem base.',
+    news:[ {dot:'r',text:'Kuwait closed all land borders with airspace closure. No ETA for reopening.',time:'02 Mar \xb7 03:30'} ] },
+  { id:'b05', country:'Saudi Arabia / Bahrain', name:'King Fahd Causeway',          route:'Dammam \u2192 Manama',                s:'disrupted',
+    hours:'Open (restricted)', types:'Car \xb7 Truck \xb7 Bus',
+    note:'Causeway physically open but Bahrain imposing strict controls. Only pre-authorised vehicles. Significant backlog on Saudi side.',
+    news:[ {dot:'a',text:'Bahrain restricting entry to pre-registered vehicles only.',time:'02 Mar \xb7 05:00'},
+           {dot:'a',text:'Significant backlog forming. Non-essential crossings advised to postpone.',time:'02 Mar \xb7 09:00'},
+           {dot:'b',text:'Fuel tankers and food supply trucks given priority passage.',time:'02 Mar \xb7 10:00'} ] },
+  { id:'b06', country:'Saudi Arabia / Jordan', name:'Haditha / Al Omari',           route:'Tabuk \u2192 Amman',                  s:'disrupted',
+    hours:'Open (reduced)', types:'Car \xb7 Truck',
+    note:'Open but Jordan has reduced crossing capacity. Trucks prioritised. Private cars subject to extended checks.',
+    news:[ {dot:'a',text:'Jordan reduced civilian throughput at Haditha. Commercial freight continuing.',time:'02 Mar \xb7 06:00'} ] },
+  { id:'b07', country:'Saudi Arabia / Iraq',   name:'Arar Border Crossing',         route:'Arar (KSA) \u2192 Iraq',              s:'closed',
+    hours:'Suspended', types:'Car \xb7 Truck',
+    note:'Closed. Iraq suspended all land border crossings alongside national airspace closure.',
+    news:[ {dot:'r',text:'Iraq closed all land borders with airspace. Arar crossing suspended.',time:'02 Mar \xb7 03:30'} ] },
+  { id:'b08', country:'Saudi Arabia / Yemen',  name:'Haradh / Al Tuwal',            route:'Jizan \u2192 Yemen',                  s:'closed',
+    hours:'Closed \u2014 conflict zone', types:'\u2014',
+    note:'Closed. Saudi military-controlled border zone. No civilian crossings permitted.',
+    news:[ {dot:'r',text:'Saudi\u2013Yemen border closed under military control. No civilian access.',time:'Ongoing'} ] },
+  { id:'b09', country:'Kuwait / Iraq',         name:'Abdali / Safwan',              route:'Kuwait City \u2192 Basra',            s:'closed',
+    hours:'Suspended', types:'Car \xb7 Truck',
+    note:'Closed. Both Kuwait and Iraq suspended all land crossings under emergency measures.',
+    news:[ {dot:'r',text:'Both Kuwait and Iraq suspended Abdali crossing. No movement either direction.',time:'02 Mar \xb7 03:30'} ] },
+  { id:'b10', country:'Qatar / Saudi Arabia',  name:'Abu Samra / Salwa',            route:'Doha \u2192 Saudi Arabia',            s:'disrupted',
+    hours:'Open (freight only)', types:'Truck',
+    note:"Qatar's only land border. Essential freight only. Private vehicles heavily restricted.",
+    news:[ {dot:'a',text:'Abu Samra open for essential freight only. Private vehicles restricted.',time:'02 Mar \xb7 05:00'},
+           {dot:'b',text:'Qatar importing food staples. Saudi confirmed freight unimpeded.',time:'02 Mar \xb7 08:00'} ] },
+  { id:'b11', country:'Jordan / Israel',       name:'Allenby / King Hussein Bridge', route:'Amman \u2192 West Bank',             s:'closed',
+    hours:'Suspended', types:'Car \xb7 Bus \xb7 Pedestrian',
+    note:'Closed. Both Jordan and Israel suspended crossing under emergency measures. Travellers stranded on both sides.',
+    news:[ {dot:'r',text:'Jordan and Israel both suspended Allenby Bridge. No timeline given.',time:'02 Mar \xb7 02:00'},
+           {dot:'r',text:'Several hundred travellers stranded, unable to cross.',time:'02 Mar \xb7 07:00'} ] },
+  { id:'b12', country:'Jordan / Israel',       name:'Wadi Araba / Yitzhak Rabin',   route:'Aqaba \u2192 Eilat',                  s:'closed',
+    hours:'Suspended', types:'Car \xb7 Pedestrian',
+    note:'Closed under Israeli emergency border closure orders.',
+    news:[ {dot:'r',text:'Wadi Araba closed by Israel border authority under emergency war regulations.',time:'01 Mar \xb7 23:45'} ] },
+  { id:'b13', country:'Jordan / Syria',        name:'Nasib / Jaber',                route:'Amman \u2192 Damascus',               s:'disrupted',
+    hours:'Open (freight only)', types:'Truck',
+    note:'Open for freight but passenger movement restricted. Jordan advising strongly against travel to Syria.',
+    news:[ {dot:'a',text:'Nasib open for freight only. Jordan MFA advising against entry to Syria.',time:'02 Mar \xb7 06:00'} ] },
+  { id:'b14', country:'Iraq / Jordan',         name:'Trebil / Karameh',             route:'Baghdad \u2192 Amman',                s:'closed',
+    hours:'Suspended', types:'Car \xb7 Truck',
+    note:'Closed under Iraqi national border closure order.',
+    news:[ {dot:'r',text:'Iraq closed all land borders. Trebil suspended with no ETA.',time:'02 Mar \xb7 03:30'} ] },
+  { id:'b15', country:'Iraq / Iran',           name:'Khosravi / Qasr-e Shirin',     route:'Baghdad \u2192 Tehran',               s:'closed',
+    hours:'Suspended', types:'Car \xb7 Truck',
+    note:'Closed by both Iraq and Iran. Major trade and pilgrim route suspended.',
+    news:[ {dot:'r',text:'Both Iraq and Iran closed Khosravi under national emergency measures.',time:'02 Mar \xb7 03:00'} ] },
+  { id:'b16', country:'Iraq / Turkey',         name:'Ibrahim Khalil / Habur',       route:'Erbil \u2192 Ankara',                 s:'open',
+    hours:'06:00\u201322:00', types:'Car \xb7 Truck \xb7 Bus',
+    note:'Open. Turkey has not closed its borders. Major freight route continuing with enhanced security checks.',
+    news:[ {dot:'g',text:'Ibrahim Khalil open. Turkey maintaining normal border operations.',time:'02 Mar \xb7 06:00'},
+           {dot:'a',text:'Enhanced screening \u2014 allow extra time for freight trucks.',time:'02 Mar \xb7 08:00'} ] },
+  { id:'b17', country:'Iran / Turkey',         name:'G\xfcrbulak / Bazargan',        route:'Tehran \u2192 Ankara',                s:'closed',
+    hours:'Suspended (Iran side)', types:'Car \xb7 Truck',
+    note:"Closed from Iranian side under Iran's national emergency. Turkey end staffed but no traffic from Iran.",
+    news:[ {dot:'r',text:'Iran halted all movement at G\xfcrbulak. Turkey side open but no traffic.',time:'02 Mar \xb7 02:00'},
+           {dot:'a',text:'Major disruption to Turkey\u2013Iran trade routes.',time:'02 Mar \xb7 08:00'} ] },
+  { id:'b18', country:'Oman / UAE',            name:'Al Wajajah / Hatta',           route:'Muscat \u2192 Dubai',                 s:'open',
+    hours:'24 hrs', types:'Car \xb7 Truck \xb7 Bus',
+    note:'Fully open. Oman neutral. Primary route for people leaving UAE. Oman increased border staffing.',
+    news:[ {dot:'g',text:'Oman\u2013UAE border fully open. Immigration operating normally.',time:'02 Mar \xb7 09:00'},
+           {dot:'g',text:'Oman increased staffing to handle surge from UAE.',time:'02 Mar \xb7 10:30'} ] },
+  { id:'b19', country:'Oman / Yemen',          name:'Sarfait Border',               route:'Salalah \u2192 Yemen',                s:'closed',
+    hours:'Closed \u2014 conflict zone', types:'\u2014',
+    note:'Closed. Yemen conflict makes crossing inaccessible. Oman military presence on border.',
+    news:[ {dot:'r',text:'Oman\u2013Yemen border closed. Ongoing conflict prevents any crossing.',time:'Ongoing'} ] },
+  { id:'b20', country:'Turkey / Syria',        name:'Bab al-Hawa',                  route:'Gaziantep \u2192 Idlib',              s:'disrupted',
+    hours:'Open (humanitarian only)', types:'Aid trucks',
+    note:'Open for UN humanitarian convoys and NGO aid only. Passenger vehicle movement suspended.',
+    news:[ {dot:'a',text:'Bab al-Hawa open for humanitarian convoys only. Passenger vehicles suspended.',time:'02 Mar \xb7 06:00'} ] },
+  { id:'b21', country:'Turkey / Syria',        name:'\xd6nc\xfcp\u0131nar / Bab al-Salameh', route:'Kilis \u2192 Northern Syria', s:'disrupted',
+    hours:'Open (restricted)', types:'Aid trucks',
+    note:'Restricted to humanitarian and essential supply movement only.',
+    news:[ {dot:'a',text:'\xd6nc\xfcp\u0131nar restricted to authorised humanitarian vehicles.',time:'02 Mar \xb7 05:00'} ] },
+  { id:'b22', country:'Turkey / Iraq',         name:'Habur / Ibrahim Khalil',       route:'\u015e\u0131rnak \u2192 Erbil / Mosul', s:'open',
+    hours:'06:00\u201322:00', types:'Car \xb7 Truck \xb7 Bus',
+    note:"Open. One of Turkey's busiest Iraq crossings handling major freight. Operating normally.",
+    news:[ {dot:'g',text:'Habur open. Major commercial freight uninterrupted.',time:'02 Mar \xb7 06:00'} ] },
+  { id:'b23', country:'Egypt / Israel',        name:'Taba Border Crossing',         route:'Sharm El-Sheikh \u2192 Eilat',        s:'closed',
+    hours:'Suspended by Israel', types:'Car \xb7 Pedestrian',
+    note:'Closed by Israel under emergency border orders.',
+    news:[ {dot:'r',text:'Israel suspended Taba under emergency war regulations.',time:'01 Mar \xb7 23:45'} ] },
+  { id:'b24', country:'Egypt / Gaza',          name:'Rafah Border Crossing',        route:'Cairo \u2192 Gaza',                   s:'closed',
+    hours:'Closed', types:'Pedestrian',
+    note:'Closed. Regional escalation resulted in full closure. Egypt maintaining buffer zone.',
+    news:[ {dot:'r',text:'Rafah fully closed. No civilian movement.',time:'02 Mar \xb7 04:00'} ] },
+  { id:'b25', country:'Egypt / Libya',         name:'Sallum / Amsaad',              route:'Alexandria \u2192 Benghazi',          s:'open',
+    hours:'07:00\u201321:00', types:'Car \xb7 Truck',
+    note:'Open and operating normally. Neither country involved in the current conflict.',
+    news:[ {dot:'g',text:'Egypt\u2013Libya Sallum crossing open normally. No disruptions.',time:'02 Mar \xb7 06:00'} ] },
+];
+
+const B_LBL = { closed:'CLOSED', disrupted:'DISRUPTED', open:'OPEN' };
+let bFilter = 'all';
+let openBorderId = null;
+
+function toggleBorderPanel() {
+  var panel  = document.getElementById('border-panel');
+  var toggle = document.getElementById('border-toggle');
+  var isOpen = panel.classList.contains('open');
+  panel.classList.toggle('open', !isOpen);
+  toggle.classList.toggle('active', !isOpen);
+  if (!isOpen) {
+    buildBorderList(bFilter);
+    var ft = document.getElementById('bp-foot');
+    if (ft) ft.textContent = 'Updated ' + gulfShort();
+  }
+}
+
+function setBorderFilter(f, el) {
+  bFilter = f;
+  document.querySelectorAll('.bft').forEach(function(t) { t.classList.remove('on'); });
+  el.classList.add('on');
+  buildBorderList(f);
+}
+
+function buildBorderList(filter) {
+  var el = document.getElementById('blist');
+  if (!el) return;
+  el.innerHTML = '';
+  var shown = filter === 'all' ? BORDERS : BORDERS.filter(function(b) { return b.s === filter; });
+  if (!shown.length) {
+    el.innerHTML = '<div style="padding:20px;text-align:center;font-size:11px;color:var(--muted)">No crossings match this filter.</div>';
+    return;
+  }
+  var groups = {};
+  shown.forEach(function(b) {
+    if (!groups[b.country]) groups[b.country] = [];
+    groups[b.country].push(b);
+  });
+  Object.keys(groups).forEach(function(country) {
+    var hdr = document.createElement('div');
+    hdr.className = 'b-country-hdr';
+    hdr.textContent = country;
+    el.appendChild(hdr);
+    groups[country].forEach(function(b) {
+      var c = b.s === 'closed' ? 'r' : b.s === 'disrupted' ? 'a' : 'g';
+      var newsHtml = b.news.map(function(n) {
+        return '<div class="b-ni"><div class="b-ndot ' + n.dot + '"></div>' +
+               '<div><div class="b-ntext">' + n.text + '</div>' +
+               '<div class="b-nmeta">' + n.time + '</div></div></div>';
+      }).join('');
+      var card = document.createElement('div');
+      card.className = 'b-card';
+      card.id = 'bcard-' + b.id;
+      card.innerHTML =
+        '<div class="b-top"><div class="b-pip ' + c + '"></div>' +
+        '<div class="b-name">' + b.name + '</div>' +
+        '<div class="b-badge ' + c + '">' + B_LBL[b.s] + '</div></div>' +
+        '<div class="b-route">' + b.route + '</div>' +
+        '<div class="b-note">' + b.note + '</div>' +
+        '<div class="b-detail">' +
+          '<div class="b-drow"><span class="b-dk">Hours</span><span class="b-dv">' + b.hours + '</span></div>' +
+          '<div class="b-drow"><span class="b-dk">Vehicles</span><span class="b-dv">' + b.types + '</span></div>' +
+          '<div class="b-drow"><span class="b-dk">Status</span><span class="b-dv ' + c + '">' + B_LBL[b.s] + '</span></div>' +
+          '<div class="b-news-hdr">Updates</div>' + newsHtml +
+        '</div>';
+      card.addEventListener('click', function() {
+        var already = card.classList.contains('open');
+        document.querySelectorAll('.b-card.open').forEach(function(x) { x.classList.remove('open'); });
+        if (!already) {
+          card.classList.add('open');
+          openBorderId = b.id;
+          card.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        } else {
+          openBorderId = null;
+        }
+      });
+      el.appendChild(card);
+    });
+  });
+}
+
+
+</script>
+</body>
+</html>
