@@ -11,6 +11,7 @@
 
 
 
+
 :root {
   --red:#ef4444; --amber:#f59e0b; --green:#22c55e; --blue:#3b82f6;
   --bg:#08111f; --panel:rgba(8,14,28,0.97); --panel2:rgba(13,20,38,0.96);
@@ -688,6 +689,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: var(--fon
 .b-nmeta  { font-size:8px; color:var(--muted); margin-top:1px; font-family:var(--mono); }
 .bp-foot  { padding:7px 15px; font-size:9px; color:rgba(90,106,128,.4);
   font-family:var(--mono); border-top:1px solid var(--border); flex-shrink:0; }
+
 </style>
 </head>
 <body>
@@ -752,26 +754,20 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: var(--fon
   </button>
 </div>
 
-<!-- BORDER TOGGLE BUTTON -->
 <button id="border-toggle" onclick="toggleBorderPanel()" title="Border Crossings">
-  <span class="bt-icon">&#x1F6C3;</span>
-  <span class="bt-lbl">Borders</span>
+  <span class="bt-icon">&#x1F6C3;</span><span class="bt-lbl">Borders</span>
 </button>
-
-<!-- BORDER PANEL -->
 <div id="border-panel">
   <div class="bp-head">
-    <div>
-      <div class="bp-title">&#x1F6C3; Border Crossings</div>
-      <div class="bp-sub">Gulf &amp; Middle East &middot; click a crossing for details</div>
-    </div>
+    <div><div class="bp-title">&#x1F6C3; Border Crossings</div>
+    <div class="bp-sub">Gulf &amp; Middle East</div></div>
     <button class="bp-close" onclick="toggleBorderPanel()">&times;</button>
   </div>
   <div class="bp-filters">
     <div class="bft on all" onclick="setBorderFilter('all',this)">All</div>
-    <div class="bft r"      onclick="setBorderFilter('closed',this)">Closed</div>
-    <div class="bft a"      onclick="setBorderFilter('disrupted',this)">Disrupted</div>
-    <div class="bft g"      onclick="setBorderFilter('open',this)">Open</div>
+    <div class="bft r" onclick="setBorderFilter('closed',this)">Closed</div>
+    <div class="bft a" onclick="setBorderFilter('disrupted',this)">Disrupted</div>
+    <div class="bft g" onclick="setBorderFilter('open',this)">Open</div>
   </div>
   <div id="blist"></div>
   <div class="bp-foot" id="bp-foot">&mdash;</div>
@@ -779,763 +775,951 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: var(--fon
 
 <script>
 
+// AIRPORT DATA - Gulf, Middle East, Turkey. Status: 04 Mar 2026 08:30 GST.
 
-// ═══════════════════════════════════════════════════════════════════
-//  AIRPORT DATA — Gulf & immediate region only
-// ═══════════════════════════════════════════════════════════════════
 const AP = [
 
-  // ── UAE — all closed ──────────────────────────────────────────
+  // ══════════════════════════════════════════════════
+  // UAE  — FIR OMAE partially open, ESCAT corridors
+  // ══════════════════════════════════════════════════
   { id:'DXB', name:'Dubai International',           city:'Dubai, UAE',            lat:25.2532, lon:55.3657, s:'disrupted',
-    carrier:'Emirates · flydubai · Multiple',  res:'Repatriation only. Scheduled services suspended until 23:59 UAE time 4 Mar.',
+    carrier:'Emirates · flydubai · Multiple',
+    res:'Repatriation only until 23:59 UAE 4 Mar. Do NOT go unless airline contacted you.',
     detail:{
-      airspace:'UAE airspace fully closed by UAE GCAA',
-      ops:'All commercial and cargo operations suspended',
-      carrier_status:'Emirates halted all DXB ops. flydubai grounded.',
-      last_flight:'Outbound EK001 departed 01 Mar 22:48; no arrivals since 02 Mar 00:30',
+      airspace:'NOTAM OMAE partial — expires 12:00 UTC 4 Mar. Strict waypoint corridors. GNSS jamming reported.',
+      ops:'114 repatriation flights scheduled today (52 flydubai, 41 Emirates, 21 other). Controlled access only.',
+      carrier_status:'Emirates scheduled suspended until 23:59 4 Mar. flydubai limited T2/T3. 17,498 passengers repatriated so far.',
+      last_flight:'Limited repatriation ops began evening 2 Mar.'
     },
     news:[
-      { dot:'r', text:'Fresh ballistic missile wave 03 Mar early morning — three inbound flights held outside UAE airspace before diverting.',                  time:'03 Mar · 03:30' },
-      { dot:'g', text:'114 flights scheduled today (4 Mar): 52 flydubai, 41 Emirates, 21 other airlines. 17,498 passengers repatriated on 60 prior flights.',    time:'04 Mar · 08:30' },
-      { dot:'a', text:'Emirates issued statement: "All Emirates flights are suspended until further notice. Customers may rebook free of charge for travel to 20 Mar."', time:'02 Mar · 04:10' },
-      { dot:'r', text:'DO NOT go to DXB unless airline has contacted you with a confirmed departure time. Dubai Airports enforcing access control.',               time:'04 Mar · 08:30' },
+      { dot:'r', text:'Fresh ballistic missile wave 3 Mar — three inbound flights held outside UAE airspace before diverting.',               time:'03 Mar · 03:30' },
+      { dot:'a', text:'Emirates: scheduled flights suspended until 23:59 UAE time 4 Mar. Repatriation + freighter only — passengers notified directly.', time:'03 Mar · 05:29' },
+      { dot:'g', text:'114 flights today (4 Mar): 52 flydubai, 41 Emirates, 21 others. GCAA operating under partial-reopening NOTAM.',       time:'04 Mar · 08:30' },
+      { dot:'r', text:'DO NOT go to DXB unless your airline has contacted you with a confirmed departure time.',                              time:'04 Mar · 08:30' },
     ],
     links:[
-      { label:'✈ Emirates flight status',  url:'https://www.emirates.com/uk/english/manage-booking/flight-status/' },
-      { label:'📋 Dubai Airports',         url:'https://www.dubaiairports.ae/' },
       { label:'📊 FlightAware DXB',         url:'https://www.flightaware.com/live/airport/OMDB' },
-      { label:'🛬 Dubai Airports status',    url:'https://dubaiairports.ae/flight-status' },
-      { label:'✈ Emirates updates',             url:'https://www.emirates.com/english/help/travel-updates/' },
-      { label:'✈ flydubai updates',             url:'https://www.flydubai.com/en/plan/travel-updates' },
+      { label:'🛫 Dubai Airports status',   url:'https://dubaiairports.ae/flight-status' },
+      { label:'✈ Emirates updates',         url:'https://www.emirates.com/english/help/travel-updates/' },
+      { label:'✈ flydubai updates',         url:'https://www.flydubai.com/en/plan/travel-updates' },
     ]
   },
 
-  { id:'DWC', name:'Al Maktoum Intl (Dubai South)', city:'Dubai, UAE',            lat:24.8963, lon:55.1610, s:'closed',
-    carrier:'flydubai · Cargo airlines',       res:'TBD — aligned with DXB',
+  { id:'DWC', name:'Al Maktoum Intl (Dubai South)', city:'Dubai, UAE',            lat:24.8963, lon:55.1610, s:'disrupted',
+    carrier:'Emirates · Cargo carriers',
+    res:'Repatriation and freighter ops only. Scheduled suspended.',
     detail:{
-      airspace:'UAE airspace closed',
-      ops:'All operations suspended',
-      carrier_status:'All operators halted. Cargo ops also suspended.',
-      last_flight:'Last recorded departure 01 Mar 23:55 (cargo)',
+      airspace:'Under OMAE partial NOTAM. Accessible via TARDI/MEMTU/TANSU/PEKEM waypoints only.',
+      ops:'Limited repatriation and cargo ops. Dubai Airports confirmed limited resumption from DWC 2 Mar.',
+      carrier_status:'Emirates cargo and repatriation flights. Scheduled commercial suspended.',
+      last_flight:'Repatriation flights began evening 2 Mar.'
     },
     news:[
-      { dot:'r', text:'UAE GCAA extended airspace closure to all UAE airports including DWC.',        time:'02 Mar · 02:45' },
-      { dot:'a', text:'DWC cargo hub operations suspended. Airfreight being rerouted via Muscat.',    time:'02 Mar · 06:00' },
+      { dot:'a', text:'DWC limited repatriation ops began 2 Mar evening alongside DXB.',                                                     time:'02 Mar · 20:00' },
+      { dot:'a', text:'UAE GCAA extended DWC access under same OMAE partial-reopening NOTAM as DXB.',                                        time:'03 Mar · 11:10' },
     ],
     links:[
-      { label:'📊 FlightAware DWC board', url:'https://www.flightaware.com/live/airport/OMDW' },
-      { label:'📋 Dubai South',          url:'https://www.dubaisouth.ae/' },
+      { label:'📊 FlightAware DWC',         url:'https://www.flightaware.com/live/airport/OMDW' },
+      { label:'🛫 Dubai Airports',          url:'https://dubaiairports.ae/flight-status' },
     ]
   },
 
-  { id:'AUH', name:'Zayed International',           city:'Abu Dhabi, UAE',        lat:24.4330, lon:54.6511, s:'closed',
-    carrier:'Etihad Airways · Multiple',       res:'TBD',
+  { id:'AUH', name:'Zayed International',           city:'Abu Dhabi, UAE',        lat:24.4330, lon:54.6511, s:'disrupted',
+    carrier:'Etihad · Multiple',
+    res:'Scheduled suspended until 14:00 UAE time 5 Mar. Repatriation only.',
     detail:{
-      airspace:'UAE airspace closed',
-      ops:'All operations suspended following drone strike',
-      carrier_status:'Etihad suspended all departures and arrivals. Rebooking waivers active.',
-      last_flight:'Etihad EY002 to LHR was taxiing when airport shut 02 Mar 02:50; returned to gate',
+      airspace:'Under OMAE partial NOTAM. Arrivals via ITRAX/SODEX/TANSU/PEKEM; departures via LABRI/RETAS.',
+      ops:'Partial operations. Repatriation and cargo only under strict authority approval.',
+      carrier_status:'Etihad scheduled suspended until 14:00 5 Mar. Cargo and repatriation may operate.',
+      last_flight:'Partial ops resumed 2 Mar. Two Etihad flights landed Abu Dhabi on 3 Mar.'
     },
     news:[
-      { dot:'a', text:'Etihad: scheduled flights suspended until 14:00 UAE time 5 Mar. Repatriation and cargo may operate under strict approval only.',            time:'03 Mar · 06:00' },
-      { dot:'a', text:'Do NOT travel to AUH unless Etihad contacts you directly with confirmed ticket details. Airport access restricted.',                        time:'03 Mar · 09:00' },
-      { dot:'b', text:'Etihad free rebooking on Etihad flights through 31 March 2026. Contact booking channel used for original reservation.',                    time:'03 Mar · 06:00' },
+      { dot:'a', text:'Etihad: all scheduled commercial flights suspended until 14:00 UAE time 5 Mar.',                                      time:'03 Mar · 06:00' },
+      { dot:'a', text:'Do NOT travel to AUH unless Etihad contacts you directly with confirmed ticket details.',                             time:'03 Mar · 09:00' },
+      { dot:'b', text:'Etihad free rebooking on Etihad flights through 31 March 2026.',                                                      time:'03 Mar · 06:00' },
     ],
     links:[
-      { label:'✈ Etihad flight status',  url:'https://www.etihad.com/en-us/manage/check-your-flight-status' },
-      { label:'📋 Abu Dhabi Airports',   url:'https://www.abudhabiairport.ae/' },
-      { label:'📊 FlightAware AUH',          url:'https://www.flightaware.com/live/airport/OMAA' },
-      { label:'✈ Etihad travel updates',         url:'https://www.etihad.com/en/travel-updates' },
-      { label:'🏛 Abu Dhabi Airports',        url:'https://www.abudhabiairport.ae/en' },
+      { label:'📊 FlightAware AUH',         url:'https://www.flightaware.com/live/airport/OMAA' },
+      { label:'✈ Etihad travel updates',    url:'https://www.etihad.com/en/travel-updates' },
+      { label:'🏛 Abu Dhabi Airports',      url:'https://www.abudhabiairport.ae/en' },
     ]
   },
 
   { id:'SHJ', name:'Sharjah International',         city:'Sharjah, UAE',          lat:25.3286, lon:55.5172, s:'disrupted',
-    carrier:'Air Arabia · Cargo',              res:'TBD',
+    carrier:'Air Arabia',
+    res:'Air Arabia UAE suspended until 15:00 4 Mar. Flights to LB/JO/SY/IQ until 5 Mar.',
     detail:{
-      airspace:'UAE airspace closed',
-      ops:'All Air Arabia flights suspended. Cargo ops halted.',
-      carrier_status:'Air Arabia halted all flights from SHJ and all Gulf destinations.',
-      last_flight:'G9 432 to AMM was final departure 01 Mar 23:20',
+      airspace:'Under OMAE partial NOTAM. Accessible via TAPRA/PASOV/MUSAP waypoints.',
+      ops:'Very limited ops. Air Arabia may operate select flights under authority approval.',
+      carrier_status:'Air Arabia UAE flights suspended until 15:00 4 Mar. Affected passengers contacted directly.',
+      last_flight:'Normal ops suspended since 28 Feb.'
     },
     news:[
-      { dot:'r', text:'UAE-wide airspace closure grounded Air Arabia\'s entire fleet at Sharjah.',    time:'02 Mar · 02:45' },
-      { dot:'b', text:'Limited Air Arabia flights may operate subject to approval. Affected passengers contacted directly. Check airarabia.com for status.',        time:'04 Mar · 00:00' },
+      { dot:'a', text:'Air Arabia: UAE flights suspended until 15:00 4 Mar. Jordan/Lebanon/Syria/Iraq routes to 5 Mar.', time:'04 Mar · 00:00' },
+      { dot:'b', text:'Limited Air Arabia flights may operate subject to approval. Affected passengers contacted.',       time:'04 Mar · 00:00' },
     ],
     links:[
-      { label:'✈ Air Arabia status', url:'https://www.airarabia.com/en/flight-status' },
-      { label:'📊 FlightAware SHJ',          url:'https://www.flightaware.com/live/airport/OMSJ' },
-      { label:'✈ Air Arabia updates',            url:'https://www.airarabia.com/en/travel-alerts' },
+      { label:'📊 FlightAware SHJ',         url:'https://www.flightaware.com/live/airport/OMSJ' },
+      { label:'✈ Air Arabia updates',       url:'https://www.airarabia.com/en/travel-alerts' },
     ]
   },
 
-  { id:'RKT', name:'Ras Al Khaimah International',  city:'Ras Al Khaimah, UAE',   lat:25.6135, lon:55.9388, s:'closed',
-    carrier:'Various charter operators',       res:'TBD',
+  { id:'RKT', name:'Ras Al Khaimah International',  city:'Ras Al Khaimah, UAE',   lat:25.6135, lon:55.9388, s:'disrupted',
+    carrier:'Air Arabia · RAK Airways',
+    res:'Under OMAE partial NOTAM. Very limited scheduled ops.',
     detail:{
-      airspace:'UAE airspace closed',
-      ops:'Charter and low-cost ops suspended',
-      carrier_status:'Wizz Air Abu Dhabi and charter operators grounded.',
-      last_flight:'No scheduled commercial movements in 12 hours',
+      airspace:'Accessible under OMAE partial NOTAM via TAPRA/PASOV corridors.',
+      ops:'Minimal operations. No regular scheduled flights currently.',
+      carrier_status:'Air Arabia and RAK Airways grounded under UAE restrictions.',
+      last_flight:'Normal ops suspended since 28 Feb.'
     },
     news:[
-      { dot:'r', text:'UAE airspace closure included RKT in scope. Airport authority confirmed suspension.', time:'02 Mar · 02:45' },
+      { dot:'a', text:'RKT accessible under OMAE partial NOTAM but no regular commercial traffic.',                       time:'04 Mar · 00:00' },
     ],
     links:[
-      { label:'📊 FlightAware RKT', url:'https://www.flightaware.com/live/airport/OMRK' },
+      { label:'📊 FlightAware RKT',         url:'https://www.flightaware.com/live/airport/OMRK' },
     ]
   },
 
-  { id:'FJR', name:'Fujairah International',        city:'Fujairah, UAE',          lat:25.1122, lon:56.3240, s:'closed',
-    carrier:'Various · Cargo',                 res:'TBD',
+  { id:'FJR', name:'Fujairah International',        city:'Fujairah, UAE',         lat:25.1122, lon:56.3240, s:'open',
+    carrier:'SpiceJet · Charter carriers',
+    res:'Fully operational. SpiceJet running special India evacuation flights.',
     detail:{
-      airspace:'UAE airspace closed',
-      ops:'All ops suspended',
-      carrier_status:'Fujairah primarily a cargo/general aviation airport; all ops suspended.',
-      last_flight:'No scheduled commercial movements',
+      airspace:'Accessible under OMAE partial NOTAM via MENSA/TANSU/PEKEM corridors.',
+      ops:'Fully operational. Being used for South Asian repatriation flights.',
+      carrier_status:'SpiceJet operating FJR–Delhi, Mumbai, Kochi specials. Open for charters.',
+      last_flight:'Normal ops resumed. UAE authorities confirmed FJR fully operational.'
     },
     news:[
-      { dot:'g', text:'Fujairah International confirmed fully operational by UAE authorities.',                                                                    time:'03 Mar · 18:00' },
-      { dot:'a', text:'Fire at Fujairah oil storage tank from drone interception debris — airport operations unaffected. SpiceJet running FJR–India specials.',time:'04 Mar · 06:00' },
+      { dot:'g', text:'Fujairah confirmed fully operational by UAE authorities. SpiceJet operating India evacuation specials.', time:'03 Mar · 18:00' },
+      { dot:'a', text:'Fire at Fujairah oil storage tank from drone interception debris — airport operations unaffected.',      time:'04 Mar · 06:00' },
+      { dot:'g', text:'FJR a viable departure point. If stranded in UAE and holding India/Asian routing, check SpiceJet.',     time:'04 Mar · 08:00' },
     ],
     links:[
-      { label:'📊 FlightAware FJR', url:'https://www.flightaware.com/live/airport/OMFJ' },
+      { label:'📊 FlightAware FJR',         url:'https://www.flightaware.com/live/airport/OMFJ' },
     ]
   },
 
-  // ── Qatar ────────────────────────────────────────────────────
-  { id:'DOH', name:'Hamad International',           city:'Doha, Qatar',            lat:25.2731, lon:51.6080, s:'closed',
-    carrier:'Qatar Airways · Multiple',        res:'When Qatar CAA confirms safe reopening',
+  // ══════════════════════════════════════════════════
+  // QATAR — FIR OTDF total closure expires 16:00 UTC 4 Mar
+  // ══════════════════════════════════════════════════
+  { id:'DOH', name:'Hamad International',           city:'Doha, Qatar',           lat:25.2731, lon:51.6080, s:'closed',
+    carrier:'Qatar Airways · Multiple',
+    res:'Fully closed. FIR OTDF total closure expires 16:00 UTC 4 Mar — expected to extend.',
     detail:{
-      airspace:'Qatar airspace closed by Qatar CAA',
-      ops:'Qatar Airways fully grounded. All other operators suspended.',
-      carrier_status:'Qatar Airways suspended all operations. CEO statement issued.',
-      last_flight:'QR007 to JFK was mid-flight; diverted to Muscat (MCT) 02 Mar 03:40',
+      airspace:'FIR OTDF total closure. Expires 16:00 UTC 4 Mar — all prior extensions suggest further extension likely.',
+      ops:'All commercial flights suspended. Limited humanitarian and state ops only. Minor perimeter damage from intercepted debris.',
+      carrier_status:'Qatar Airways fully suspended. Next update at 09:00 Doha time 4 Mar. ~8,000 transit passengers stranded.',
+      last_flight:'QR007 to JFK diverted to MCT on 2 Mar 03:40.'
     },
     news:[
-      { dot:'r', text:'Qatar CAA closed national airspace following regional escalation. All inbound and outbound flights halted.', time:'02 Mar · 03:00' },
-      { dot:'r', text:'Qatar Airways CEO: "We have suspended all operations until the Qatar CAA declares it safe to fly."',         time:'02 Mar · 04:30' },
-      { dot:'a', text:'Al Udeid Air Base (largest US base in Middle East, located in Qatar) on elevated force-protection status.',  time:'02 Mar · 02:30' },
-      { dot:'b', text:'Qatar offering all stranded travellers free accommodation through Qatari hospitality programme.',             time:'02 Mar · 08:00' },
+      { dot:'r', text:'FIR OTDF total closure. Expires 16:00 UTC 4 Mar — Qatar Airways says operations resume once Qatar CAA declares airspace safe.', time:'04 Mar · 00:00' },
+      { dot:'a', text:'Minor perimeter damage from intercepted missile debris. Terminal building and runways structurally intact.',              time:'02 Mar · 05:00' },
+      { dot:'b', text:'Qatar Airways: passengers with bookings 28 Feb–10 Mar can rebook (up to 14 days) at no charge, or request full refund.', time:'03 Mar · 09:00' },
+      { dot:'b', text:'~8,000 transit passengers stranded in Doha. Qatar hospitality programme covering hotel costs.',                          time:'03 Mar · 10:00' },
     ],
     links:[
-      { label:'✈ Qatar Airways status', url:'https://www.qatarairways.com/en-us/flight-status.html' },
-      { label:'📋 Hamad Airport',       url:'https://dohahamadairport.com/' },
-      { label:'📊 FlightAware DOH',     url:'https://www.flightaware.com/live/airport/OTHH' },
+      { label:'📊 FlightAware DOH',         url:'https://www.flightaware.com/live/airport/OTHH' },
+      { label:'✈ Qatar Airways alerts',     url:'https://www.qatarairways.com/en/travel-alerts.html' },
+      { label:'🏛 Hamad Airport',           url:'https://dohahamadairport.com/' },
     ]
   },
 
-  // ── Bahrain ──────────────────────────────────────────────────
-  { id:'BAH', name:'Bahrain International',         city:'Manama, Bahrain',        lat:26.2708, lon:50.6336, s:'closed',
-    carrier:'Gulf Air · Multiple',             res:'TBD',
+  // ══════════════════════════════════════════════════
+  // BAHRAIN — FIR OBBB total closure expires 16:00 UTC 4 Mar
+  // ══════════════════════════════════════════════════
+  { id:'BAH', name:'Bahrain International',         city:'Manama, Bahrain',       lat:26.2708, lon:50.6336, s:'closed',
+    carrier:'Gulf Air · Multiple',
+    res:'Fully closed. FIR OBBB total closure expires 16:00 UTC 4 Mar.',
     detail:{
-      airspace:'Bahrain airspace closed by Bahrain CAA',
-      ops:'Gulf Air fully suspended. All operators halted.',
-      carrier_status:'Gulf Air grounded entire fleet. No ETA for resumption.',
-      last_flight:'GF 009 to LHR departed 01 Mar 23:50 — final departure before closure',
+      airspace:'FIR OBBB total closure. Expires 16:00 UTC 4 Mar. Iran struck US 5th Fleet naval base here.',
+      ops:'All commercial flights suspended. Gulf Air suspended until next update at 11:00 local 5 Mar.',
+      carrier_status:'Gulf Air fully suspended. Next update 11:00 local time 5 Mar.',
+      last_flight:'All ops suspended since 28 Feb.'
     },
     news:[
-      { dot:'r', text:'Bahrain CAA declared national airspace closure. Gulf Air grounded entire fleet.',                                   time:'02 Mar · 02:50' },
-      { dot:'r', text:'US Naval Forces Central Command (NAVCENT), headquartered in Bahrain, confirmed it is on highest readiness.',        time:'02 Mar · 02:20' },
-      { dot:'a', text:'Bahraini government urges citizens to follow official instructions; no curfew declared but public gatherings banned.', time:'02 Mar · 06:00' },
+      { dot:'r', text:'FIR OBBB total closure expires 16:00 UTC 4 Mar. All commercial flights fully suspended.',                               time:'04 Mar · 00:00' },
+      { dot:'r', text:'Iran struck US 5th Fleet base. US Embassy in Bahrain closed until further notice, non-emergency staff evacuating.',     time:'03 Mar · 08:00' },
+      { dot:'a', text:'Gulf Air: next update at 11:00 local time 5 Mar.',                                                                      time:'04 Mar · 00:00' },
     ],
     links:[
-      { label:'✈ Gulf Air status',     url:'https://www.gulfair.com/manage-travel/check-in-and-status/flight-status' },
-      { label:'📋 Bahrain Airport',    url:'https://www.bahrainairport.bh/' },
-      { label:'📊 FlightAware BAH',    url:'https://www.flightaware.com/live/airport/OBBI' },
+      { label:'📊 FlightAware BAH',         url:'https://www.flightaware.com/live/airport/OBBI' },
+      { label:'✈ Gulf Air',                 url:'https://www.gulfair.com/' },
     ]
   },
 
-  // ── Kuwait ───────────────────────────────────────────────────
-  { id:'KWI', name:'Kuwait International',          city:'Kuwait City, Kuwait',    lat:29.2267, lon:47.9689, s:'closed',
-    carrier:'Kuwait Airways · Jazeera Airways',res:'TBD',
+  // ══════════════════════════════════════════════════
+  // KUWAIT — FIR OKAC total closure expires 16:00 UTC 4 Mar
+  // ══════════════════════════════════════════════════
+  { id:'KWI', name:'Kuwait International',          city:'Kuwait City, Kuwait',   lat:29.2267, lon:47.9689, s:'closed',
+    carrier:'Kuwait Airways · Multiple',
+    res:'Fully closed. FIR OKAC total closure expires 16:00 UTC 4 Mar.',
     detail:{
-      airspace:'Kuwait airspace closed',
-      ops:'All commercial flights suspended. Airport in emergency posture.',
-      carrier_status:'Kuwait Airways and Jazeera Airways grounded all flights.',
-      last_flight:'KU 111 to LHR was airborne when closure announced; continued to London',
+      airspace:'FIR OKAC total closure expires 16:00 UTC 4 Mar. Iran struck area near Ali Al Salem Air Base.',
+      ops:'All commercial flights suspended. US Embassy Kuwait City closed until further notice.',
+      carrier_status:'Kuwait Airways all flights suspended. US ordered evacuation of non-emergency staff from Kuwait.',
+      last_flight:'All ops suspended since 2 Mar 03:15.'
     },
     news:[
-      { dot:'r', text:'Iranian strike targeted the area around Ali Al Salem Air Base, 40km north of KWI. Airport confirmed operational damage to ground equipment.', time:'02 Mar · 03:10' },
-      { dot:'r', text:'Kuwait DGCA declared immediate airspace closure. All flights halted.',                                                                        time:'02 Mar · 03:15' },
-      { dot:'a', text:'Kuwait Airways suspended all flights including those in the air; aircraft diverted to Cairo (CAI) and Muscat (MCT).',                          time:'02 Mar · 03:30' },
+      { dot:'r', text:'FIR OKAC total closure expires 16:00 UTC 4 Mar. KWI fully closed.',                                                    time:'04 Mar · 00:00' },
+      { dot:'r', text:'US Embassy Kuwait closed. US ordered evacuation of non-emergency personnel and families from Kuwait.',                  time:'03 Mar · 09:00' },
+      { dot:'a', text:'Kuwait Airways diverted some aircraft to Cairo (CAI) and Muscat (MCT) before full closure.',                            time:'02 Mar · 03:30' },
     ],
     links:[
-      { label:'✈ Kuwait Airways status', url:'https://www.kuwaitairways.com/en/check-flight-status' },
-      { label:'📊 FlightAware KWI',      url:'https://www.flightaware.com/live/airport/OKBK' },
+      { label:'📊 FlightAware KWI',         url:'https://www.flightaware.com/live/airport/OKBK' },
+      { label:'✈ Kuwait Airways',           url:'https://www.kuwaitairways.com/' },
     ]
   },
 
-  // ── Iraq ─────────────────────────────────────────────────────
-  { id:'BGW', name:'Baghdad International',         city:'Baghdad, Iraq',          lat:33.2625, lon:44.2346, s:'closed',
-    carrier:'Iraqi Airways · Multiple',        res:'TBD',
+  // ══════════════════════════════════════════════════
+  // IRAQ — FIR ORBB total closure expires 09:00 UTC 4 Mar
+  // ══════════════════════════════════════════════════
+  { id:'BGW', name:'Baghdad International',         city:'Baghdad, Iraq',         lat:33.2625, lon:44.2346, s:'closed',
+    carrier:'Iraqi Airways · Multiple',
+    res:'Closed. FIR ORBB total closure expires 09:00 UTC 4 Mar.',
     detail:{
-      airspace:'Iraq airspace fully closed',
-      ops:'All commercial ops suspended',
-      carrier_status:'Iraqi Airways grounded. All foreign carriers suspended Iraq routes.',
-      last_flight:'IA 001 to BEY cancelled; airport evacuated of non-essential personnel',
+      airspace:'FIR ORBB total closure expires 09:00 UTC 4 Mar. Extensions expected.',
+      ops:'All commercial flights suspended. Non-essential staff evacuated. US Embassy Baghdad on ordered departure.',
+      carrier_status:'Iraqi Airways suspended. Multiple militia groups in retaliatory posture.',
+      last_flight:'All ops suspended since 2 Mar 03:30.'
     },
     news:[
-      { dot:'r', text:'Iraq CAAI closed all national airspace following strike activity over Iranian border regions. Baghdad airport evacuated non-essential staff.', time:'02 Mar · 03:30' },
-      { dot:'a', text:'Several Iraqi militia groups announced retaliatory posture; US Embassy Baghdad on ordered departure.',                                         time:'02 Mar · 04:00' },
+      { dot:'r', text:'FIR ORBB total closure expires 09:00 UTC 4 Mar. All flights suspended, extensions likely.',                            time:'04 Mar · 00:00' },
+      { dot:'r', text:'US Embassy Baghdad on ordered departure. Several Iraqi militia groups declared retaliatory posture.',                   time:'02 Mar · 04:00' },
     ],
     links:[
-      { label:'📊 FlightAware BGW', url:'https://www.flightaware.com/live/airport/ORBI' },
+      { label:'📊 FlightAware BGW',         url:'https://www.flightaware.com/live/airport/ORBI' },
     ]
   },
 
-  { id:'EBL', name:'Erbil International',           city:'Erbil, Iraq',            lat:36.2376, lon:43.9632, s:'closed',
-    carrier:'Multiple (Lufthansa, flydubai, Turkish)', res:'TBD — Lufthansa suspended to Mar 8',
+  { id:'EBL', name:'Erbil International',           city:'Erbil, Iraq',           lat:36.2376, lon:43.9632, s:'closed',
+    carrier:'Multiple carriers',
+    res:'Closed under FIR ORBB total closure.',
     detail:{
-      airspace:'Iraq airspace closed',
-      ops:'All ops suspended',
-      carrier_status:'Lufthansa suspended until Mar 8. flydubai, Turkish Airlines halted.',
-      last_flight:'TK 787 was last departure 01 Mar 22:10',
+      airspace:'FIR ORBB total closure. Kurdish regional government on security alert.',
+      ops:'All flights suspended. Lufthansa Group suspended Erbil until at least 8 Mar.',
+      carrier_status:'Lufthansa Group, Turkish Airlines and others suspended Erbil.',
+      last_flight:'All ops suspended since 2 Mar 03:30.'
     },
     news:[
-      { dot:'r', text:'Iraqi airspace closure included Erbil. Kurdish regional government on security alert.', time:'02 Mar · 03:30' },
-      { dot:'a', text:'Lufthansa Group suspended all Erbil flights until at least 8 March.',                    time:'02 Mar · 05:00' },
+      { dot:'r', text:'FIR ORBB closure covers Erbil. All international flights suspended.',                                                  time:'04 Mar · 00:00' },
+      { dot:'a', text:'Lufthansa Group suspended Erbil flights until at least 8 Mar.',                                                        time:'02 Mar · 05:00' },
     ],
     links:[
-      { label:'📊 FlightAware EBL', url:'https://www.flightaware.com/live/airport/ORER' },
+      { label:'📊 FlightAware EBL',         url:'https://www.flightaware.com/live/airport/ORER' },
     ]
   },
 
-  { id:'BSR', name:'Basra International',           city:'Basra, Iraq',            lat:30.5491, lon:47.6621, s:'closed',
-    carrier:'Iraqi Airways · flydubai',        res:'TBD',
+  { id:'BSR', name:'Basra International',           city:'Basra, Iraq',           lat:30.5491, lon:47.6621, s:'closed',
+    carrier:'Iraqi Airways · Multiple',
+    res:'Closed under FIR ORBB total closure.',
     detail:{
-      airspace:'Iraq airspace closed',
-      ops:'All ops suspended',
-      carrier_status:'Iraqi Airways and flydubai halted all Basra services.',
-      last_flight:'No movements in 24 hours',
+      airspace:'FIR ORBB total closure. Oil sector zone; workers advised to shelter in place.',
+      ops:'All flights suspended. Oil sector workers in Basra advised by employers to shelter in place.',
+      carrier_status:'All carriers suspended.',
+      last_flight:'All ops suspended since 2 Mar 03:30.'
     },
     news:[
-      { dot:'r', text:'Basra airport closed under nationwide Iraq airspace closure.',      time:'02 Mar · 03:30' },
-      { dot:'a', text:'Oil sector workers in Basra advised by employers to shelter in place.', time:'02 Mar · 07:00' },
+      { dot:'r', text:'FIR ORBB closure covers Basra. All international flights suspended.',                                                  time:'04 Mar · 00:00' },
+      { dot:'a', text:'Oil sector workers in Basra advised by employers to shelter in place.',                                                time:'02 Mar · 07:00' },
     ],
     links:[
-      { label:'📊 FlightAware BSR', url:'https://www.flightaware.com/live/airport/ORMM' },
+      { label:'📊 FlightAware BSR',         url:'https://www.flightaware.com/live/airport/ORMM' },
     ]
   },
 
-  // ── Iran ─────────────────────────────────────────────────────
-  { id:'IKA', name:'Imam Khomeini International',   city:'Tehran, Iran',           lat:35.4161, lon:51.1522, s:'closed',
-    carrier:'IranAir · Mahan Air · Multiple',  res:'TBD',
+  { id:'NJF', name:'Najaf International',           city:'Najaf, Iraq',           lat:31.9890, lon:44.4040, s:'closed',
+    carrier:'FlyBaghdad · Iraqi Airways',
+    res:'Closed under FIR ORBB total closure.',
     detail:{
-      airspace:'Iran airspace fully closed by ICAO notice',
-      ops:'All commercial flights suspended',
-      carrier_status:'IranAir and Mahan Air grounded. All foreign carriers suspended Iran routes months ago.',
-      last_flight:'No foreign carriers operating; domestic last flight 02 Mar 01:00',
+      airspace:'FIR ORBB total closure. Najaf is a major Shia pilgrimage hub.',
+      ops:'All flights suspended. Pilgrimage season disrupted.',
+      carrier_status:'All carriers suspended.',
+      last_flight:'All ops suspended since 2 Mar 03:30.'
     },
     news:[
-      { dot:'r', text:'US and Israeli strikes hit multiple military and nuclear facilities across Iran. ICAO issued NOTAM closing Iranian airspace.', time:'01 Mar · 23:00' },
-      { dot:'r', text:'Isfahan and Natanz strike sites confirmed by US DoD. IranAir suspended all operations.',                                      time:'02 Mar · 00:30' },
-      { dot:'a', text:'Iran CAO issued emergency closure of all Iranian airspace for 72 hours, extendable.',                                          time:'02 Mar · 01:00' },
+      { dot:'r', text:'Najaf airport closed under FIR ORBB national closure. Pilgrimage season severely disrupted.',                          time:'02 Mar · 03:30' },
     ],
     links:[
-      { label:'📊 FlightAware IKA', url:'https://www.flightaware.com/live/airport/OIIE' },
+      { label:'📊 FlightAware NJF',         url:'https://www.flightaware.com/live/airport/ORNI' },
     ]
   },
 
-  { id:'MHD', name:'Mashhad International',         city:'Mashhad, Iran',          lat:36.2352, lon:59.6400, s:'closed',
-    carrier:'IranAir · Kish Air',              res:'TBD',
+  { id:'OSM', name:'Mosul International',           city:'Mosul, Iraq',           lat:36.3058, lon:43.1474, s:'closed',
+    carrier:'Iraqi Airways',
+    res:'Closed under FIR ORBB total closure.',
     detail:{
-      airspace:'Iran airspace fully closed',
-      ops:'All ops suspended',
-      carrier_status:'All carriers grounded under national closure.',
-      last_flight:'No movements since 02 Mar 01:00',
+      airspace:'FIR ORBB total closure.',
+      ops:'All flights suspended.',
+      carrier_status:'Iraqi Airways suspended.',
+      last_flight:'All ops suspended since 2 Mar 03:30.'
     },
     news:[
-      { dot:'r', text:'Iran nationwide airspace closure includes Mashhad.', time:'02 Mar · 01:00' },
+      { dot:'r', text:'Mosul airport closed under FIR ORBB national closure.',                                                               time:'02 Mar · 03:30' },
     ],
     links:[
-      { label:'📊 FlightAware MHD', url:'https://www.flightaware.com/live/airport/OIMM' },
+      { label:'📊 FlightAware OSM',         url:'https://www.flightaware.com/live/airport/ORBM' },
     ]
   },
 
-  // ── Israel ───────────────────────────────────────────────────
-  { id:'TLV', name:'Ben Gurion International',      city:'Tel Aviv, Israel',       lat:32.0055, lon:34.8854, s:'closed',
-    carrier:'El Al · Multiple',                res:'TBD — El Al suspended ticket sales to Mar 21',
+  // ══════════════════════════════════════════════════
+  // IRAN — FIR OIIX total closure expires 08:30 UTC 7 Mar
+  // ══════════════════════════════════════════════════
+  { id:'IKA', name:'Imam Khomeini International',   city:'Tehran, Iran',          lat:35.4161, lon:51.1522, s:'closed',
+    carrier:'IranAir · Mahan Air',
+    res:'Closed. FIR OIIX total closure expires 08:30 UTC 7 Mar.',
     detail:{
-      airspace:'Israeli airspace closed by Israel Airports Authority',
-      ops:'All commercial flights suspended. Iron Dome and Arrow systems active.',
-      carrier_status:'El Al grounded. All foreign carriers suspended Israel routes.',
-      last_flight:'LY 315 (El Al) to JFK departed 01 Mar 22:30 — last flight before closure',
+      airspace:'FIR OIIX total closure expires 08:30 UTC 7 Mar. Iran under active US/Israeli strikes.',
+      ops:'All civil aviation suspended. IranAir and Mahan Air grounded. All foreign carriers suspended Iran months ago.',
+      carrier_status:'IranAir and Mahan Air grounded. No foreign carriers. IRGC active.',
+      last_flight:'Domestic last flight 2 Mar 01:00.'
     },
     news:[
-      { dot:'r', text:'Israel Airports Authority closed TLV under emergency war regulations. Iron Dome batteries deployed around airport perimeter.', time:'01 Mar · 23:45' },
-      { dot:'r', text:'El Al suspended ticket sales for all flights through 21 March. Passengers advised not to travel to the airport.',              time:'02 Mar · 01:00' },
-      { dot:'a', text:'Multiple carriers — Lufthansa, Air France, Ryanair, easyJet — have already been suspending Israel routes for months.',         time:'Ongoing' },
+      { dot:'r', text:'FIR OIIX total closure expires 08:30 UTC 7 Mar. Iran under active US/Israeli strike campaign.',                       time:'04 Mar · 00:00' },
+      { dot:'r', text:'Civilian Iran Air passenger jet destroyed at Bushehr airport in strike.',                                              time:'03 Mar · 18:00' },
+      { dot:'r', text:'Iran warned by NOTAM that conflict may extend over Persian Gulf and Oman Sea.',                                        time:'03 Mar · 12:00' },
     ],
     links:[
-      { label:'✈ El Al flight status', url:'https://www.elal.com/en/Flight-Status/' },
-      { label:'📋 Israel Airports',    url:'https://www.iaa.gov.il/en/' },
-      { label:'📊 FlightAware TLV',    url:'https://www.flightaware.com/live/airport/LLBG' },
+      { label:'📊 FlightAware IKA',         url:'https://www.flightaware.com/live/airport/OIIE' },
     ]
   },
 
-  // ── Lebanon ──────────────────────────────────────────────────
-  { id:'BEY', name:'Beirut–Rafic Hariri International', city:'Beirut, Lebanon',  lat:33.8208, lon:35.4884, s:'closed',
-    carrier:'Middle East Airlines',            res:'TBD',
+  { id:'MHD', name:'Mashhad International',         city:'Mashhad, Iran',         lat:36.2352, lon:59.6400, s:'closed',
+    carrier:'IranAir · Mahan Air',
+    res:'Closed under FIR OIIX total closure.',
     detail:{
-      airspace:'Lebanon airspace closed',
-      ops:'Middle East Airlines (MEA) halted all operations.',
-      carrier_status:'MEA grounded all aircraft. Airport closed to commercial traffic.',
-      last_flight:'ME 201 to Paris departed 01 Mar 23:55 — final departure',
+      airspace:'FIR OIIX total closure expires 08:30 UTC 7 Mar.',
+      ops:'All civil aviation suspended.',
+      carrier_status:'IranAir and Mahan Air grounded.',
+      last_flight:'All ops suspended since 28 Feb.'
     },
     news:[
-      { dot:'r', text:'Lebanon CAA closed airspace. Beirut airport shut following regional escalation.', time:'02 Mar · 01:30' },
-      { dot:'a', text:'Middle East Airlines (MEA) suspended all flights with immediate effect.',          time:'02 Mar · 01:45' },
+      { dot:'r', text:'All Iranian airports closed under FIR OIIX total closure.',                                                           time:'04 Mar · 00:00' },
     ],
     links:[
-      { label:'✈ MEA flight status', url:'https://www.mea.com.lb/' },
-      { label:'📊 FlightAware BEY',  url:'https://www.flightaware.com/live/airport/OLBA' },
+      { label:'📊 FlightAware MHD',         url:'https://www.flightaware.com/live/airport/OIMM' },
     ]
   },
 
-  // ── Jordan — disrupted ───────────────────────────────────────
-  { id:'AMM', name:'Queen Alia International',      city:'Amman, Jordan',          lat:31.7226, lon:35.9932, s:'disrupted',
-    carrier:'Royal Jordanian · Multiple',      res:'Partial operations — verify with airline',
+  { id:'TBZ', name:'Tabriz International',          city:'Tabriz, Iran',          lat:38.1339, lon:46.2350, s:'closed',
+    carrier:'IranAir · Mahan Air',
+    res:'Closed under FIR OIIX total closure.',
     detail:{
-      airspace:'Jordan temporarily closed, now partially reopened — monitoring closely',
-      ops:'Some flights resumed. Many cancellations ongoing.',
-      carrier_status:'Royal Jordanian operating reduced schedule. Several European carriers still suspended.',
-      last_flight:'RJ 108 to LHR resumed operations 02 Mar 09:00',
+      airspace:'FIR OIIX total closure expires 08:30 UTC 7 Mar.',
+      ops:'All civil aviation suspended.',
+      carrier_status:'All carriers suspended.',
+      last_flight:'All ops suspended since 28 Feb.'
     },
     news:[
-      { dot:'a', text:'Jordan closed airspace 02 Mar 01:00. Partial reopening announced 02 Mar 08:30 for specific corridors only.', time:'02 Mar · 08:30' },
-      { dot:'a', text:'Royal Jordanian resumed limited schedule but advised passengers to check status before travelling to airport.', time:'02 Mar · 09:15' },
-      { dot:'b', text:'Jordan is coordinating with Egypt and Cyprus to establish safe routing corridors away from conflict zones.',     time:'02 Mar · 10:00' },
+      { dot:'r', text:'All Iranian airports closed under FIR OIIX total closure.',                                                           time:'04 Mar · 00:00' },
     ],
     links:[
-      { label:'✈ Royal Jordanian status', url:'https://www.rj.com/en/flight-information/flight-status' },
-      { label:'📋 Jordan Airports',       url:'https://www.qaiairport.com/' },
-      { label:'📊 FlightAware AMM',       url:'https://www.flightaware.com/live/airport/OJAI' },
+      { label:'📊 FlightAware TBZ',         url:'https://www.flightaware.com/live/airport/OITT' },
     ]
   },
 
-  // ── Saudi Arabia — disrupted ─────────────────────────────────
-  { id:'RUH', name:'King Khalid International',     city:'Riyadh, Saudi Arabia',   lat:24.9579, lon:46.6988, s:'disrupted',
-    carrier:'Saudia · Multiple',               res:'Operational with precautionary restrictions',
+  { id:'IFN', name:'Isfahan International',         city:'Isfahan, Iran',         lat:32.7509, lon:51.8613, s:'closed',
+    carrier:'IranAir · Mahan Air',
+    res:'Closed under FIR OIIX total closure.',
     detail:{
-      airspace:'Saudi airspace open with GACA managing deconfliction corridors',
-      ops:'Reduced operations. Significant diversion traffic inbound from Gulf.',
-      carrier_status:'Saudia operating reduced schedule. Lufthansa suspended until Mar 8. Air India until Mar 2.',
-      last_flight:'Ongoing operations — last Saudia departure 02 Mar 11:00',
+      airspace:'FIR OIIX total closure expires 08:30 UTC 7 Mar.',
+      ops:'All civil aviation suspended.',
+      carrier_status:'All carriers suspended.',
+      last_flight:'All ops suspended since 28 Feb.'
     },
     news:[
-      { dot:'a', text:'Saudi GACA keeping airspace open but restricting routes over eastern border. Eastbound departures rerouted south.',              time:'02 Mar · 04:00' },
-      { dot:'a', text:'Lufthansa Group suspended all Saudi routes until 8 March citing "unacceptable risk" in regional airspace.',                       time:'02 Mar · 03:00' },
-      { dot:'b', text:'Riyadh airport managing surge of diverted and rerouted flights from UAE, Qatar and Bahrain. Extra ground staff deployed.',        time:'02 Mar · 08:00' },
-      { dot:'b', text:'Air India resumed Riyadh services 02 Mar having suspended briefly. IndiGo reviewing network.',                                   time:'02 Mar · 10:30' },
+      { dot:'r', text:'All Iranian airports closed under FIR OIIX total closure.',                                                           time:'04 Mar · 00:00' },
     ],
     links:[
-      { label:'✈ Saudia flight status', url:'https://www.saudia.com/planning-a-trip/check-in-and-boarding/flight-status' },
-      { label:'📋 Saudi GACA',          url:'https://www.gaca.gov.sa/en/index' },
-      { label:'📊 FlightAware RUH',     url:'https://www.flightaware.com/live/airport/OERK' },
+      { label:'📊 FlightAware IFN',         url:'https://www.flightaware.com/live/airport/OIFM' },
     ]
   },
 
-  { id:'JED', name:'King Abdulaziz International',  city:'Jeddah, Saudi Arabia',   lat:21.6796, lon:39.1565, s:'disrupted',
-    carrier:'Saudia · flynas · Multiple',      res:'Operational — heavy diversion congestion',
+  // ══════════════════════════════════════════════════
+  // ISRAEL — FIR LLLL total closure expires 10:00 UTC 9 Mar
+  // ══════════════════════════════════════════════════
+  { id:'TLV', name:'Ben Gurion International',      city:'Tel Aviv, Israel',      lat:32.0055, lon:34.8854, s:'closed',
+    carrier:'El Al · Multiple',
+    res:'Closed. PPR only. FIR LLLL total closure expires 10:00 UTC 9 Mar.',
     detail:{
-      airspace:'Saudi airspace open — Jeddah serving as key diversion hub',
-      ops:'Heavily elevated traffic from Gulf and Israeli airspace diversions.',
-      carrier_status:'Saudia, flynas, flyadeal operating. Many European carriers rerouting via JED.',
-      last_flight:'Ongoing operations — heavy traffic throughput',
+      airspace:'FIR LLLL total closure expires 10:00 UTC 9 Mar. Limited PPR civil operations only.',
+      ops:'Effectively closed to commercial traffic. El Al prioritising repatriation of stranded Israelis abroad.',
+      carrier_status:'El Al closed ticket sales through 21 Mar — prioritising stranded Israelis. BA/LH/AF suspended to Tel Aviv.',
+      last_flight:'Minimal PPR movements only.'
     },
     news:[
-      { dot:'b', text:'Jeddah has become the primary diversion and rerouting hub as flights avoid closed Gulf and Israeli airspace. Congestion reported.', time:'02 Mar · 06:00' },
-      { dot:'a', text:'Saudi GACA warns of significant delays at JED due to rerouted traffic. Ground holds of 60–90 minutes reported.',                    time:'02 Mar · 09:00' },
-      { dot:'a', text:'Lufthansa, Air France and British Airways all rerouting ME-bound flights via JED corridor rather than Gulf.',                       time:'02 Mar · 08:30' },
+      { dot:'r', text:'FIR LLLL total closure expires 10:00 UTC 9 Mar. TLV accessible for limited PPR civil arrivals/departures only.',      time:'04 Mar · 00:00' },
+      { dot:'a', text:'El Al preparing repatriation flights for stranded Israelis abroad once airspace reopens. Ticket sales closed to 21 Mar.',time:'03 Mar · 10:00' },
+      { dot:'r', text:'Iranian missiles struck several Israeli locations. 11 people killed. Hezbollah attacks ongoing.',                      time:'03 Mar · 12:00' },
     ],
     links:[
-      { label:'✈ Saudia flight status', url:'https://www.saudia.com/planning-a-trip/check-in-and-boarding/flight-status' },
-      { label:'📊 FlightAware JED',     url:'https://www.flightaware.com/live/airport/OEJN' },
+      { label:'📊 FlightAware TLV',         url:'https://www.flightaware.com/live/airport/LLBG' },
+      { label:'✈ El Al',                    url:'https://www.elal.com/en/pages/home.aspx' },
     ]
   },
 
-  { id:'DMM', name:'King Fahd International',       city:'Dammam, Saudi Arabia',   lat:26.4712, lon:49.7979, s:'disrupted',
-    carrier:'Saudia · flyadeal · Multiple',    res:'Operational (reduced)',
+  // ══════════════════════════════════════════════════
+  // LEBANON — EASA CZIB advises avoid OLBB FIR
+  // ══════════════════════════════════════════════════
+  { id:'BEY', name:'Beirut–Rafic Hariri International', city:'Beirut, Lebanon',   lat:33.8208, lon:35.4884, s:'closed',
+    carrier:'Middle East Airlines · Multiple',
+    res:'Closed. EASA CZIB 2026-03 advises avoid OLBB FIR to 6 Mar.',
     detail:{
-      airspace:'Saudi airspace open — Eastern Province under monitoring',
-      ops:'Limited operations. Several European carriers suspended.',
-      carrier_status:'Saudia and flyadeal operating. Lufthansa suspended to Mar 8.',
-      last_flight:'Saudia SV 001 to RUH operated 02 Mar 10:30',
+      airspace:'EASA CZIB 2026-03 advises avoid at all altitudes to 6 Mar. Hezbollah-Israel conflict ongoing.',
+      ops:'All commercial flights suspended. LCCC (Lebanese airspace authority) maintaining closures.',
+      carrier_status:'Middle East Airlines suspended. Most European carriers suspended Beirut.',
+      last_flight:'All ops suspended since 28 Feb.'
     },
     news:[
-      { dot:'a', text:'Dammam in Saudi\'s Eastern Province — close to Bahraini and Kuwaiti airspace closures. Risk elevated.',                       time:'02 Mar · 03:00' },
-      { dot:'a', text:'Lufthansa suspended all Dammam services until 8 March. Emirates, Etihad, Qatar Airways already grounded.',                     time:'02 Mar · 03:00' },
-      { dot:'b', text:'Oil industry workers based in Eastern Province advised by Saudi Aramco security team to minimise travel.',                      time:'02 Mar · 08:00' },
+      { dot:'r', text:'EASA CZIB 2026-03 advises operators avoid Lebanon (OLBB FIR) at all altitudes to 6 Mar.',                             time:'04 Mar · 00:00' },
+      { dot:'r', text:'Hezbollah attacked Israel; Israeli retaliatory strikes killed 52 in Lebanon.',                                         time:'03 Mar · 12:00' },
+      { dot:'a', text:'Middle East Airlines suspended all operations.',                                                                       time:'02 Mar · 03:00' },
     ],
     links:[
-      { label:'📊 FlightAware DMM', url:'https://www.flightaware.com/live/airport/OEDF' },
+      { label:'📊 FlightAware BEY',         url:'https://www.flightaware.com/live/airport/OLBA' },
     ]
   },
 
-  { id:'MED', name:'Prince Mohammad bin Abdulaziz', city:'Medina, Saudi Arabia',   lat:24.5534, lon:39.7051, s:'disrupted',
-    carrier:'Saudia · flynas · International charters', res:'Operational (reduced)',
+  // ══════════════════════════════════════════════════
+  // JORDAN — NOTAM OJAC nighttime closure 15:00–06:00 local
+  // ══════════════════════════════════════════════════
+  { id:'AMM', name:'Queen Alia International',      city:'Amman, Jordan',         lat:31.7226, lon:35.9932, s:'disrupted',
+    carrier:'Royal Jordanian · Multiple',
+    res:'Nighttime closure 15:00–06:00 local daily (NOTAM OJAC expires 06:00 UTC 5 Mar).',
     detail:{
-      airspace:'Saudi airspace open — Medina operations reduced',
-      ops:'Hajj and Umrah charter flights severely disrupted.',
-      carrier_status:'Saudia operating limited schedule. Charter operators suspended.',
-      last_flight:'Saudia operating domestic routes; international severely reduced',
+      airspace:'NOTAM OJAC: closed daily from 15:00–06:00 local. Daytime limited ops only.',
+      ops:'Daytime limited operations. Used as refuelling stop for Europe-Asia diversions. Busy with rerouted traffic.',
+      carrier_status:'Royal Jordanian limited daytime schedule. Saudia cancelled AMM flights until 23:59 4 Mar.',
+      last_flight:'Limited daytime flights continuing.'
     },
     news:[
-      { dot:'a', text:'Medina airport disruptions affecting Umrah pilgrim flights. Saudi Ministry of Hajj advising pilgrims not to travel.', time:'02 Mar · 08:00' },
+      { dot:'a', text:'Jordan NOTAM OJAC: nighttime closure 15:00–06:00 local daily, expires 06:00 UTC 5 Mar.',                              time:'04 Mar · 00:00' },
+      { dot:'a', text:'Saudia cancelled Amman flights until 23:59 4 Mar. KLM, BA adjusted Jordan routes.',                                   time:'04 Mar · 00:00' },
+      { dot:'b', text:'AMM handling some diverted traffic and repatriation flights during daytime window.',                                   time:'03 Mar · 12:00' },
     ],
     links:[
-      { label:'📊 FlightAware MED', url:'https://www.flightaware.com/live/airport/OEMA' },
+      { label:'📊 FlightAware AMM',         url:'https://www.flightaware.com/live/airport/OJAI' },
+      { label:'🏛 Jordan Airports',         url:'https://www.qaiairport.com/' },
     ]
   },
 
-  { id:'AHB', name:'Abha International',            city:'Abha, Saudi Arabia',     lat:18.2404, lon:42.6566, s:'disrupted',
-    carrier:'Saudia · flyadeal',               res:'Operational (reduced)',
+  { id:'AQJ', name:'Aqaba King Hussein International', city:'Aqaba, Jordan',      lat:29.6116, lon:35.0181, s:'disrupted',
+    carrier:'Royal Jordanian · Air Arabia',
+    res:'Under Jordan nighttime closure NOTAM. Limited daytime ops only.',
     detail:{
-      airspace:'Saudi airspace open — southwest region monitored',
-      ops:'Limited operations. Proximity to Yemen conflict zone adds risk.',
-      carrier_status:'Saudia and flyadeal operating reduced schedule.',
-      last_flight:'Saudia SV domestic service operated 02 Mar 09:00',
+      airspace:'NOTAM OJAC: nighttime closure 15:00–06:00 local.',
+      ops:'Very limited daytime operations.',
+      carrier_status:'Limited service only.',
+      last_flight:'Reduced schedule since 28 Feb.'
     },
     news:[
-      { dot:'a', text:'Abha airport in Saudi\'s Asir region has previously been targeted by Houthi drones from Yemen. Elevated threat posture maintained.', time:'02 Mar · 06:00' },
-      { dot:'a', text:'Saudi GACA issued NOTAM restricting approach paths over Yemen border. All Abha arrivals from south rerouted.', time:'02 Mar · 07:30' },
+      { dot:'a', text:'Aqaba under Jordan nighttime closure NOTAM. Very limited daytime service.',                                            time:'04 Mar · 00:00' },
     ],
     links:[
-      { label:'📊 FlightAware AHB', url:'https://www.flightaware.com/live/airport/OEAB' },
+      { label:'📊 FlightAware AQJ',         url:'https://www.flightaware.com/live/airport/OJAQ' },
     ]
   },
 
-  { id:'TUU', name:'Tabuk Regional Airport',        city:'Tabuk, Saudi Arabia',    lat:28.3654, lon:36.6189, s:'disrupted',
-    carrier:'Saudia · flynas',                 res:'Operational (reduced)',
+  // ══════════════════════════════════════════════════
+  // SAUDI ARABIA — FIR OEJD partial closure (Iraq/Gulf border region)
+  // ══════════════════════════════════════════════════
+  { id:'RUH', name:'King Khalid International',     city:'Riyadh, Saudi Arabia',  lat:24.9579, lon:46.6988, s:'disrupted',
+    carrier:'Saudia · Flynas · Multiple',
+    res:'Disrupted. Saudia cancelled routes to AMM/KWI/DXB/AUH/DOH/BAH/Moscow/Peshawar until 23:59 4 Mar.',
     detail:{
-      airspace:'Saudi airspace open — northwest border region monitored',
-      ops:'Reduced operations. Jordan airspace closure affecting routing.',
-      carrier_status:'Saudia and flynas operating limited domestic schedule.',
-      last_flight:'flynas XY 401 to RUH operated 02 Mar 10:15',
+      airspace:'Saudi FIR OEJD partial closure (Iraq/Gulf border region). M318 and M550 route segments closed.',
+      ops:'Airport operating but reduced schedule. Drone strikes in Riyadh city 3 Mar — flights briefly paused.',
+      carrier_status:'Saudia cancelled multiple international routes until 23:59 4 Mar. Turkish Airlines cancelled Riyadh. Air France cancelled until 5 Mar.',
+      last_flight:'Limited schedule continuing with major disruptions.'
     },
     news:[
-      { dot:'a', text:'Tabuk sits near Jordanian border. Jordan\'s airspace partial closure affects routing for flights to/from Tabuk.', time:'02 Mar · 05:00' },
-      { dot:'a', text:'Lufthansa Group and several European carriers have suspended all northwest Saudi routes until further notice.',    time:'02 Mar · 03:00' },
+      { dot:'r', text:'Two Iranian drones struck US Embassy Riyadh 3 Mar. Saudi air defences intercepted 4 drones over Diplomatic Quarter.', time:'03 Mar · 07:16' },
+      { dot:'r', text:'Flights to RUH briefly paused after Riyadh drone strikes. US shelter-in-place for Riyadh, Jeddah, Dhahran.',          time:'03 Mar · 04:00' },
+      { dot:'a', text:'Saudia: cancelled AMM, KWI, DXB, AUH, DOH, BAH, Moscow, Peshawar routes until 23:59 local 4 Mar.',                   time:'04 Mar · 00:00' },
+      { dot:'a', text:'Iranian drones struck Ras Tanura oil terminal. Air defence intercepted 5 drones over refinery.',                      time:'02 Mar · 20:00' },
     ],
     links:[
-      { label:'📊 FlightAware TUU', url:'https://www.flightaware.com/live/airport/OETB' },
+      { label:'📊 FlightAware RUH',         url:'https://www.flightaware.com/live/airport/OERK' },
+      { label:'✈ Saudia',                   url:'https://www.saudia.com/' },
     ]
   },
 
-  { id:'GIZ', name:'Jizan Regional Airport',        city:'Jizan, Saudi Arabia',    lat:16.9011, lon:42.5858, s:'disrupted',
-    carrier:'Saudia',                          res:'Operational (reduced)',
+  { id:'JED', name:'King Abdulaziz International',  city:'Jeddah, Saudi Arabia',  lat:21.6796, lon:39.1565, s:'disrupted',
+    carrier:'Saudia · Flynas · Multiple',
+    res:'Disrupted but operating. Evacuations being staged via Jeddah. US shelter-in-place notice.',
     detail:{
-      airspace:'Saudi airspace open — far southwest, Yemen proximity risk',
-      ops:'Limited scheduled operations. Heightened security.',
-      carrier_status:'Saudia operating domestic-only schedule.',
-      last_flight:'Saudia SV domestic arrival 02 Mar 08:40',
+      airspace:'OEJD partial closure affects northern Saudi routes. Jeddah routing via Red Sea open.',
+      ops:'Jeddah operating as a staging hub for repatriation. IndiGo operating 4 return flights JED–India.',
+      carrier_status:'Saudia suspended multiple routes. IndiGo running JED–India specials. Air France suspended until 5 Mar.',
+      last_flight:'Limited schedule continuing.'
     },
     news:[
-      { dot:'a', text:'Jizan is Saudi Arabia\'s southernmost commercial airport, ~50 km from Yemen border. Regional conflict risk assessment elevated.', time:'02 Mar · 06:00' },
+      { dot:'g', text:'IndiGo operating 4 return flights Jeddah–India as part of progressive repatriation programme.',                       time:'04 Mar · 00:00' },
+      { dot:'a', text:'US Embassy issued shelter-in-place notice for Jeddah. US ordered evacuation of non-emergency staff from Saudi.',       time:'03 Mar · 07:00' },
+      { dot:'a', text:'KLM suspended Jeddah until 5 Mar. Air France suspended until 5 Mar.',                                                 time:'04 Mar · 00:00' },
     ],
     links:[
-      { label:'📊 FlightAware GIZ', url:'https://www.flightaware.com/live/airport/OEGN' },
+      { label:'📊 FlightAware JED',         url:'https://www.flightaware.com/live/airport/OEJN' },
+      { label:'✈ Saudia',                   url:'https://www.saudia.com/' },
     ]
   },
 
-  { id:'ELQ', name:'Prince Naif bin Abdulaziz Intl', city:'Qassim, Saudi Arabia',  lat:26.3025, lon:43.7744, s:'disrupted',
-    carrier:'Saudia · flyadeal',               res:'Operational (reduced)',
+  { id:'DMM', name:'King Fahd International',       city:'Dammam, Saudi Arabia',  lat:26.4712, lon:49.7979, s:'disrupted',
+    carrier:'Saudia · Flynas',
+    res:'Disrupted. Close to Kuwait and Gulf border partial closure zone.',
     detail:{
-      airspace:'Saudi airspace open — central region',
-      ops:'Domestic and limited regional operations.',
-      carrier_status:'Saudia operating domestic schedule. Regional disruptions ongoing.',
-      last_flight:'Saudia SV 221 to JED operated 02 Mar 09:30',
+      airspace:'OEJD partial closure affects Gulf-border area near Dammam. M318 route segment closed.',
+      ops:'Reduced operations. Saudia suspended DMM routes to Kuwait/Gulf destinations.',
+      carrier_status:'Saudia suspended Kuwait-DMM and Gulf routes. Lufthansa suspended Dammam until 8 Mar. KLM suspended until 5 Mar.',
+      last_flight:'Reduced schedule continuing.'
     },
     news:[
-      { dot:'a', text:'Qassim airport disruptions reflect Saudi-wide precautionary airspace management in response to Gulf crisis.', time:'02 Mar · 04:00' },
+      { dot:'a', text:'OEJD partial closure affects Gulf-facing routes from DMM. M318 and M550 segments closed.',                             time:'04 Mar · 00:00' },
+      { dot:'a', text:'Lufthansa Group suspended Dammam flights until at least 8 Mar.',                                                      time:'02 Mar · 05:00' },
+      { dot:'a', text:'KLM suspended Dubai and Dammam until 5 Mar.',                                                                         time:'04 Mar · 00:00' },
     ],
     links:[
-      { label:'📊 FlightAware ELQ', url:'https://www.flightaware.com/live/airport/OEGS' },
+      { label:'📊 FlightAware DMM',         url:'https://www.flightaware.com/live/airport/OEDF' },
     ]
   },
 
-  { id:'HAS', name:"Ha'il Regional Airport",        city:"Ha'il, Saudi Arabia",    lat:27.4379, lon:41.6863, s:'disrupted',
-    carrier:'Saudia · flynas',                 res:'Operational (reduced)',
+  { id:'MED', name:'Prince Mohammad bin Abdulaziz', city:'Medina, Saudi Arabia',  lat:24.5534, lon:39.7051, s:'disrupted',
+    carrier:'Saudia · Flynas · Multiple',
+    res:'Disrupted. Umrah and hajj pilgrim traffic severely disrupted.',
     detail:{
-      airspace:'Saudi airspace open — northern region',
-      ops:'Domestic operations maintained. Limited international connectivity.',
-      carrier_status:'Saudia and flynas operating domestic services.',
-      last_flight:'flynas XY domestic service 02 Mar 10:00',
+      airspace:'OEJD FIR. Western Saudi routes via Red Sea open.',
+      ops:'Operating but reduced. Major disruption to pilgrimage traffic.',
+      carrier_status:'Saudia reduced schedule. Pilgrim charter flights suspended.',
+      last_flight:'Limited schedule continuing.'
     },
     news:[
-      { dot:'a', text:'Ha\'il disruptions in line with Saudi-wide precautionary aviation measures.', time:'02 Mar · 04:00' },
+      { dot:'a', text:'Medina pilgrimage flights severely disrupted. Saudi authorities managing pilgrim welfare.',                             time:'03 Mar · 10:00' },
     ],
     links:[
-      { label:'📊 FlightAware HAS', url:'https://www.flightaware.com/live/airport/OEHL' },
+      { label:'📊 FlightAware MED',         url:'https://www.flightaware.com/live/airport/OEMA' },
     ]
   },
 
-  { id:'TIF', name:'Taif Regional Airport',         city:'Taif, Saudi Arabia',     lat:21.4834, lon:40.5443, s:'disrupted',
-    carrier:'Saudia · flynas',                 res:'Operational (reduced)',
+  { id:'AHB', name:'Abha International',            city:'Abha, Saudi Arabia',    lat:18.2404, lon:42.6566, s:'disrupted',
+    carrier:'Saudia · Flynas',
+    res:'Disrupted. Near Yemen border — ongoing Houthi threat.',
     detail:{
-      airspace:'Saudi airspace open — Hejaz region',
-      ops:'Limited scheduled operations.',
-      carrier_status:'Saudia and flynas operating domestic-only schedule.',
-      last_flight:'Saudia SV domestic service operated 02 Mar 09:15',
+      airspace:'OEJD FIR. Near Yemen conflict zone.',
+      ops:'Reduced operations. Historically targeted by Houthi drones.',
+      carrier_status:'Reduced schedule. Check airline.',
+      last_flight:'Reduced schedule continuing.'
     },
     news:[
-      { dot:'a', text:'Taif disruptions reflect Saudi-wide precautionary measures. Some military activity at adjacent air base noted.', time:'02 Mar · 05:00' },
+      { dot:'a', text:'Abha airport in Houthi drone range. Saudi military on heightened alert in border region.',                             time:'03 Mar · 10:00' },
     ],
     links:[
-      { label:'📊 FlightAware TIF', url:'https://www.flightaware.com/live/airport/OETF' },
+      { label:'📊 FlightAware AHB',         url:'https://www.flightaware.com/live/airport/OEAB' },
     ]
   },
 
-  { id:'YNB', name:'Yanbu Airport',                 city:'Yanbu, Saudi Arabia',    lat:24.1445, lon:38.0634, s:'disrupted',
-    carrier:'Saudia',                          res:'Operational (reduced)',
+  { id:'TUU', name:'Tabuk Regional Airport',        city:'Tabuk, Saudi Arabia',   lat:28.3654, lon:36.6189, s:'disrupted',
+    carrier:'Saudia · Flynas',
+    res:'Disrupted. Limited domestic and select international ops.',
     detail:{
-      airspace:'Saudi airspace open — Red Sea coast',
-      ops:'Limited operations serving oil industry workers.',
-      carrier_status:'Saudia operating domestic schedule only.',
-      last_flight:'Saudia SV domestic arrival 02 Mar 08:00',
+      airspace:'OEJD FIR. Northern Saudi near Jordan border.',
+      ops:'Limited operations.',
+      carrier_status:'Limited schedule.',
+      last_flight:'Reduced schedule continuing.'
+    },
+    news:[ { dot:'a', text:'Tabuk disrupted. Check airline before travel.',                                                                  time:'04 Mar · 00:00' } ],
+    links:[ { label:'📊 FlightAware TUU',   url:'https://www.flightaware.com/live/airport/OETB' } ]
+  },
+
+  { id:'GIZ', name:'Jizan Regional Airport',        city:'Jizan, Saudi Arabia',   lat:16.9011, lon:42.5858, s:'disrupted',
+    carrier:'Saudia',
+    res:'Disrupted. Near Yemen military border zone.',
+    detail:{
+      airspace:'OEJD FIR. Adjacent to Haradh/Yemen conflict zone.',
+      ops:'Very limited operations. Military zone nearby.',
+      carrier_status:'Saudia only, reduced.',
+      last_flight:'Very limited schedule.'
+    },
+    news:[ { dot:'a', text:'Jizan near Yemen military border zone. Very limited civilian operations.',                                       time:'04 Mar · 00:00' } ],
+    links:[ { label:'📊 FlightAware GIZ',   url:'https://www.flightaware.com/live/airport/OEGN' } ]
+  },
+
+  { id:'ELQ', name:'Prince Naif bin Abdulaziz Intl', city:'Qassim, Saudi Arabia', lat:26.3025, lon:43.7744, s:'disrupted',
+    carrier:'Saudia · Flynas',
+    res:'Disrupted. Limited schedule.',
+    detail:{
+      airspace:'OEJD FIR.',
+      ops:'Reduced operations.',
+      carrier_status:'Limited schedule.',
+      last_flight:'Reduced schedule continuing.'
+    },
+    news:[ { dot:'a', text:'Qassim airport disrupted. Check airline.',                                                                       time:'04 Mar · 00:00' } ],
+    links:[ { label:'📊 FlightAware ELQ',   url:'https://www.flightaware.com/live/airport/OEGS' } ]
+  },
+
+  { id:'YNB', name:'Yanbu Airport',                 city:'Yanbu, Saudi Arabia',   lat:24.1445, lon:38.0634, s:'disrupted',
+    carrier:'Saudia',
+    res:'Disrupted. Limited schedule.',
+    detail:{
+      airspace:'OEJD FIR.',
+      ops:'Reduced operations.',
+      carrier_status:'Saudia limited.',
+      last_flight:'Reduced schedule continuing.'
+    },
+    news:[ { dot:'a', text:'Yanbu airport disrupted. Check airline.',                                                                        time:'04 Mar · 00:00' } ],
+    links:[ { label:'📊 FlightAware YNB',   url:'https://www.flightaware.com/live/airport/OEYN' } ]
+  },
+
+  // ══════════════════════════════════════════════════
+  // OMAN — FIR OOMM OPEN. Primary evacuation hub.
+  // ══════════════════════════════════════════════════
+  { id:'MCT', name:'Muscat International',          city:'Muscat, Oman',          lat:23.5933, lon:58.2844, s:'open',
+    carrier:'Oman Air · Multiple',
+    res:'Open. PRIMARY EVACUATION HUB for the region. Oman neutral.',
+    detail:{
+      airspace:'FIR OOMM OPEN. EASA advises caution but Oman airspace is usable.',
+      ops:'Fully operational. Major diversion destination. Hotel capacity under pressure.',
+      carrier_status:'Oman Air cancelled AMM/DXB/BAH/DOH/DMM/KWI flights to 6 Mar. Other routes operating. Air India Express resumed MCT.',
+      last_flight:'Normal operations continuing. Major surge in diverted arrivals.'
     },
     news:[
-      { dot:'a', text:'Yanbu is a key industrial city serving Saudi Aramco\'s Red Sea operations. Workers advised to minimise non-essential travel.', time:'02 Mar · 07:00' },
+      { dot:'g', text:'MCT OPEN and operating. Primary evacuation hub for stranded Gulf passengers. Oman strictly neutral.',                  time:'04 Mar · 08:00' },
+      { dot:'a', text:'Drone struck fuel tank at Duqm port 3 Mar — limited damage, no casualties. MCT airport unaffected.',                  time:'03 Mar · 12:00' },
+      { dot:'g', text:'Iran denied Duqm attack. Oman maintaining strict neutrality. QR007 JFK diverted here on 2 Mar.',                      time:'03 Mar · 15:00' },
+      { dot:'a', text:'Oman Air cancelled Gulf destination routes to 6 Mar but operating other international routes.',                        time:'04 Mar · 00:00' },
+      { dot:'b', text:'Hotel capacity filling fast. Oman Tourism Ministry coordinating emergency accommodation.',                             time:'02 Mar · 10:00' },
     ],
     links:[
-      { label:'📊 FlightAware YNB', url:'https://www.flightaware.com/live/airport/OEYN' },
+      { label:'📊 FlightAware MCT',         url:'https://www.flightaware.com/live/airport/OOMS' },
+      { label:'🌐 FR24 airspace blog',       url:'https://www.flightradar24.com/blog/live/israel-launches-pre-emptive-strikes-on-iran-airspace-closures-going-into-place/' },
     ]
   },
 
-  { id:'AQI', name:'Al Qaisumah / Hafr Al-Batin',   city:'Hafr Al-Batin, Saudi Arabia', lat:28.3352, lon:46.1251, s:'disrupted',
-    carrier:'Saudia',                          res:'Operational (reduced)',
+  { id:'SLL', name:'Salalah Airport',               city:'Salalah, Oman',         lat:17.0387, lon:54.0913, s:'open',
+    carrier:'Oman Air · Air Arabia',
+    res:'Open. Oman FIR is open. Alternative to MCT if needed.',
     detail:{
-      airspace:'Saudi airspace open — near Kuwaiti border',
-      ops:'Very limited operations. High risk proximity to Kuwaiti closure zone.',
-      carrier_status:'Saudia operating domestic-only. All regional services halted.',
-      last_flight:'Saudia SV domestic service 01 Mar 20:00; reduced since',
+      airspace:'FIR OOMM OPEN.',
+      ops:'Fully operational. Smaller capacity than MCT.',
+      carrier_status:'Oman Air and Air Arabia operating.',
+      last_flight:'Normal operations.'
     },
     news:[
-      { dot:'a', text:'Hafr Al-Batin is Saudi Arabia\'s closest commercial airport to Kuwait. Kuwait\'s airspace closure and nearby strikes create elevated risk.', time:'02 Mar · 04:00' },
+      { dot:'g', text:'Salalah airport open and operational.',                                                                               time:'04 Mar · 00:00' },
     ],
     links:[
-      { label:'📊 FlightAware AQI', url:'https://www.flightaware.com/live/airport/OEPA' },
+      { label:'📊 FlightAware SLL',         url:'https://www.flightaware.com/live/airport/OOSA' },
     ]
   },
 
-  // ── Oman — OPEN ──────────────────────────────────────────────
-  { id:'MCT', name:'Muscat International',          city:'Muscat, Oman',           lat:23.5933, lon:58.2844, s:'open',
-    carrier:'Oman Air · Multiple',             res:'N/A — Fully operational',
-    detail:{
-      airspace:'Oman airspace fully open — not participating in conflict',
-      ops:'Normal operations. Receiving significant diverted traffic.',
-      carrier_status:'Oman Air operating normally. All major international carriers diverted to MCT.',
-      last_flight:'Active — continuous operations. Handling diverted QR007, KU-diverts, others',
-    },
-    news:[
-      { dot:'g', text:'Oman announced neutrality and kept airspace fully open. MCT is the nearest operational major airport to Dubai (~350 km via E11 highway).', time:'02 Mar · 03:00' },
-      { dot:'g', text:'Oman Air deployed additional ground staff to handle surge in diverted flights. Two Qatar Airways aircraft confirmed on ground at MCT.',      time:'02 Mar · 05:30' },
-      { dot:'b', text:'Overland route Dubai → Muscat via E11/E55 confirmed open by UAE and Oman border agencies. Drive time approx 4–5 hours.',                   time:'02 Mar · 07:00' },
-      { dot:'b', text:'Muscat airport hotel capacity filling fast. Oman Tourism Ministry coordinating emergency accommodation.',                                   time:'02 Mar · 10:00' },
-      { dot:'a', text:'Drone strike hit fuel tank at Duqm commercial port 3 Mar — limited damage, no casualties. MCT airport unaffected.',             time:'03 Mar · 12:00' },
-      { dot:'g', text:'Iran denied Duqm attack. Oman maintaining strict neutrality. MCT remains the primary open major Gulf hub.',                          time:'03 Mar · 15:00' },
-    ],
-    links:[
-      { label:'✈ Oman Air status',       url:'https://www.omanair.com/en/flightstatusresults' },
-      { label:'📋 Muscat Airport',        url:'https://www.muscatairport.co.om/' },
-      { label:'📊 FlightAware MCT',          url:'https://www.flightaware.com/live/airport/OOMS' },
-      { label:'🌐 FR24 airspace live blog',   url:'https://www.flightradar24.com/blog/live/israel-launches-pre-emptive-strikes-on-iran-airspace-closures-going-into-place/' },
-    ]
+  { id:'MCM', name:'Muscat — Seeb (old terminal)',  city:'Muscat, Oman',          lat:23.5933, lon:58.2844, s:'open',
+    carrier:'See MCT',
+    res:'Use MCT.',
+    detail:{ airspace:'See MCT.', ops:'Redirect to MCT.', carrier_status:'See MCT.', last_flight:'See MCT.' },
+    news:[ { dot:'b', text:'Refer to MCT (Muscat International) for all Oman/Muscat information.',                                           time:'04 Mar · 00:00' } ],
+    links:[ { label:'📊 FlightAware MCT',   url:'https://www.flightaware.com/live/airport/OOMS' } ]
   },
 
-  { id:'SLL', name:'Salalah Airport',               city:'Salalah, Oman',          lat:17.0387, lon:54.0913, s:'open',
-    carrier:'Oman Air · Air Arabia',           res:'N/A — Fully operational',
+  // ══════════════════════════════════════════════════
+  // EGYPT — HECC FIR OPEN. Key bypass corridor.
+  // ══════════════════════════════════════════════════
+  { id:'CAI', name:'Cairo International',           city:'Cairo, Egypt',          lat:30.1219, lon:31.4056, s:'open',
+    carrier:'EgyptAir · Multiple',
+    res:'Open. Key node on Europe–Oman southern bypass route.',
     detail:{
-      airspace:'Oman airspace fully open',
-      ops:'Normal operations',
-      carrier_status:'Oman Air and Air Arabia operating normally.',
-      last_flight:'Active — Oman Air WY 111 arrived 02 Mar 10:45',
+      airspace:'HECC FIR OPEN. Southern bypass: Europe → Egypt → Saudi → Oman.',
+      ops:'Fully operational. Receiving diverted flights. EgyptAir running repatriation.',
+      carrier_status:'EgyptAir operating. Kuwait Airways diverted aircraft to CAI. Emirates flew London/Paris/Frankfurt via Egypt routing.',
+      last_flight:'Normal operations plus heavy diverted traffic.'
     },
     news:[
-      { dot:'g', text:'Salalah operating normally under Oman\'s neutral airspace policy.', time:'02 Mar · 03:00' },
+      { dot:'g', text:'CAI fully open. Egypt FIR is a primary node on the southern Europe–Asia bypass route.',                               time:'04 Mar · 08:00' },
+      { dot:'g', text:'Kuwait Airways diverted aircraft to Cairo when KWI closed. EgyptAir accepting stranded passengers.',                   time:'02 Mar · 04:00' },
     ],
     links:[
-      { label:'📊 FlightAware SLL', url:'https://www.flightaware.com/live/airport/OOSA' },
-    ]
-  },
-
-  // ── Egypt — open ──────────────────────────────────────────────
-  { id:'CAI', name:'Cairo International',           city:'Cairo, Egypt',           lat:30.1219, lon:31.4056, s:'open',
-    carrier:'EgyptAir · Multiple',             res:'N/A — Fully operational',
-    detail:{
-      airspace:'Egypt airspace fully open — acting as regional diversion hub',
-      ops:'Heavy elevated traffic. EgyptAir and all international carriers operating.',
-      carrier_status:'EgyptAir operating all routes. Multiple diverted Gulf flights landed.',
-      last_flight:'Active — continuous operations including diverted Kuwait Airways aircraft',
-    },
-    news:[
-      { dot:'g', text:'Cairo International receiving significant diverted traffic from Gulf, Israeli and Jordanian airspace closures.',                        time:'02 Mar · 04:00' },
-      { dot:'g', text:'EgyptAir adding extra capacity and issuing flexible rebooking policies for passengers rerouting through Cairo.',                       time:'02 Mar · 07:00' },
-      { dot:'b', text:'Egypt has offered overflight corridors to European carriers needing to avoid Gulf airspace. Cairo-London and Cairo-Frankfurt demand up.', time:'02 Mar · 09:00' },
-    ],
-    links:[
-      { label:'✈ EgyptAir status',  url:'https://www.egyptair.com/en/Pages/flight-status.aspx' },
-      { label:'📊 FlightAware CAI', url:'https://www.flightaware.com/live/airport/HECA' },
+      { label:'📊 FlightAware CAI',         url:'https://www.flightaware.com/live/airport/HECA' },
+      { label:'✈ EgyptAir',                 url:'https://www.egyptair.com/' },
     ]
   },
 
   { id:'SSH', name:'Sharm El-Sheikh International', city:'Sharm El-Sheikh, Egypt', lat:27.9773, lon:34.3950, s:'open',
-    carrier:'Multiple charter operators',      res:'N/A — Fully operational',
+    carrier:'EgyptAir · Charter carriers',
+    res:'Open. Being used for TUI and tour operator reroutes.',
     detail:{
-      airspace:'Egypt airspace fully open',
-      ops:'Normal charter and scheduled operations',
-      carrier_status:'All operators normal. Some rerouting over Sinai due to Israeli airspace closure.',
-      last_flight:'Active operations',
+      airspace:'HECC FIR OPEN.',
+      ops:'Operational. TUI and others adding capacity to Sharm as a workaround hub.',
+      carrier_status:'EgyptAir and charters operating. Extra capacity being added.',
+      last_flight:'Normal operations.'
     },
     news:[
-      { dot:'g', text:'Sharm El-Sheikh operating normally. Some aircraft rerouting around southern Israel.', time:'02 Mar · 05:00' },
+      { dot:'g', text:'Sharm El-Sheikh open. Airlines adding extra capacity here to work around Gulf closures.',                              time:'03 Mar · 10:00' },
+      { dot:'b', text:'TUI adding Sharm capacity to help stranded customers reroute.',                                                       time:'03 Mar · 10:00' },
     ],
     links:[
-      { label:'📊 FlightAware SSH', url:'https://www.flightaware.com/live/airport/HESH' },
+      { label:'📊 FlightAware SSH',         url:'https://www.flightaware.com/live/airport/HESH' },
     ]
   },
 
-  // ── Turkey — open ─────────────────────────────────────────────
-  { id:'IST', name:'Istanbul Airport',              city:'Istanbul, Turkey',       lat:41.2608, lon:28.7418, s:'open',
-    carrier:'Turkish Airlines · Multiple',     res:'N/A — Fully operational',
+  { id:'HRG', name:'Hurghada International',        city:'Hurghada, Egypt',       lat:27.1803, lon:33.7994, s:'open',
+    carrier:'EgyptAir · Charter carriers',
+    res:'Open. Tourism hub, also receiving diverted traffic.',
     detail:{
-      airspace:'Turkey airspace fully open',
-      ops:'Normal operations. Turkish Airlines cancelled some Middle East routes but IST hub fully operational.',
-      carrier_status:'Turkish Airlines operating. Cancelled select Iran, Israel, Lebanon, Iraq routes.',
-      last_flight:'Active — continuous hub operations',
+      airspace:'HECC FIR OPEN.',
+      ops:'Fully operational.',
+      carrier_status:'EgyptAir and charters operating.',
+      last_flight:'Normal operations.'
+    },
+    news:[ { dot:'g', text:'Hurghada open and operational.',                                                                                 time:'04 Mar · 00:00' } ],
+    links:[ { label:'📊 FlightAware HRG',   url:'https://www.flightaware.com/live/airport/HEGN' } ]
+  },
+
+  { id:'ALY', name:'El Nouzha Airport (Alexandria)', city:'Alexandria, Egypt',    lat:31.1839, lon:29.9489, s:'open',
+    carrier:'EgyptAir · Nile Air',
+    res:'Open. Smaller airport north of Cairo.',
+    detail:{
+      airspace:'HECC FIR OPEN.',
+      ops:'Operational.',
+      carrier_status:'EgyptAir and Nile Air.',
+      last_flight:'Normal operations.'
+    },
+    news:[ { dot:'g', text:'Alexandria El Nouzha open and operational.',                                                                     time:'04 Mar · 00:00' } ],
+    links:[ { label:'📊 FlightAware ALY',   url:'https://www.flightaware.com/live/airport/HEAX' } ]
+  },
+
+  // ══════════════════════════════════════════════════
+  // TURKEY — ALL OPEN. Major bypass and evacuation hub.
+  // ══════════════════════════════════════════════════
+  { id:'IST', name:'Istanbul Airport',              city:'Istanbul, Turkey',      lat:41.2608, lon:28.7418, s:'open',
+    carrier:'Turkish Airlines · Multiple',
+    res:'Open. Major evacuation hub. Turkish airspace unaffected.',
+    detail:{
+      airspace:'LTBB FIR OPEN. Turkish airspace fully open and operating normally.',
+      ops:'Fully operational. IST handling increased load as Gulf hubs closed.',
+      carrier_status:'Turkish Airlines cancelled flights to: Bahrain, Dammam, Riyadh, Iran, Iraq, Jordan, Kuwait, Lebanon, Oman, Qatar, Syria, UAE. IST itself fully open.',
+      last_flight:'Normal operations.'
     },
     news:[
-      { dot:'g', text:'Istanbul Airport fully operational. Turkish Airlines cancelled routes to IKA, TLV, BEY, BGW citing force majeure.', time:'02 Mar · 04:30' },
-      { dot:'b', text:'IST becoming a major stopover hub for passengers rerouting from the Gulf via alternative paths.',                    time:'02 Mar · 08:00' },
+      { dot:'g', text:'IST fully open. Turkish airspace not closed. IST is a major alternative hub for stranded Gulf passengers.',           time:'04 Mar · 08:00' },
+      { dot:'a', text:'Turkish Airlines cancelled all routes to: BAH, DMM, RUH, Iran, Iraq, JO, KWI, LB, Oman, DOH, Syria, UAE.',           time:'04 Mar · 00:00' },
+      { dot:'b', text:'Demand for Hong Kong–London and Asia–Europe via Turkey surging. Book early.',                                         time:'04 Mar · 00:00' },
     ],
     links:[
-      { label:'✈ Turkish Airlines status', url:'https://www.turkishairlines.com/en-gb/flights/flight-status/' },
-      { label:'🌐 ops.group airspace brief',  url:'https://ops.group/blog/middle-east-airspace-update/' },
-      { label:'🌐 FR24 airspace live blog',    url:'https://www.flightradar24.com/blog/live/israel-launches-pre-emptive-strikes-on-iran-airspace-closures-going-into-place/' },
-      { label:'📋 Istanbul Airport',       url:'https://www.istairport.com/en' },
-      { label:'📊 FlightAware IST',        url:'https://www.flightaware.com/live/airport/LTFM' },
+      { label:'📊 FlightAware IST',         url:'https://www.flightaware.com/live/airport/LTFM' },
+      { label:'✈ Turkish Airlines status',  url:'https://www.turkishairlines.com/en-gb/flights/flight-status/' },
+      { label:'🌐 ops.group airspace brief', url:'https://ops.group/blog/middle-east-airspace-update/' },
+      { label:'🌐 FR24 airspace live blog',  url:'https://www.flightradar24.com/blog/live/israel-launches-pre-emptive-strikes-on-iran-airspace-closures-going-into-place/' },
     ]
   },
 
-  { id:'SAW', name:'Istanbul Sabiha Gökçen',        city:'Istanbul, Turkey',       lat:40.8983, lon:29.3092, s:'open',
-    carrier:'Pegasus · SunExpress · Multiple', res:'N/A — Fully operational',
+  { id:'SAW', name:'Istanbul Sabiha Gökçen',        city:'Istanbul, Turkey',      lat:40.8983, lon:29.3092, s:'open',
+    carrier:'Pegasus · SunExpress · Multiple',
+    res:'Open. Alternative Istanbul airport, handles budget carriers.',
     detail:{
-      airspace:'Turkey airspace fully open',
-      ops:'Normal operations. Asia-side hub handling overflow from IST.',
-      carrier_status:'Pegasus Airlines and SunExpress operating all routes normally.',
-      last_flight:'Active — continuous operations',
+      airspace:'LTBB FIR OPEN.',
+      ops:'Fully operational.',
+      carrier_status:'Pegasus, SunExpress, Wizz Air operating (Wizz suspended some Gulf/Jordan routes).',
+      last_flight:'Normal operations.'
     },
-    news:[
-      { dot:'g', text:'Sabiha Gökçen fully operational. Pegasus Airlines operating all scheduled services.', time:'02 Mar · 05:00' },
-      { dot:'b', text:'SAW handling overflow from IST as passenger volumes surge due to Gulf rerouting.',    time:'02 Mar · 09:00' },
-    ],
+    news:[ { dot:'g', text:'SAW fully open. Pegasus and SunExpress operating normally.',                                                     time:'04 Mar · 00:00' } ],
     links:[
-      { label:'✈ Pegasus flight status', url:'https://www.flypgs.com/en/flight-information/flight-status' },
-      { label:'📋 Sabiha Gökçen Airport',url:'https://www.sabihagokcen.aero/homepage' },
-      { label:'📊 FlightAware SAW',      url:'https://www.flightaware.com/live/airport/LTFJ' },
+      { label:'📊 FlightAware SAW',         url:'https://www.flightaware.com/live/airport/LTFJ' },
+      { label:'✈ Pegasus',                  url:'https://www.flypgs.com/' },
     ]
   },
 
-  { id:'AYT', name:'Antalya Airport',               city:'Antalya, Turkey',        lat:36.8987, lon:30.8003, s:'open',
-    carrier:'Turkish Airlines · Pegasus · Multiple', res:'N/A — Fully operational',
+  { id:'AYT', name:'Antalya Airport',               city:'Antalya, Turkey',       lat:36.8987, lon:30.8003, s:'open',
+    carrier:'Turkish Airlines · SunExpress · Multiple',
+    res:'Open. Tourism hub, no disruption.',
     detail:{
-      airspace:'Turkey airspace fully open',
-      ops:'Normal operations. Charter-heavy airport operating as usual.',
-      carrier_status:'All carriers operating. No disruptions reported.',
-      last_flight:'Active — continuous operations including high charter volumes',
+      airspace:'LTBA/LTCC FIR OPEN.',
+      ops:'Fully operational. Major European package holiday destination.',
+      carrier_status:'Turkish Airlines, SunExpress, charter carriers all operating.',
+      last_flight:'Normal operations.'
     },
-    news:[
-      { dot:'g', text:'Antalya fully operational. Major European charter destination unaffected by Gulf crisis.', time:'02 Mar · 05:00' },
-    ],
-    links:[
-      { label:'📋 Antalya Airport',  url:'https://www.antalya-airport.aero/en' },
-      { label:'📊 FlightAware AYT', url:'https://www.flightaware.com/live/airport/LTAI' },
-    ]
+    news:[ { dot:'g', text:'Antalya fully open and operating normally.',                                                                     time:'04 Mar · 00:00' } ],
+    links:[ { label:'📊 FlightAware AYT',   url:'https://www.flightaware.com/live/airport/LTAI' } ]
   },
 
-  { id:'ADB', name:'Izmir Adnan Menderes',          city:'Izmir, Turkey',          lat:38.2924, lon:27.1570, s:'open',
-    carrier:'Turkish Airlines · Pegasus · SunExpress', res:'N/A — Fully operational',
+  { id:'ADB', name:'Izmir Adnan Menderes',          city:'Izmir, Turkey',         lat:38.2924, lon:27.1570, s:'open',
+    carrier:'Turkish Airlines · Pegasus',
+    res:'Open.',
     detail:{
-      airspace:'Turkey airspace fully open',
-      ops:'Normal operations.',
-      carrier_status:'All carriers operating normally.',
-      last_flight:'Active — continuous operations',
+      airspace:'LTBA FIR OPEN.',
+      ops:'Fully operational.',
+      carrier_status:'Turkish Airlines and Pegasus operating.',
+      last_flight:'Normal operations.'
     },
-    news:[
-      { dot:'g', text:'Izmir Adnan Menderes fully operational. No disruptions reported.', time:'02 Mar · 05:00' },
-    ],
-    links:[
-      { label:'📊 FlightAware ADB', url:'https://www.flightaware.com/live/airport/LTBJ' },
-    ]
+    news:[ { dot:'g', text:'Izmir fully open.',                                                                                              time:'04 Mar · 00:00' } ],
+    links:[ { label:'📊 FlightAware ADB',   url:'https://www.flightaware.com/live/airport/LTBJ' } ]
   },
 
-  { id:'ESB', name:'Ankara Esenboğa',               city:'Ankara, Turkey',         lat:40.1281, lon:32.9951, s:'open',
-    carrier:'Turkish Airlines · Pegasus',      res:'N/A — Fully operational',
+  { id:'ESB', name:'Ankara Esenboğa',               city:'Ankara, Turkey',        lat:40.1281, lon:32.9951, s:'open',
+    carrier:'Turkish Airlines · Pegasus',
+    res:'Open.',
     detail:{
-      airspace:'Turkey airspace fully open',
-      ops:'Normal operations. Capital city airport serving government and commercial traffic.',
-      carrier_status:'Turkish Airlines and Pegasus operating full schedules.',
-      last_flight:'Active — continuous operations',
+      airspace:'LTBA FIR OPEN.',
+      ops:'Fully operational.',
+      carrier_status:'Turkish Airlines and Pegasus operating.',
+      last_flight:'Normal operations.'
     },
-    news:[
-      { dot:'g', text:'Ankara Esenboğa fully operational. Turkish government monitoring Gulf situation closely; no airspace measures announced.', time:'02 Mar · 06:00' },
-      { dot:'b', text:'Turkish Ministry of Foreign Affairs issued travel advisory urging citizens to avoid Iran, Iraq, Israel, Lebanon and Gulf states.', time:'02 Mar · 08:00' },
-    ],
-    links:[
-      { label:'📋 Ankara Airport',  url:'https://www.esenbogaairport.com/en/' },
-      { label:'📊 FlightAware ESB', url:'https://www.flightaware.com/live/airport/LTAC' },
-    ]
+    news:[ { dot:'g', text:'Ankara Esenboğa fully open.',                                                                                    time:'04 Mar · 00:00' } ],
+    links:[ { label:'📊 FlightAware ESB',   url:'https://www.flightaware.com/live/airport/LTAC' } ]
   },
 
-  { id:'GZT', name:'Gaziantep Oğuzeli International', city:'Gaziantep, Turkey',    lat:36.9473, lon:37.4787, s:'open',
-    carrier:'Turkish Airlines · Pegasus · SunExpress', res:'N/A — Fully operational',
+  { id:'GZT', name:'Gaziantep Oğuzeli International', city:'Gaziantep, Turkey',   lat:36.9473, lon:37.4787, s:'open',
+    carrier:'Turkish Airlines · Pegasus',
+    res:'Open. Near Syrian border but Turkish airspace unaffected.',
     detail:{
-      airspace:'Turkey airspace fully open — southeast Turkey monitoring Syria border',
-      ops:'Normal commercial operations. Turkish military on elevated readiness near Syrian border.',
-      carrier_status:'All carriers operating normally.',
-      last_flight:'Active — continuous operations',
+      airspace:'LTBA/LTCC FIR OPEN.',
+      ops:'Operational. Closest Turkish airport to Syria/Iraq border.',
+      carrier_status:'Turkish Airlines and Pegasus operating.',
+      last_flight:'Normal operations.'
     },
-    news:[
-      { dot:'g', text:'Gaziantep airport operating normally despite proximity to Syrian border and regional tensions.', time:'02 Mar · 05:00' },
-      { dot:'a', text:'Turkish Armed Forces on heightened alert along entire Syrian and Iraqi border regions.', time:'02 Mar · 04:00' },
-    ],
-    links:[
-      { label:'📊 FlightAware GZT', url:'https://www.flightaware.com/live/airport/LTAJ' },
-    ]
+    news:[ { dot:'g', text:'Gaziantep open. Turkey not involved in conflict.',                                                               time:'04 Mar · 00:00' } ],
+    links:[ { label:'📊 FlightAware GZT',   url:'https://www.flightaware.com/live/airport/LTAJ' } ]
   },
 
-  { id:'GZP', name:'Alanya Gazipaşa Airport',       city:'Alanya, Turkey',         lat:36.2993, lon:32.3002, s:'open',
-    carrier:'Pegasus · SunExpress · Charters',  res:'N/A — Fully operational',
-    detail:{
-      airspace:'Turkey airspace fully open',
-      ops:'Normal charter and scheduled operations.',
-      carrier_status:'Pegasus and charter operators running normal schedules.',
-      last_flight:'Active — ongoing charter traffic',
-    },
-    news:[
-      { dot:'g', text:'Alanya Gazipaşa fully operational. Tourist season charter traffic unaffected.', time:'02 Mar · 05:00' },
-    ],
-    links:[
-      { label:'📊 FlightAware GZP', url:'https://www.flightaware.com/live/airport/LTFG' },
-    ]
+  { id:'GZP', name:'Alanya Gazipaşa Airport',       city:'Alanya, Turkey',        lat:36.2993, lon:32.3002, s:'open',
+    carrier:'SunExpress · Pegasus',
+    res:'Open.',
+    detail:{ airspace:'LTBA/LTCC FIR OPEN.', ops:'Operational.', carrier_status:'SunExpress and charter carriers.', last_flight:'Normal.' },
+    news:[ { dot:'g', text:'Alanya Gazipaşa open.',                                                                                         time:'04 Mar · 00:00' } ],
+    links:[ { label:'📊 FlightAware GZP',   url:'https://www.flightaware.com/live/airport/LTFG' } ]
   },
 
-  { id:'TZX', name:'Trabzon Airport',               city:'Trabzon, Turkey',        lat:40.9950, lon:39.7897, s:'open',
-    carrier:'Turkish Airlines · Pegasus',      res:'N/A — Fully operational',
+  { id:'TZX', name:'Trabzon Airport',               city:'Trabzon, Turkey',       lat:40.9950, lon:39.7897, s:'open',
+    carrier:'Turkish Airlines · Pegasus',
+    res:'Open. Northeast Turkey, Caucasus routing hub.',
     detail:{
-      airspace:'Turkey airspace fully open — Black Sea coast',
-      ops:'Normal operations.',
-      carrier_status:'Turkish Airlines and Pegasus operating normally.',
-      last_flight:'Active — continuous operations',
+      airspace:'LTBA FIR OPEN. On the northern Caucasus bypass route used by Asia-Europe diverts.',
+      ops:'Operational. May see increased traffic from Caucasus bypass routing.',
+      carrier_status:'Turkish Airlines and Pegasus operating.',
+      last_flight:'Normal operations.'
+    },
+    news:[ { dot:'g', text:'Trabzon open. Caucasus routing corridor active above.',                                                          time:'04 Mar · 00:00' } ],
+    links:[ { label:'📊 FlightAware TZX',   url:'https://www.flightaware.com/live/airport/LTCG' } ]
+  },
+
+  { id:'DLM', name:'Dalaman Airport',               city:'Dalaman, Turkey',       lat:36.7133, lon:28.7925, s:'open',
+    carrier:'SunExpress · TUI · Charter',
+    res:'Open. Major European charter destination.',
+    detail:{ airspace:'LTBA/LTCC FIR OPEN.', ops:'Fully operational.', carrier_status:'SunExpress, TUI, charter carriers.', last_flight:'Normal.' },
+    news:[ { dot:'g', text:'Dalaman fully open.',                                                                                            time:'04 Mar · 00:00' } ],
+    links:[ { label:'📊 FlightAware DLM',   url:'https://www.flightaware.com/live/airport/LTBS' } ]
+  },
+
+  { id:'BJV', name:'Bodrum Milas–Bodrum Airport',   city:'Bodrum, Turkey',        lat:37.2501, lon:27.6643, s:'open',
+    carrier:'SunExpress · Turkish Airlines · Charter',
+    res:'Open.',
+    detail:{ airspace:'LTBA FIR OPEN.', ops:'Fully operational.', carrier_status:'SunExpress and charters.', last_flight:'Normal.' },
+    news:[ { dot:'g', text:'Bodrum fully open.',                                                                                             time:'04 Mar · 00:00' } ],
+    links:[ { label:'📊 FlightAware BJV',   url:'https://www.flightaware.com/live/airport/LTFE' } ]
+  },
+
+  { id:'ASR', name:'Kayseri Erkilet Airport',       city:'Kayseri, Turkey',       lat:38.7704, lon:35.4954, s:'open',
+    carrier:'Turkish Airlines · Pegasus',
+    res:'Open.',
+    detail:{ airspace:'LTBA FIR OPEN.', ops:'Operational.', carrier_status:'Turkish Airlines, Pegasus.', last_flight:'Normal.' },
+    news:[ { dot:'g', text:'Kayseri open.',                                                                                                  time:'04 Mar · 00:00' } ],
+    links:[ { label:'📊 FlightAware ASR',   url:'https://www.flightaware.com/live/airport/LTAU' } ]
+  },
+
+  { id:'SZF', name:'Samsun Çarşamba Airport',       city:'Samsun, Turkey',        lat:41.2545, lon:36.5671, s:'open',
+    carrier:'Turkish Airlines · Pegasus',
+    res:'Open.',
+    detail:{ airspace:'LTBA FIR OPEN.', ops:'Operational.', carrier_status:'Turkish Airlines, Pegasus.', last_flight:'Normal.' },
+    news:[ { dot:'g', text:'Samsun Çarşamba open.',                                                                                         time:'04 Mar · 00:00' } ],
+    links:[ { label:'📊 FlightAware SZF',   url:'https://www.flightaware.com/live/airport/LTFH' } ]
+  },
+
+  { id:'KYA', name:'Konya Airport',                 city:'Konya, Turkey',         lat:37.9792, lon:32.5619, s:'open',
+    carrier:'Turkish Airlines · Pegasus',
+    res:'Open.',
+    detail:{ airspace:'LTBA FIR OPEN.', ops:'Operational.', carrier_status:'Turkish Airlines, Pegasus.', last_flight:'Normal.' },
+    news:[ { dot:'g', text:'Konya open.',                                                                                                    time:'04 Mar · 00:00' } ],
+    links:[ { label:'📊 FlightAware KYA',   url:'https://www.flightaware.com/live/airport/LTAN' } ]
+  },
+
+  { id:'MLX', name:'Malatya Erhaç Airport',         city:'Malatya, Turkey',       lat:38.4353, lon:38.0910, s:'open',
+    carrier:'Turkish Airlines · SunExpress',
+    res:'Open.',
+    detail:{ airspace:'LTBA FIR OPEN.', ops:'Operational.', carrier_status:'Turkish Airlines, SunExpress.', last_flight:'Normal.' },
+    news:[ { dot:'g', text:'Malatya open.',                                                                                                  time:'04 Mar · 00:00' } ],
+    links:[ { label:'📊 FlightAware MLX',   url:'https://www.flightaware.com/live/airport/LTAT' } ]
+  },
+
+  { id:'VAN', name:'Van Ferit Melen Airport',       city:'Van, Turkey',           lat:38.4682, lon:43.3323, s:'open',
+    carrier:'Turkish Airlines · Pegasus',
+    res:'Open. Southeastern Turkey near Iran/Iraq border.',
+    detail:{
+      airspace:'LTBA FIR OPEN. Near Iran border but Turkish FIR open.',
+      ops:'Operational. Monitor if conflict activity spreads.',
+      carrier_status:'Turkish Airlines and Pegasus operating.',
+      last_flight:'Normal operations.'
+    },
+    news:[ { dot:'g', text:'Van open. Near Iran border but Turkish airspace unaffected.',                                                    time:'04 Mar · 00:00' } ],
+    links:[ { label:'📊 FlightAware VAN',   url:'https://www.flightaware.com/live/airport/LTCI' } ]
+  },
+
+  { id:'DIY', name:'Diyarbakır Airport',            city:'Diyarbakır, Turkey',    lat:37.8939, lon:40.2010, s:'open',
+    carrier:'Turkish Airlines · Pegasus',
+    res:'Open. Near Syria/Iraq border, Turkish airspace unaffected.',
+    detail:{
+      airspace:'LTBA FIR OPEN. Near Syria/Iraq border but Turkey not closing airspace.',
+      ops:'Operational.',
+      carrier_status:'Turkish Airlines and Pegasus operating.',
+      last_flight:'Normal operations.'
+    },
+    news:[ { dot:'g', text:'Diyarbakır open. Turkey not involved in conflict.',                                                              time:'04 Mar · 00:00' } ],
+    links:[ { label:'📊 FlightAware DIY',   url:'https://www.flightaware.com/live/airport/LTCC' } ]
+  },
+
+  { id:'HTA', name:'Hatay Airport',                 city:'Hatay, Turkey',         lat:36.3623, lon:36.2822, s:'open',
+    carrier:'Turkish Airlines · Pegasus',
+    res:'Open. Nearest Turkish airport to Syria.',
+    detail:{
+      airspace:'LTBA/LTCC FIR OPEN. Closest Turkish airport to Syria (50 km).',
+      ops:'Operational but monitor closely. Turkish airspace itself safe.',
+      carrier_status:'Turkish Airlines and Pegasus operating.',
+      last_flight:'Normal operations.'
+    },
+    news:[ { dot:'g', text:'Hatay open. Nearest Turkish airport to Syria. Turkish airspace unaffected.',                                     time:'04 Mar · 00:00' } ],
+    links:[ { label:'📊 FlightAware HTA',   url:'https://www.flightaware.com/live/airport/LTDA' } ]
+  },
+
+  // ══════════════════════════════════════════════════
+  // SYRIA — FIR OSTT total closure expires 21:00 UTC 7 Mar
+  // ══════════════════════════════════════════════════
+  { id:'DAM', name:'Damascus International',        city:'Damascus, Syria',       lat:33.4114, lon:36.5156, s:'closed',
+    carrier:'Syrian Air',
+    res:'Closed. FIR OSTT total closure expires 21:00 UTC 7 Mar.',
+    detail:{
+      airspace:'FIR OSTT total closure expires 21:00 UTC 7 Mar.',
+      ops:'All commercial flights suspended. Syria under active conflict.',
+      carrier_status:'Syrian Air suspended. No foreign carriers operating.',
+      last_flight:'All ops suspended since 28 Feb.'
     },
     news:[
-      { dot:'g', text:'Trabzon fully operational. Black Sea region unaffected by Gulf crisis.', time:'02 Mar · 05:00' },
+      { dot:'r', text:'FIR OSTT total closure expires 21:00 UTC 7 Mar. Damascus fully closed.',                                              time:'04 Mar · 00:00' },
     ],
-    links:[
-      { label:'📊 FlightAware TZX', url:'https://www.flightaware.com/live/airport/LTCG' },
-    ]
+    links:[ { label:'📊 FlightAware DAM',   url:'https://www.flightaware.com/live/airport/OSDI' } ]
   },
+
+  { id:'ALP', name:'Aleppo International',          city:'Aleppo, Syria',         lat:36.1807, lon:37.2244, s:'closed',
+    carrier:'Syrian Air',
+    res:'Closed under FIR OSTT closure.',
+    detail:{
+      airspace:'FIR OSTT total closure.',
+      ops:'Closed.',
+      carrier_status:'All carriers suspended.',
+      last_flight:'All ops suspended since 28 Feb.'
+    },
+    news:[ { dot:'r', text:'Aleppo closed under FIR OSTT total closure.',                                                                    time:'04 Mar · 00:00' } ],
+    links:[ { label:'📊 FlightAware ALP',   url:'https://www.flightaware.com/live/airport/OSAP' } ]
+  },
+
 ];
+
+
 
 // ═══════════════════════════════════════════════════════════════════
 // HELPERS
@@ -1651,6 +1835,7 @@ function makePopup(ap) {
 }
 
 // ═══════════════════════════════════════════════════════════════════
+
 // SIDEBAR LIST
 // ═══════════════════════════════════════════════════════════════════
 let curFilter = 'all';
@@ -1846,6 +2031,7 @@ setInterval(tick,1000);
 // ═══════════════════════════════════════════════════════
 // BORDER CROSSINGS
 // ═══════════════════════════════════════════════════════
+
 const BORDERS = [
   { id:'b01', country:'UAE / Oman',            name:'Hatta / Al Wajajah',           route:'Dubai \u2192 Muscat via Hatta',        s:'open',
     hours:'24 hrs', types:'Car \xb7 Truck \xb7 Bus',
@@ -1957,6 +2143,7 @@ const BORDERS = [
     news:[ {dot:'g',text:'Egypt\u2013Libya Sallum crossing open normally. No disruptions.',time:'02 Mar \xb7 06:00'} ] },
 ];
 
+
 const B_LBL = { closed:'CLOSED', disrupted:'DISRUPTED', open:'OPEN' };
 let bFilter = 'all';
 let openBorderId = null;
@@ -2038,6 +2225,106 @@ function buildBorderList(filter) {
   });
 }
 
+
+
+
+// ═══════════════════════════════════════════════════════════════════
+// HOW TO KEEP THIS MAP UPDATED VIA API
+// ═══════════════════════════════════════════════════════════════════
+//
+// This map's airport status data is stored in the AP array above.
+// To keep it current programmatically, use the Anthropic API with
+// web search enabled. Here's the pattern:
+//
+// STEP 1: Install dependencies
+//   npm install @anthropic-ai/sdk
+//   OR just use fetch() — no SDK needed
+//
+// STEP 2: Call the API with web search enabled
+//
+//   const response = await fetch('https://api.anthropic.com/v1/messages', {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json',
+//       'x-api-key': process.env.ANTHROPIC_API_KEY,
+//       'anthropic-version': '2023-06-01',
+//       'anthropic-beta': 'interleaved-thinking-2025-05-14'
+//     },
+//     body: JSON.stringify({
+//       model: 'claude-sonnet-4-20250514',
+//       max_tokens: 2000,
+//       tools: [{ type: 'web_search_20250305', name: 'web_search' }],
+//       system: `You are an aviation crisis data analyst.
+//         Return ONLY valid JSON — no prose, no markdown, no backticks.
+//         Schema for each airport:
+//         {
+//           "id": "IATA code",
+//           "s": "open" | "disrupted" | "closed",
+//           "res": "one-line summary for passengers, max 120 chars",
+//           "news": [
+//             { "dot": "r|a|g|b", "text": "update text", "time": "DD Mon · HH:MM" }
+//           ]
+//         }
+//         Dot colours: r=red/closed, a=amber/disrupted, g=green/open, b=blue/info.
+//         Return an array of airport objects.`,
+//       messages: [{
+//         role: 'user',
+//         content: `Search for the latest status (as of right now) for these airports:
+//           DXB, AUH, DWC, SHJ, FJR, DOH, BAH, KWI, BGW, MCT, CAI, AMM, RUH, JED, TLV, BEY.
+//           For each airport return: current open/disrupted/closed status,
+//           latest NOTAM expiry if known, latest airline suspension times,
+//           any strikes or incidents in the last 6 hours,
+//           and any evacuation or repatriation flight information.
+//           Today is ${new Date().toISOString()}.`
+//       }]
+//     })
+//   });
+//
+//   const data = await response.json();
+//   // Extract text from response
+//   const text = data.content
+//     .filter(b => b.type === 'text')
+//     .map(b => b.text)
+//     .join('');
+//   const updates = JSON.parse(text);  // array of airport updates
+//
+// STEP 3: Apply updates to the AP array
+//
+//   updates.forEach(update => {
+//     const ap = AP.find(a => a.id === update.id);
+//     if (!ap) return;
+//     ap.s   = update.s;
+//     ap.res = update.res;
+//     if (update.news?.length) {
+//       // Prepend new items, keep last 6
+//       ap.news = [...update.news, ...ap.news].slice(0, 6);
+//     }
+//   });
+//   buildMarkers();   // re-render map pins
+//   buildList();      // re-render sidebar list
+//   updateStats();    // re-render counters
+//
+// STEP 4: Run on a schedule
+//
+//   // In Node.js (e.g. run as a cron job every 15 minutes):
+//   setInterval(refreshFromAPI, 15 * 60 * 1000);
+//
+//   // Or add a button to this page that calls refreshFromAPI()
+//   // The refreshBtn already exists in the UI — wire it to your refresh function.
+//
+// COST ESTIMATE:
+//   ~1,000–2,000 input tokens + ~500 output tokens per call.
+//   At Claude Sonnet pricing (~$3/M input, $15/M output):
+//   ≈ $0.004–0.008 per refresh. Every 15 min = ~$0.03/hour.
+//
+// NOTES:
+//   - Always parse response defensively (try/catch)
+//   - Cache the last good response in case the API call fails
+//   - The 'dot' colour mapping: r=red, a=amber, g=green, b=blue/info
+//   - NOTAM expiry times are in UTC; convert to GST (UTC+4) for display
+//   - For production: store ANTHROPIC_API_KEY server-side, never in client JS
+//
+// ═══════════════════════════════════════════════════════════════════
 
 </script>
 </body>
