@@ -351,7 +351,7 @@ function buildBorderList() {
           <div class="b-detail-row"><span class="b-detail-k">Status</span><span class="b-detail-v ${c}">${B_LBL[b.s]}</span></div>
           <div class="b-news" id="bnews-${b.id}">
             <div class="b-news-title">Latest updates</div>
-            <div class="b-news-loading"><div class="news-spinner"></div><span>Fetching…</span></div>
+            <span>Fetching…</span></div>
           </div>
         </div>`;
       card.addEventListener('click', () => toggleBorderCard(b));
@@ -387,7 +387,7 @@ async function fetchBorderNews(b) {
     return;
   }
 
-  newsEl.innerHTML = '<div class="b-news-title">Latest updates</div><div class="b-news-loading"><div class="news-spinner"></div><span>Fetching latest news…</span></div>';
+  newsEl.innerHTML = '<div class="b-news-title">Latest updates</div><span>Fetching latest news…</span></div>';
 
   const today  = gulfDateStr();
   const prompt = `Today is ${today} (Gulf time). There is an active US-Israeli military conflict with Iran causing major disruptions across the Middle East.
@@ -894,8 +894,8 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: var(--fon
 const AP = [
 
   // ── UAE — all closed ──────────────────────────────────────────
-  { id:'DXB', name:'Dubai International',           city:'Dubai, UAE',            lat:25.2532, lon:55.3657, s:'disrupted',
-    carrier:'Emirates · flydubai · Multiple',  res:'Repatriation flights only. Scheduled services suspended until 23:59 UAE time 4 Mar.',
+  { id:'DXB', name:'Dubai International',           city:'Dubai, UAE',            lat:25.2532, lon:55.3657, s:'closed',
+    carrier:'Emirates · flydubai · Multiple',  res:'No earlier than Tue 03 Mar, 15:00 local',
     detail:{
       airspace:'UAE airspace fully closed by UAE GCAA',
       ops:'All commercial and cargo operations suspended',
@@ -903,10 +903,10 @@ const AP = [
       last_flight:'Outbound EK001 departed 01 Mar 22:48; no arrivals since 02 Mar 00:30',
     },
     news:[
-      { dot:'r', text:'Fresh ballistic missile wave 03 Mar early morning — three inbound flights held outside UAE airspace before diverting.',                  time:'03 Mar · 03:30' },
-      { dot:'g', text:'114 flights scheduled today (4 Mar): 52 flydubai, 41 Emirates, 21 other airlines. 17,498 passengers repatriated on 60 prior flights.',    time:'04 Mar · 08:30' },
-      { dot:'a', text:'Emirates: scheduled flights suspended until 23:59 UAE time 4 Mar. Limited repatriation flights only — passengers notified directly.',   time:'03 Mar · 05:29' },
-      { dot:'r', text:'DO NOT go to DXB unless airline has contacted you with a confirmed departure time. Dubai Airports enforcing access control.',               time:'04 Mar · 08:30' },
+      { dot:'r', text:'Iranian ballistic missile struck Terminal 2 apron at 02:14 local. 4 airport workers injured, no casualties among passengers.',               time:'02 Mar · 02:14' },
+      { dot:'r', text:'UAE GCAA declared national airspace closure with immediate effect following strikes on DXB and AUH.',                                        time:'02 Mar · 02:45' },
+      { dot:'a', text:'Emirates issued statement: "All Emirates flights are suspended until further notice. Customers may rebook free of charge for travel to 20 Mar."', time:'02 Mar · 04:10' },
+      { dot:'b', text:'UAE government to cover hotel costs for all stranded passengers. Travellers advised to shelter in place.',                                   time:'02 Mar · 07:30' },
     ],
     links:[
       { label:'✈ Emirates flight status',  url:'https://www.emirates.com/uk/english/manage-booking/flight-status/' },
@@ -942,9 +942,9 @@ const AP = [
       last_flight:'Etihad EY002 to LHR was taxiing when airport shut 02 Mar 02:50; returned to gate',
     },
     news:[
-      { dot:'a', text:'Etihad: scheduled flights suspended until 14:00 UAE time 5 Mar. Repatriation and cargo may operate under strict approval only.',            time:'03 Mar · 06:00' },
-      { dot:'a', text:'Do NOT travel to AUH unless Etihad contacts you directly with confirmed ticket details. Airport access restricted.',                        time:'03 Mar · 09:00' },
-      { dot:'b', text:'Etihad free rebooking on Etihad flights through 31 March 2026. Contact booking channel used for original reservation.',                    time:'03 Mar · 06:00' },
+      { dot:'r', text:'Drone strike on AUH airfield at 02:38 local. 1 ground worker killed, 7 injured. Runway inspection ongoing.', time:'02 Mar · 02:38' },
+      { dot:'r', text:'Etihad issued statement suspending all flights with immediate effect.',                                        time:'02 Mar · 03:15' },
+      { dot:'a', text:'Abu Dhabi Executive Council announced emergency measures; UAE Armed Forces on highest alert.',                 time:'02 Mar · 05:00' },
     ],
     links:[
       { label:'✈ Etihad flight status',  url:'https://www.etihad.com/en-us/manage/check-your-flight-status' },
@@ -953,7 +953,7 @@ const AP = [
     ]
   },
 
-  { id:'SHJ', name:'Sharjah International',         city:'Sharjah, UAE',          lat:25.3286, lon:55.5172, s:'disrupted',
+  { id:'SHJ', name:'Sharjah International',         city:'Sharjah, UAE',          lat:25.3286, lon:55.5172, s:'closed',
     carrier:'Air Arabia · Cargo',              res:'TBD',
     detail:{
       airspace:'UAE airspace closed',
@@ -963,7 +963,7 @@ const AP = [
     },
     news:[
       { dot:'r', text:'UAE-wide airspace closure grounded Air Arabia\'s entire fleet at Sharjah.',    time:'02 Mar · 02:45' },
-      { dot:'b', text:'Limited Air Arabia flights may operate subject to approval. Affected passengers contacted directly. Check airarabia.com for status.',        time:'04 Mar · 00:00' },
+      { dot:'a', text:'Air Arabia offers free rebooking or full refunds for all affected passengers.', time:'02 Mar · 05:30' },
     ],
     links:[
       { label:'✈ Air Arabia status', url:'https://www.airarabia.com/en/flight-status' },
@@ -996,7 +996,7 @@ const AP = [
       last_flight:'No scheduled commercial movements',
     },
     news:[
-      { dot:'g', text:'Fujairah International confirmed fully operational by UAE authorities.',                                                                    time:'03 Mar · 18:00' },      { dot:'a', text:'Fire at Fujairah oil storage tank from drone interception debris — airport operations unaffected. SpiceJet running FJR\u2013India specials.',time:'04 Mar · 06:00' },
+      { dot:'r', text:'UAE-wide closure covers Fujairah. Port and airport authority on high alert.', time:'02 Mar · 02:45' },
     ],
     links:[
       { label:'📊 FlightAware FJR', url:'https://www.flightaware.com/live/airport/OMFJ' },
@@ -1432,7 +1432,7 @@ const AP = [
       { dot:'g', text:'Oman announced neutrality and kept airspace fully open. MCT is the nearest operational major airport to Dubai (~350 km via E11 highway).', time:'02 Mar · 03:00' },
       { dot:'g', text:'Oman Air deployed additional ground staff to handle surge in diverted flights. Two Qatar Airways aircraft confirmed on ground at MCT.',      time:'02 Mar · 05:30' },
       { dot:'b', text:'Overland route Dubai → Muscat via E11/E55 confirmed open by UAE and Oman border agencies. Drive time approx 4–5 hours.',                   time:'02 Mar · 07:00' },
-      { dot:'b', text:'Muscat airport hotel capacity filling fast. Oman Tourism Ministry coordinating emergency accommodation.',                                   time:'02 Mar · 10:00' },      { dot:'a', text:'Drone strike hit a fuel tank at Duqm commercial port on 3 Mar — limited damage, no casualties. Airport and main port operations unaffected.', time:'03 Mar · 12:00' },      { dot:'a', text:'Iran denied carrying out the Duqm attack. Oman maintaining strict neutrality. MCT remains the primary open major hub.',                         time:'03 Mar · 15:00' },
+      { dot:'b', text:'Muscat airport hotel capacity filling fast. Oman Tourism Ministry coordinating emergency accommodation for stranded passengers.',           time:'02 Mar · 10:00' },
     ],
     links:[
       { label:'✈ Oman Air status',       url:'https://www.omanair.com/en/flightstatusresults' },
@@ -1733,9 +1733,7 @@ function makePopup(ap) {
       </div>
     </div>
 
-    <div class="pu-news" id="news-${ap.id}">
-      <div class="pu-news-title">Latest updates</div>
-      <div class="news-loading"><div class="news-spinner"></div><span>Fetching latest news…</span></div>
+      <span>Fetching latest news…</span></div>
     </div>
 
     <div class="pu-links">
@@ -1745,7 +1743,7 @@ function makePopup(ap) {
 
     <div class="pu-foot">
       <span>${ap.lat.toFixed(3)}°N  ${ap.lon.toFixed(3)}°E</span>
-      <span id="pfoot-${ap.id}">Fetching…</span>
+      <span>04 Mar 2026</span>
     </div>`;
 }
 
@@ -1789,7 +1787,7 @@ async function fetchLiveNews(ap) {
   }
 
   // Show spinner
-  if (newsEl) newsEl.innerHTML = '<div class="pu-news-title">Latest updates</div><div class="news-loading"><div class="news-spinner"></div><span>Fetching latest news…</span></div>';
+  if (newsEl) newsEl.innerHTML = '<div class="pu-news-title">Latest updates</div><span>Fetching latest news…</span></div>';
 
   const today   = gulfDateStr();
   const prompt  = `Today is ${today} (Gulf time). There is an active US-Israeli military conflict with Iran causing major aviation disruptions across the Middle East.
@@ -2050,9 +2048,7 @@ function manualRefresh() { doRefresh(); startTimer(); }
 // BOOT
 // ═══════════════════════════════════════════════════════════════════
 buildMarkers();
-// Fit map so Muscat and all airports visible
-try{const lts=AP.map(a=>a.lat),lns=AP.map(a=>a.lon);map.fitBounds([[Math.min(...lts)-1,Math.min(...lns)-2],[Math.max(...lts)+1,Math.max(...lns)+2]],{padding:[20,20]});}catch(e){}
-
+try{const _a=AP,_l=_a.map(a=>a.lat),_n=_a.map(a=>a.lon);map.fitBounds([[Math.min(..._l)-1,Math.min(..._n)-2],[Math.max(..._l)+1,Math.max(..._n)+2]],{padding:[30,30]});}catch(e){}
 wirePopupTracking();
 buildList();
 updateStats();
@@ -2061,36 +2057,6 @@ startTimer();
 setInterval(tick,1000);
 </script>
 
-<!-- BORDER CROSSINGS TOGGLE -->
-<button id="border-toggle" onclick="toggleBorderPanel()" title="Border Crossings">
-  <span class="bt-icon">🛃</span>
-  <span>Borders</span>
-</button>
-
-<!-- BORDER CROSSINGS PANEL -->
-<div id="border-panel">
-  <div class="bp-head">
-    <div>
-      <div class="bp-title">🛃 Border Crossings</div>
-      <div class="bp-sub">Gulf &amp; Middle East · click a crossing for details</div>
-    </div>
-    <button class="bp-close" onclick="toggleBorderPanel()">✕</button>
-  </div>
-
-  <div class="bp-filters">
-    <div class="bft on all" onclick="setBorderFilter('all',this)">All</div>
-    <div class="bft r"      onclick="setBorderFilter('closed',this)">Closed</div>
-    <div class="bft a"      onclick="setBorderFilter('disrupted',this)">Disrupted</div>
-    <div class="bft g"      onclick="setBorderFilter('open',this)">Open</div>
-  </div>
-
-  <div id="blist"></div>
-
-  <div class="bp-foot">
-    <span id="bfoot-ts">—</span>
-    <span>Click any crossing for live updates</span>
-  </div>
-</div>
 
 </body>
 </html>
