@@ -351,7 +351,7 @@ function buildBorderList() {
           <div class="b-detail-row"><span class="b-detail-k">Status</span><span class="b-detail-v ${c}">${B_LBL[b.s]}</span></div>
           <div class="b-news" id="bnews-${b.id}">
             <div class="b-news-title">Latest updates</div>
-            <span>Fetching…</span></div>
+            </div>
           </div>
         </div>`;
       card.addEventListener('click', () => toggleBorderCard(b));
@@ -387,7 +387,7 @@ async function fetchBorderNews(b) {
     return;
   }
 
-  newsEl.innerHTML = '<div class="b-news-title">Latest updates</div><span>Fetching latest news…</span></div>';
+  newsEl.innerHTML = '<div class="b-news-title">Latest updates</div></div>';
 
   const today  = gulfDateStr();
   const prompt = `Today is ${today} (Gulf time). There is an active US-Israeli military conflict with Iran causing major disruptions across the Middle East.
@@ -894,12 +894,12 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: var(--fon
 const AP = [
 
   // ── UAE — all closed ──────────────────────────────────────────
-  { id:'DXB', name:'Dubai International',           city:'Dubai, UAE',            lat:25.2532, lon:55.3657, s:'closed',
-    carrier:'Emirates · flydubai · Multiple',  res:'No earlier than Tue 03 Mar, 15:00 local',
+  { id:'DXB', name:'Dubai International',           city:'Dubai, UAE',            lat:25.2532, lon:55.3657, s:'disrupted',
+    carrier:'Emirates · flydubai · Multiple',  res:'Limited repatriation + some scheduled. Emirates suspended until 23:59 7 Mar. Virgin Atlantic resumed.',
     detail:{
-      airspace:'UAE airspace fully closed by UAE GCAA',
-      ops:'All commercial and cargo operations suspended',
-      carrier_status:'Emirates halted all DXB ops. flydubai grounded.',
+      airspace:'UAE OMAE partial NOTAM — emergency corridors active. GNSS jamming warnings in effect.',
+      ops:'Limited repatriation and scheduled flights. 114+ flights operated 4 Mar. Only travel if contacted by airline.',
+      carrier_status:'Emirates: scheduled flights suspended until 23:59 7 Mar. Virgin Atlantic resumed scheduled DXB–LHR 4 Mar. flydubai: limited ops from T2/T3. Air Arabia: suspended until 15:00 9 Mar.',
       last_flight:'Outbound EK001 departed 01 Mar 22:48; no arrivals since 02 Mar 00:30',
     },
     news:[
@@ -933,12 +933,12 @@ const AP = [
     ]
   },
 
-  { id:'AUH', name:'Zayed International',           city:'Abu Dhabi, UAE',        lat:24.4330, lon:54.6511, s:'closed',
-    carrier:'Etihad Airways · Multiple',       res:'TBD',
+  { id:'AUH', name:'Zayed International',           city:'Abu Dhabi, UAE',        lat:24.4330, lon:54.6511, s:'disrupted',
+    carrier:'Etihad Airways · Multiple',       res:'Etihad suspended until 06:00 6 Mar. Repatriation flights operating.',
     detail:{
       airspace:'UAE airspace closed',
-      ops:'All operations suspended following drone strike',
-      carrier_status:'Etihad suspended all departures and arrivals. Rebooking waivers active.',
+      ops:'Limited repatriation flights only. Scheduled suspended until 06:00 6 Mar. Only travel if directly notified by Etihad.',
+      carrier_status:'Etihad: scheduled flights suspended until 06:00 6 Mar. Virgin Atlantic, Air India resumed some services. Air Arabia suspended until 09 Mar.',
       last_flight:'Etihad EY002 to LHR was taxiing when airport shut 02 Mar 02:50; returned to gate',
     },
     news:[
@@ -1005,10 +1005,10 @@ const AP = [
 
   // ── Qatar ────────────────────────────────────────────────────
   { id:'DOH', name:'Hamad International',           city:'Doha, Qatar',            lat:25.2731, lon:51.6080, s:'closed',
-    carrier:'Qatar Airways · Multiple',        res:'When Qatar CAA confirms safe reopening',
+    carrier:'Qatar Airways · Multiple',        res:'Qatar Airways suspended. Next update 06 Mar 09:00 local. Airspace closed indefinitely.',
     detail:{
       airspace:'Qatar airspace closed by Qatar CAA',
-      ops:'Qatar Airways fully grounded. All other operators suspended.',
+      ops:'Total suspension. Qatar CAA airspace closure in effect. No movements at HAM. Next update from Qatar Airways: 6 Mar 09:00 local.',
       carrier_status:'Qatar Airways suspended all operations. CEO statement issued.',
       last_flight:'QR007 to JFK was mid-flight; diverted to Muscat (MCT) 02 Mar 03:40',
     },
@@ -1733,7 +1733,7 @@ function makePopup(ap) {
       </div>
     </div>
 
-      <span>Fetching latest news…</span></div>
+      </div>
     </div>
 
     <div class="pu-links">
@@ -1743,7 +1743,7 @@ function makePopup(ap) {
 
     <div class="pu-foot">
       <span>${ap.lat.toFixed(3)}°N  ${ap.lon.toFixed(3)}°E</span>
-      <span>04 Mar 2026</span>
+      <span>05 Mar 2026</span>
     </div>`;
 }
 
@@ -1787,7 +1787,7 @@ async function fetchLiveNews(ap) {
   }
 
   // Show spinner
-  if (newsEl) newsEl.innerHTML = '<div class="pu-news-title">Latest updates</div><span>Fetching latest news…</span></div>';
+  if (newsEl) newsEl.innerHTML = '<div class="pu-news-title">Latest updates</div></div>';
 
   const today   = gulfDateStr();
   const prompt  = `Today is ${today} (Gulf time). There is an active US-Israeli military conflict with Iran causing major aviation disruptions across the Middle East.
