@@ -1631,6 +1631,50 @@ const AP = [
       { label:'📊 FlightAware TZX', url:'https://www.flightaware.com/live/airport/LTCG' },
     ]
   },
+  // ── Cyprus ──────────────────────────────────────────────────────
+  { id:'LCA', name:'Larnaca International',         city:'Larnaca, Cyprus',        lat:34.8751, lon:33.6249, s:'disrupted',
+    carrier:'Cyprus Airways · Wizz Air · British Airways · Ryanair',
+    res:'Open but disrupted. 48 cancellations 1 Mar, 66 cancellations 4 Mar. Gulf/Israel routes suspended.',
+    detail:{
+      airspace:'Cyprus FIR open. Drone struck RAF Akrotiri 2 Mar — airspace unaffected per Cyprus CAA.',
+      ops:'Operating normally for European routes. All Gulf, Israel, Jordan, Lebanon routes suspended. 65 flights operated vs normal on 4 Mar.',
+      carrier_status:'Wizz Air: Israel/Dubai/AUH/Amman suspended to 15 Mar. easyJet: UK–LCA flights cancelled. British Airways: services disrupted. Ryanair/Jet2: operating. Cyprus Airways: evacuated 180 Cypriots from DXB 4 Mar.',
+      last_flight:'European routes ongoing. Last Gulf service 28 Feb.',
+    },
+    links:[
+      { label:'✈ Hermes Airports LCA', url:'https://www.hermesairports.com/en/larnaka/flights/arrivals' },
+      { label:'📊 FlightAware LCA',    url:'https://www.flightaware.com/live/airport/LCLK' },
+    ]
+  },
+
+  { id:'PFO', name:'Paphos International',           city:'Paphos, Cyprus',         lat:34.7180, lon:32.4857, s:'disrupted',
+    carrier:'Ryanair · Jet2 · British Airways · Wizz Air',
+    res:'Open but disrupted. 12 cancellations 1 Mar, 18 cancellations 4 Mar. Briefly evacuated 2 Mar after Akrotiri drone strike.',
+    detail:{
+      airspace:'Cyprus FIR open. Paphos evacuated briefly 2 Mar as precaution after drone hit near RAF Akrotiri — has since reopened fully.',
+      ops:'Operating normally for European routes. All Gulf and Israel routes suspended. 38 flights operated 4 Mar.',
+      carrier_status:'Ryanair and Jet2: operating UK routes. easyJet: Bristol/Manchester/Edinburgh–PFO cancelled. Wizz Air: Israel/Gulf routes suspended to 15 Mar. British Airways: services disrupted.',
+      last_flight:'European routes ongoing. Akrotiri area remains on heightened alert.',
+    },
+    links:[
+      { label:'✈ Hermes Airports PFO', url:'https://www.hermesairports.com/en/paphos/flights/arrivals' },
+      { label:'📊 FlightAware PFO',    url:'https://www.flightaware.com/live/airport/LCPH' },
+    ]
+  },
+
+  { id:'ECN', name:'Ercan International',            city:'Nicosia, N. Cyprus',     lat:35.1547, lon:33.4961, s:'disrupted',
+    carrier:'Pegasus Airlines · Turkish Airlines · AtlasGlobal',
+    res:'Operating via Turkey. 9 delays 3 Mar. Routes via Istanbul unaffected by Gulf closures.',
+    detail:{
+      airspace:'Operates under Turkish FIR (LTAA). Not affected by Gulf/Israel FIR closures. All traffic routes via Turkey.',
+      ops:'Limited disruption. Connections via IST/SAW operating. No direct Gulf routes operated from ECN.',
+      carrier_status:'Pegasus: 8 delays 3 Mar. Turkish Airlines: operating IST routes. No Gulf carriers operate ECN.',
+      last_flight:'Ongoing via Turkey corridor.',
+    },
+    links:[
+      { label:'📊 FlightAware ECN', url:'https://www.flightaware.com/live/airport/LCEN' },
+    ]
+  },
 ];
 
 // ═══════════════════════════════════════════════════════════════════
