@@ -895,7 +895,7 @@ const AP = [
 
   // ── UAE — all closed ──────────────────────────────────────────
   { id:'DXB', name:'Dubai International',           city:'Dubai, UAE',            lat:25.2532, lon:55.3657, s:'disrupted',
-    carrier:'Emirates · flydubai · Multiple',  res:'204 departures today (80 Emirates, 71 flydubai). Emirates reduced schedule until further notice — selling tickets for operating flights. Emirates scheduled service officially resumes 8 Mar. Confirmed booking required.',
+    carrier:'Emirates · flydubai · Multiple',  res:'204 departures today (80 Emirates, 71 flydubai). Emirates on reduced schedule, anticipates return to 100% capacity within days — subject to airspace availability. Confirmed booking required.',
     detail:{
       airspace:'UAE FIR (OMAE) partially open via strict waypoint corridors. EASA high-risk advisory in effect. GNSS jamming/spoofing reported across FIR.',
       ops:'Emirates and flydubai selling tickets for operating flights. ~204 departures 6 Mar. Essential cargo (pharmaceuticals, perishables) also operating. Only travel with confirmed booking.',
@@ -936,7 +936,7 @@ const AP = [
     detail:{
       airspace:'UAE FIR partially open. EASA high-risk advisory in effect.',
       ops:'Etihad resumed limited schedule from 06:00 6 Mar — selling tickets to 25 destinations. Flights subject to operational and safety approvals.',
-      carrier_status:'Etihad: resumed from 06:00 6 Mar, selling tickets, 25 destinations. Virgin Atlantic and Air India Express operating. Air Arabia suspended to 15:00 9 Mar. BA unable to operate AUH.',
+      carrier_status:'Etihad: resumed from 06:00 6 Mar, selling tickets to 25 destinations (incl. London, Moscow, New York, Riyadh). Flights subject to safety approvals. Virgin Atlantic and Air India Express operating. Air Arabia suspended to 15:00 9 Mar. BA unable to operate AUH.',
     },
     news:[
       { dot:'r', text:'Drone strike on AUH airfield at 02:38 local. 1 ground worker killed, 7 injured. Runway inspection ongoing.', time:'02 Mar · 02:38' },
@@ -999,10 +999,10 @@ const AP = [
 
   // ── Qatar ────────────────────────────────────────────────────
   { id:'DOH', name:'Hamad International',           city:'Doha, Qatar',            lat:25.2731, lon:51.6080, s:'closed',
-    carrier:'Qatar Airways · Multiple',        res:'Qatar FIR (OTDF) total closure — NOTAM expires 16:00 UTC 6 Mar, extension likely. Qatar Airways fully suspended; next update 7 Mar 09:00 local. No HAM movements. Relief flights ex-Muscat to LHR/BER/CPH/MAD/FCO/AMS.',
+    carrier:'Qatar Airways · Multiple',        res:'Qatar FIR (OTDF) total closure — NOTAM extended past 16:00 UTC 6 Mar as expected. Qatar Airways fully suspended; next update 7 Mar 09:00 Doha time. No HAM movements. Relief flights ex-Muscat to LHR/BER/CPH/MAD/FCO/AMS.',
     detail:{
-      airspace:'Qatar FIR (OTDF) fully closed. No clearance for commercial operations. EASA high-risk advisory in effect.',
-      ops:'Total suspension. OTDF FIR closed (NOTAM expires 16:00 UTC 6 Mar, extension likely). No movements at HAM. Qatar Airways reps in designated hotels assisting stranded passengers. Relief flights from Muscat to LHR/BER/CPH/MAD/FCO/AMS.',
+      airspace:'Qatar FIR (OTDF) fully closed. No clearance for commercial operations. EASA CZIB 2026-03 updated 6 Mar, valid to 11 Mar.',
+      ops:'Total suspension. OTDF FIR closed — extended beyond 16:00 UTC 6 Mar. No movements at HAM. Qatar Airways reps in designated hotels assisting stranded passengers. Relief flights from Muscat to LHR/BER/CPH/MAD/FCO/AMS.',
       carrier_status:'Qatar Airways suspended all operations. CEO statement issued.',
     },
     news:[
@@ -1020,9 +1020,9 @@ const AP = [
 
   // ── Bahrain ──────────────────────────────────────────────────
   { id:'BAH', name:'Bahrain International',         city:'Manama, Bahrain',        lat:26.2708, lon:50.6336, s:'closed',
-    carrier:'Gulf Air · Multiple',             res:'Bahrain FIR (OBBB) total closure — NOTAM expires 16:00 UTC 6 Mar. Gulf Air fully suspended. King Fahd Causeway to Saudi Arabia also closed.',
+    carrier:'Gulf Air · Multiple',             res:'Bahrain FIR (OBBB) total closure — NOTAM extended past 16:00 UTC 6 Mar. Gulf Air fully suspended; update expected 11:00 Bahrain time 6 Mar. King Fahd Causeway (Saudi land border) closed.',
     detail:{
-      airspace:'Bahrain FIR (OBBB) fully closed. No commercial clearances. EASA high-risk advisory in effect.',
+      airspace:'Bahrain FIR (OBBB) fully closed. No commercial clearances. EASA CZIB 2026-03 updated 6 Mar, valid to 11 Mar.',
       ops:'Total suspension. Gulf Air grounded. King Fahd Causeway (Saudi land border) closed. No movements at BAH.',
       carrier_status:'Gulf Air: fully suspended, monitoring official directives. No resumption timeline announced.',
     },
@@ -1040,11 +1040,11 @@ const AP = [
 
   // ── Kuwait ───────────────────────────────────────────────────
   { id:'KWI', name:'Kuwait International',          city:'Kuwait City, Kuwait',    lat:29.2267, lon:47.9689, s:'closed',
-    carrier:'Kuwait Airways · Jazeera Airways',res:'Kuwait FIR (OKAC) total closure — NOTAM expires 16:00 UTC 6 Mar. Kuwait Airways fully suspended. No commercial movements at KWI.',
+    carrier:'Kuwait Airways · Jazeera Airways',res:'Kuwait FIR (OKAC) total closure — no confirmed reopening date. Terminal 1 struck by drone 28 Feb; structural assessment required before ops can resume. Kuwait Airways and Jazeera fully suspended.',
     detail:{
-      airspace:'Kuwait FIR (OKAC) fully closed. No commercial clearances issued.',
-      ops:'Total suspension. Kuwait Airways fully grounded. No movements at KWI.',
-      carrier_status:'Kuwait Airways and Jazeera Airways grounded all flights.',
+      airspace:'Kuwait FIR (OKAC) fully closed. No reopening date announced. EASA CZIB 2026-03 updated 6 Mar, valid to 11 Mar.',
+      ops:'Total suspension. Terminal 1 took drone impact 28 Feb; damage assessment and repair plan underway. Airport will reopen only after full structural assessment and regional airspace clearance confirmed. No movements at KWI.',
+      carrier_status:'Kuwait Airways and Jazeera Airways fully grounded. Kuwait Airways operating land-route repatriation for Kuwaiti nationals from select European cities via Saudi Arabia.',
     },
     news:[
       { dot:'r', text:'Iranian strike targeted the area around Ali Al Salem Air Base, 40km north of KWI. Airport confirmed operational damage to ground equipment.', time:'02 Mar · 03:10' },
@@ -1199,10 +1199,10 @@ const AP = [
 
   // ── Saudi Arabia — disrupted ─────────────────────────────────
   { id:'RUH', name:'King Khalid International',     city:'Riyadh, Saudi Arabia',   lat:24.9579, lon:46.6988, s:'disrupted',
-    carrier:'Saudia · Multiple',               res:'Open and operational. Saudia cancelling Gulf/Jordan/Peshawar routes until 23:59 6 Mar. Flynas extended suspension to 23:59 9 Mar for UAE/DOH/BAH/KWI/Iraq/Syria. Virgin Atlantic operating. Qatar Airways Riyadh–Frankfurt relief flight running.',
+    carrier:'Saudia · Multiple',               res:'Open and operational. Saudia cancelling Gulf/Jordan/Peshawar/Moscow routes until 23:59 UTC 6 Mar. Flynas suspended UAE/DOH/BAH/KWI/Iraq/Syria to 23:59 local 9 Mar. Virgin Atlantic operating RUH–LHR. Qatar Airways RUH–FRA relief flights running.',
     detail:{
       airspace:'Saudi FIR (OEJD) partially open. Route-level closures near Iraq border and Persian Gulf. GNSS interference reported.',
-      ops:'Operating normally for most routes. Saudi partial airspace closure (near Iraq/Gulf coast) expires 22:00 UTC 6 Mar. Saudia cancelling DXB/AUH/DOH/KWI/BAH/AMM/Peshawar until 23:59 6 Mar. Qatar Airways Riyadh–Frankfurt relief flight active.',
+      ops:'Operating normally for most routes. Saudi partial airspace closure (near Iraq/Gulf coast) in effect. Saudia cancelling DXB/AUH/DOH/KWI/BAH/AMM/Peshawar until 23:59 6 Mar. Qatar Airways Riyadh–Frankfurt relief flight active.',
       carrier_status:'Saudia: Gulf/AMM routes suspended until 23:59 6 Mar. Virgin Atlantic: RUH-LHR resumed. Flynas: suspended to closed FIRs until 15:00 6 Mar. Qatar Airways: operating RUH-FRA relief. Air India until Mar 2.',
     },
     news:[
