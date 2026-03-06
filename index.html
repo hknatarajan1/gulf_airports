@@ -895,12 +895,11 @@ const AP = [
 
   // ── UAE — all closed ──────────────────────────────────────────
   { id:'DXB', name:'Dubai International',           city:'Dubai, UAE',            lat:25.2532, lon:55.3657, s:'disrupted',
-    carrier:'Emirates · flydubai · Multiple',  res:'Ramping up: 204 departures scheduled 6 Mar (80 Emirates, 71 flydubai). Emirates reduced schedule until further notice. Confirmed booking required.',
+    carrier:'Emirates · flydubai · Multiple',  res:'204 departures today (80 Emirates, 71 flydubai). Emirates reduced schedule until further notice — selling tickets for operating flights. Emirates scheduled service officially resumes 8 Mar. Confirmed booking required.',
     detail:{
-      airspace:'UAE OMAE partial NOTAM — emergency corridors active. GNSS jamming warnings in effect.',
-      ops:'Ramping up: 204 departures 6 Mar (80 Emirates, 71 flydubai). Emirates/flydubai selling tickets for operating flights. Only travel with confirmed booking.',
-      carrier_status:'Emirates: scheduled flights suspended until 23:59 7 Mar. Virgin Atlantic resumed scheduled DXB–LHR 4 Mar. flydubai: limited ops from T2/T3. Air Arabia: suspended until 15:00 9 Mar.',
-      last_flight:'Outbound EK001 departed 01 Mar 22:48; no arrivals since 02 Mar 00:30',
+      airspace:'UAE FIR (OMAE) partially open via strict waypoint corridors. EASA high-risk advisory in effect. GNSS jamming/spoofing reported across FIR.',
+      ops:'Emirates and flydubai selling tickets for operating flights. ~204 departures 6 Mar. Essential cargo (pharmaceuticals, perishables) also operating. Only travel with confirmed booking.',
+      carrier_status:'Emirates: ~80 flights/day, selling tickets, reduced schedule. flydubai: ~71 flights/day, full network resuming. Virgin Atlantic: resumed DXB–LHR 4 Mar. flydubai: limited ops from T2/T3. Air Arabia: suspended until 15:00 9 Mar.',
     },
     news:[
       { dot:'r', text:'Iranian ballistic missile struck Terminal 2 apron at 02:14 local. 4 airport workers injured, no casualties among passengers.',               time:'02 Mar · 02:14' },
@@ -918,10 +917,9 @@ const AP = [
   { id:'DWC', name:'Al Maktoum Intl (Dubai South)', city:'Dubai, UAE',            lat:24.8963, lon:55.1610, s:'disrupted',
     carrier:'flydubai · Cargo airlines',       res:'Limited ops resumed alongside DXB from 2 Mar. Aligned with DXB recovery schedule.',
     detail:{
-      airspace:'UAE airspace closed',
-      ops:'All operations suspended',
+      airspace:'UAE FIR (OMAE) partially open. DWC resuming limited ops alongside DXB.',
+      ops:'Limited ops resumed from 2 Mar. Cargo and repatriation flights operating alongside DXB recovery.',
       carrier_status:'All operators halted. Cargo ops also suspended.',
-      last_flight:'Last recorded departure 01 Mar 23:55 (cargo)',
     },
     news:[
       { dot:'r', text:'UAE GCAA extended airspace closure to all UAE airports including DWC.',        time:'02 Mar · 02:45' },
@@ -934,12 +932,11 @@ const AP = [
   },
 
   { id:'AUH', name:'Zayed International',           city:'Abu Dhabi, UAE',        lat:24.4330, lon:54.6511, s:'disrupted',
-    carrier:'Etihad Airways · Multiple',       res:'Etihad resuming from 06:00 6 Mar. Gradual schedule rebuild. Only travel with confirmed booking.',
+    carrier:'Etihad Airways · Multiple',       res:'Etihad resumed limited commercial schedule from 06:00 6 Mar. Selling tickets to 25 destinations (6–19 Mar). Only travel with confirmed booking.',
     detail:{
-      airspace:'UAE airspace closed',
-      ops:'Etihad resuming scheduled services from 06:00 6 Mar. Gradual ramp-up. Only travel with confirmed booking from airline.',
-      carrier_status:'Etihad: resuming from 06:00 6 Mar, gradual rebuild. Virgin Atlantic and Air India Express operating. Air Arabia suspended until 15:00 9 Mar. BA unable to operate AUH.',
-      last_flight:'Etihad EY002 to LHR was taxiing when airport shut 02 Mar 02:50; returned to gate',
+      airspace:'UAE FIR partially open. EASA high-risk advisory in effect.',
+      ops:'Etihad resumed limited schedule from 06:00 6 Mar — selling tickets to 25 destinations. Flights subject to operational and safety approvals.',
+      carrier_status:'Etihad: resumed from 06:00 6 Mar, selling tickets, 25 destinations. Virgin Atlantic and Air India Express operating. Air Arabia suspended to 15:00 9 Mar. BA unable to operate AUH.',
     },
     news:[
       { dot:'r', text:'Drone strike on AUH airfield at 02:38 local. 1 ground worker killed, 7 injured. Runway inspection ongoing.', time:'02 Mar · 02:38' },
@@ -954,12 +951,11 @@ const AP = [
   },
 
   { id:'SHJ', name:'Sharjah International',         city:'Sharjah, UAE',          lat:25.3286, lon:55.5172, s:'disrupted',
-    carrier:'Air Arabia · Cargo',              res:'Limited ops. Air Arabia suspended until 15:00 9 Mar. Sharjah airport accessible under OMAE partial NOTAM.',
+    carrier:'Air Arabia · Cargo',              res:'Air Arabia restarted limited flights subject to approvals. Most Sharjah flights remain suspended. Entry for confirmed passengers only.',
     detail:{
-      airspace:'UAE airspace closed',
-      ops:'All Air Arabia flights suspended. Cargo ops halted.',
-      carrier_status:'Air Arabia halted all flights from SHJ and all Gulf destinations.',
-      last_flight:'G9 432 to AMM was final departure 01 Mar 23:20',
+      airspace:'UAE FIR partially open. Sharjah accessible under OMAE partial NOTAM.',
+      ops:'Limited ops. Air Arabia suspended until 15:00 9 Mar. Entry restricted to confirmed passengers only.',
+      carrier_status:'Air Arabia: all UAE flights suspended until 15:00 9 Mar. Limited other ops subject to GCAA approval.',
     },
     news:[
       { dot:'r', text:'UAE-wide airspace closure grounded Air Arabia\'s entire fleet at Sharjah.',    time:'02 Mar · 02:45' },
@@ -977,7 +973,6 @@ const AP = [
       airspace:'UAE airspace closed',
       ops:'Charter and low-cost ops suspended',
       carrier_status:'Wizz Air Abu Dhabi and charter operators grounded.',
-      last_flight:'No scheduled commercial movements in 12 hours',
     },
     news:[
       { dot:'r', text:'UAE airspace closure included RKT in scope. Airport authority confirmed suspension.', time:'02 Mar · 02:45' },
@@ -993,7 +988,6 @@ const AP = [
       airspace:'UAE airspace closed',
       ops:'All ops suspended',
       carrier_status:'Fujairah primarily a cargo/general aviation airport; all ops suspended.',
-      last_flight:'No scheduled commercial movements',
     },
     news:[
       { dot:'r', text:'UAE-wide closure covers Fujairah. Port and airport authority on high alert.', time:'02 Mar · 02:45' },
@@ -1005,12 +999,11 @@ const AP = [
 
   // ── Qatar ────────────────────────────────────────────────────
   { id:'DOH', name:'Hamad International',           city:'Doha, Qatar',            lat:25.2731, lon:51.6080, s:'closed',
-    carrier:'Qatar Airways · Multiple',        res:'Qatar FIR (OTDF) closed. Qatar Airways suspended — update due 06 Mar 09:00 local. Relief flights operating ex-Muscat and Riyadh only.',
+    carrier:'Qatar Airways · Multiple',        res:'Qatar FIR (OTDF) total closure — NOTAM expires 16:00 UTC 6 Mar, extension likely. Qatar Airways fully suspended; next update 7 Mar 09:00 local. No HAM movements. Relief flights ex-Muscat to LHR/BER/CPH/MAD/FCO/AMS.',
     detail:{
-      airspace:'Qatar airspace closed by Qatar CAA',
-      ops:'Total suspension. OTDF FIR closed. No movements at HAM. Qatar Airways operating relief flights ex-Muscat only. Next Qatar Airways update: 6 Mar 09:00 local.',
+      airspace:'Qatar FIR (OTDF) fully closed. No clearance for commercial operations. EASA high-risk advisory in effect.',
+      ops:'Total suspension. OTDF FIR closed (NOTAM expires 16:00 UTC 6 Mar, extension likely). No movements at HAM. Qatar Airways reps in designated hotels assisting stranded passengers. Relief flights from Muscat to LHR/BER/CPH/MAD/FCO/AMS.',
       carrier_status:'Qatar Airways suspended all operations. CEO statement issued.',
-      last_flight:'QR007 to JFK was mid-flight; diverted to Muscat (MCT) 02 Mar 03:40',
     },
     news:[
       { dot:'r', text:'Qatar CAA closed national airspace following regional escalation. All inbound and outbound flights halted.', time:'02 Mar · 03:00' },
@@ -1027,12 +1020,11 @@ const AP = [
 
   // ── Bahrain ──────────────────────────────────────────────────
   { id:'BAH', name:'Bahrain International',         city:'Manama, Bahrain',        lat:26.2708, lon:50.6336, s:'closed',
-    carrier:'Gulf Air · Multiple',             res:'Bahrain FIR (OBBB) closed. Gulf Air suspended. King Fahd Causeway (Saudi land border) also closed.',
+    carrier:'Gulf Air · Multiple',             res:'Bahrain FIR (OBBB) total closure — NOTAM expires 16:00 UTC 6 Mar. Gulf Air fully suspended. King Fahd Causeway to Saudi Arabia also closed.',
     detail:{
-      airspace:'Bahrain airspace closed by Bahrain CAA',
-      ops:'Gulf Air fully suspended. All operators halted.',
-      carrier_status:'Gulf Air grounded entire fleet. No ETA for resumption.',
-      last_flight:'GF 009 to LHR departed 01 Mar 23:50 — final departure before closure',
+      airspace:'Bahrain FIR (OBBB) fully closed. No commercial clearances. EASA high-risk advisory in effect.',
+      ops:'Total suspension. Gulf Air grounded. King Fahd Causeway (Saudi land border) closed. No movements at BAH.',
+      carrier_status:'Gulf Air: fully suspended, monitoring official directives. No resumption timeline announced.',
     },
     news:[
       { dot:'r', text:'Bahrain CAA declared national airspace closure. Gulf Air grounded entire fleet.',                                   time:'02 Mar · 02:50' },
@@ -1048,12 +1040,11 @@ const AP = [
 
   // ── Kuwait ───────────────────────────────────────────────────
   { id:'KWI', name:'Kuwait International',          city:'Kuwait City, Kuwait',    lat:29.2267, lon:47.9689, s:'closed',
-    carrier:'Kuwait Airways · Jazeera Airways',res:'Kuwait FIR (OKAC) closed. Kuwait Airways fully suspended. No commercial movements.',
+    carrier:'Kuwait Airways · Jazeera Airways',res:'Kuwait FIR (OKAC) total closure — NOTAM expires 16:00 UTC 6 Mar. Kuwait Airways fully suspended. No commercial movements at KWI.',
     detail:{
-      airspace:'Kuwait airspace closed',
-      ops:'All commercial flights suspended. Airport in emergency posture.',
+      airspace:'Kuwait FIR (OKAC) fully closed. No commercial clearances issued.',
+      ops:'Total suspension. Kuwait Airways fully grounded. No movements at KWI.',
       carrier_status:'Kuwait Airways and Jazeera Airways grounded all flights.',
-      last_flight:'KU 111 to LHR was airborne when closure announced; continued to London',
     },
     news:[
       { dot:'r', text:'Iranian strike targeted the area around Ali Al Salem Air Base, 40km north of KWI. Airport confirmed operational damage to ground equipment.', time:'02 Mar · 03:10' },
@@ -1073,7 +1064,6 @@ const AP = [
       airspace:'Iraq airspace fully closed',
       ops:'All commercial ops suspended',
       carrier_status:'Iraqi Airways grounded. All foreign carriers suspended Iraq routes.',
-      last_flight:'IA 001 to BEY cancelled; airport evacuated of non-essential personnel',
     },
     news:[
       { dot:'r', text:'Iraq CAAI closed all national airspace following strike activity over Iranian border regions. Baghdad airport evacuated non-essential staff.', time:'02 Mar · 03:30' },
@@ -1090,7 +1080,6 @@ const AP = [
       airspace:'Iraq airspace closed',
       ops:'All ops suspended',
       carrier_status:'Lufthansa suspended until Mar 8. flydubai, Turkish Airlines halted.',
-      last_flight:'TK 787 was last departure 01 Mar 22:10',
     },
     news:[
       { dot:'r', text:'Iraqi airspace closure included Erbil. Kurdish regional government on security alert.', time:'02 Mar · 03:30' },
@@ -1107,7 +1096,6 @@ const AP = [
       airspace:'Iraq airspace closed',
       ops:'All ops suspended',
       carrier_status:'Iraqi Airways and flydubai halted all Basra services.',
-      last_flight:'No movements in 24 hours',
     },
     news:[
       { dot:'r', text:'Basra airport closed under nationwide Iraq airspace closure.',      time:'02 Mar · 03:30' },
@@ -1125,7 +1113,6 @@ const AP = [
       airspace:'Iran airspace fully closed by ICAO notice',
       ops:'All commercial flights suspended',
       carrier_status:'IranAir and Mahan Air grounded. All foreign carriers suspended Iran routes months ago.',
-      last_flight:'No foreign carriers operating; domestic last flight 02 Mar 01:00',
     },
     news:[
       { dot:'r', text:'US and Israeli strikes hit multiple military and nuclear facilities across Iran. ICAO issued NOTAM closing Iranian airspace.', time:'01 Mar · 23:00' },
@@ -1143,7 +1130,6 @@ const AP = [
       airspace:'Iran airspace fully closed',
       ops:'All ops suspended',
       carrier_status:'All carriers grounded under national closure.',
-      last_flight:'No movements since 02 Mar 01:00',
     },
     news:[
       { dot:'r', text:'Iran nationwide airspace closure includes Mashhad.', time:'02 Mar · 01:00' },
@@ -1160,7 +1146,6 @@ const AP = [
       airspace:'Israeli airspace closed by Israel Airports Authority',
       ops:'All commercial flights suspended. Iron Dome and Arrow systems active.',
       carrier_status:'El Al grounded. All foreign carriers suspended Israel routes.',
-      last_flight:'LY 315 (El Al) to JFK departed 01 Mar 22:30 — last flight before closure',
     },
     news:[
       { dot:'r', text:'Israel Airports Authority closed TLV under emergency war regulations. Iron Dome batteries deployed around airport perimeter.', time:'01 Mar · 23:45' },
@@ -1181,7 +1166,6 @@ const AP = [
       airspace:'Lebanon airspace closed',
       ops:'Middle East Airlines (MEA) halted all operations.',
       carrier_status:'MEA grounded all aircraft. Airport closed to commercial traffic.',
-      last_flight:'ME 201 to Paris departed 01 Mar 23:55 — final departure',
     },
     news:[
       { dot:'r', text:'Lebanon CAA closed airspace. Beirut airport shut following regional escalation.', time:'02 Mar · 01:30' },
@@ -1195,12 +1179,11 @@ const AP = [
 
   // ── Jordan — disrupted ───────────────────────────────────────
   { id:'AMM', name:'Queen Alia International',      city:'Amman, Jordan',          lat:31.7226, lon:35.9932, s:'open',
-    carrier:'Royal Jordanian · Multiple',      res:'Jordan FIR (OJAC) open. Nighttime closure removed. Operating normally; some airlines still avoiding region.',
+    carrier:'Royal Jordanian · Multiple',      res:'Jordan FIR (OJAC) open. Nighttime closure fully lifted. Extra fuel advisory for transiting aircraft. Operating normally.',
     detail:{
-      airspace:'Jordan temporarily closed, now partially reopened — monitoring closely',
-      ops:'Some flights resumed. Many cancellations ongoing.',
+      airspace:'Jordan FIR (OJAC) open. Previous nighttime closure lifted. Extra fuel advisory for transiting aircraft.',
+      ops:'Operating normally. Jordan airspace fully open. Some carriers still avoiding region — verify with airline before travel.',
       carrier_status:'Royal Jordanian operating reduced schedule. Several European carriers still suspended.',
-      last_flight:'RJ 108 to LHR resumed operations 02 Mar 09:00',
     },
     news:[
       { dot:'a', text:'Jordan closed airspace 02 Mar 01:00. Partial reopening announced 02 Mar 08:30 for specific corridors only.', time:'02 Mar · 08:30' },
@@ -1216,12 +1199,11 @@ const AP = [
 
   // ── Saudi Arabia — disrupted ─────────────────────────────────
   { id:'RUH', name:'King Khalid International',     city:'Riyadh, Saudi Arabia',   lat:24.9579, lon:46.6988, s:'disrupted',
-    carrier:'Saudia · Multiple',               res:'Open. Saudia cancelling DXB/AUH/DOH/KWI/BAH/AMM until 23:59 6 Mar. Virgin Atlantic resumed RUH–LHR 4 Mar. Flynas suspended to closed FIRs until 15:00 6 Mar.',
+    carrier:'Saudia · Multiple',               res:'Open and operational. Saudia cancelling Gulf/Jordan/Peshawar routes until 23:59 6 Mar. Flynas extended suspension to 23:59 9 Mar for UAE/DOH/BAH/KWI/Iraq/Syria. Virgin Atlantic operating. Qatar Airways Riyadh–Frankfurt relief flight running.',
     detail:{
-      airspace:'Saudi airspace open with GACA managing deconfliction corridors',
-      ops:'Reduced operations. Significant diversion traffic inbound from Gulf.',
-      carrier_status:'Saudia operating reduced schedule. Lufthansa suspended until Mar 8. Air India until Mar 2.',
-      last_flight:'Ongoing operations — last Saudia departure 02 Mar 11:00',
+      airspace:'Saudi FIR (OEJD) partially open. Route-level closures near Iraq border and Persian Gulf. GNSS interference reported.',
+      ops:'Operating normally for most routes. Saudi partial airspace closure (near Iraq/Gulf coast) expires 22:00 UTC 6 Mar. Saudia cancelling DXB/AUH/DOH/KWI/BAH/AMM/Peshawar until 23:59 6 Mar. Qatar Airways Riyadh–Frankfurt relief flight active.',
+      carrier_status:'Saudia: Gulf/AMM routes suspended until 23:59 6 Mar. Virgin Atlantic: RUH-LHR resumed. Flynas: suspended to closed FIRs until 15:00 6 Mar. Qatar Airways: operating RUH-FRA relief. Air India until Mar 2.',
     },
     news:[
       { dot:'a', text:'Saudi GACA keeping airspace open but restricting routes over eastern border. Eastbound departures rerouted south.',              time:'02 Mar · 04:00' },
@@ -1242,7 +1224,6 @@ const AP = [
       airspace:'Saudi airspace open — Jeddah serving as key diversion hub',
       ops:'Heavily elevated traffic from Gulf and Israeli airspace diversions.',
       carrier_status:'Saudia, flynas, flyadeal operating. Many European carriers rerouting via JED.',
-      last_flight:'Ongoing operations — heavy traffic throughput',
     },
     news:[
       { dot:'b', text:'Jeddah has become the primary diversion and rerouting hub as flights avoid closed Gulf and Israeli airspace. Congestion reported.', time:'02 Mar · 06:00' },
@@ -1261,7 +1242,6 @@ const AP = [
       airspace:'Saudi airspace open — Eastern Province under monitoring',
       ops:'Limited operations. Several European carriers suspended.',
       carrier_status:'Saudia and flyadeal operating. Lufthansa suspended to Mar 8.',
-      last_flight:'Saudia SV 001 to RUH operated 02 Mar 10:30',
     },
     news:[
       { dot:'a', text:'Dammam in Saudi\'s Eastern Province — close to Bahraini and Kuwaiti airspace closures. Risk elevated.',                       time:'02 Mar · 03:00' },
@@ -1279,7 +1259,6 @@ const AP = [
       airspace:'Saudi airspace open — Medina operations reduced',
       ops:'Hajj and Umrah charter flights severely disrupted.',
       carrier_status:'Saudia operating limited schedule. Charter operators suspended.',
-      last_flight:'Saudia operating domestic routes; international severely reduced',
     },
     news:[
       { dot:'a', text:'Medina airport disruptions affecting Umrah pilgrim flights. Saudi Ministry of Hajj advising pilgrims not to travel.', time:'02 Mar · 08:00' },
@@ -1295,7 +1274,6 @@ const AP = [
       airspace:'Saudi airspace open — southwest region monitored',
       ops:'Limited operations. Proximity to Yemen conflict zone adds risk.',
       carrier_status:'Saudia and flyadeal operating reduced schedule.',
-      last_flight:'Saudia SV domestic service operated 02 Mar 09:00',
     },
     news:[
       { dot:'a', text:'Abha airport in Saudi\'s Asir region has previously been targeted by Houthi drones from Yemen. Elevated threat posture maintained.', time:'02 Mar · 06:00' },
@@ -1312,7 +1290,6 @@ const AP = [
       airspace:'Saudi airspace open — northwest border region monitored',
       ops:'Reduced operations. Jordan airspace closure affecting routing.',
       carrier_status:'Saudia and flynas operating limited domestic schedule.',
-      last_flight:'flynas XY 401 to RUH operated 02 Mar 10:15',
     },
     news:[
       { dot:'a', text:'Tabuk sits near Jordanian border. Jordan\'s airspace partial closure affects routing for flights to/from Tabuk.', time:'02 Mar · 05:00' },
@@ -1329,7 +1306,6 @@ const AP = [
       airspace:'Saudi airspace open — far southwest, Yemen proximity risk',
       ops:'Limited scheduled operations. Heightened security.',
       carrier_status:'Saudia operating domestic-only schedule.',
-      last_flight:'Saudia SV domestic arrival 02 Mar 08:40',
     },
     news:[
       { dot:'a', text:'Jizan is Saudi Arabia\'s southernmost commercial airport, ~50 km from Yemen border. Regional conflict risk assessment elevated.', time:'02 Mar · 06:00' },
@@ -1345,7 +1321,6 @@ const AP = [
       airspace:'Saudi airspace open — central region',
       ops:'Domestic and limited regional operations.',
       carrier_status:'Saudia operating domestic schedule. Regional disruptions ongoing.',
-      last_flight:'Saudia SV 221 to JED operated 02 Mar 09:30',
     },
     news:[
       { dot:'a', text:'Qassim airport disruptions reflect Saudi-wide precautionary airspace management in response to Gulf crisis.', time:'02 Mar · 04:00' },
@@ -1361,7 +1336,6 @@ const AP = [
       airspace:'Saudi airspace open — northern region',
       ops:'Domestic operations maintained. Limited international connectivity.',
       carrier_status:'Saudia and flynas operating domestic services.',
-      last_flight:'flynas XY domestic service 02 Mar 10:00',
     },
     news:[
       { dot:'a', text:'Ha\'il disruptions in line with Saudi-wide precautionary aviation measures.', time:'02 Mar · 04:00' },
@@ -1377,7 +1351,6 @@ const AP = [
       airspace:'Saudi airspace open — Hejaz region',
       ops:'Limited scheduled operations.',
       carrier_status:'Saudia and flynas operating domestic-only schedule.',
-      last_flight:'Saudia SV domestic service operated 02 Mar 09:15',
     },
     news:[
       { dot:'a', text:'Taif disruptions reflect Saudi-wide precautionary measures. Some military activity at adjacent air base noted.', time:'02 Mar · 05:00' },
@@ -1393,7 +1366,6 @@ const AP = [
       airspace:'Saudi airspace open — Red Sea coast',
       ops:'Limited operations serving oil industry workers.',
       carrier_status:'Saudia operating domestic schedule only.',
-      last_flight:'Saudia SV domestic arrival 02 Mar 08:00',
     },
     news:[
       { dot:'a', text:'Yanbu is a key industrial city serving Saudi Aramco\'s Red Sea operations. Workers advised to minimise non-essential travel.', time:'02 Mar · 07:00' },
@@ -1409,7 +1381,6 @@ const AP = [
       airspace:'Saudi airspace open — near Kuwaiti border',
       ops:'Very limited operations. High risk proximity to Kuwaiti closure zone.',
       carrier_status:'Saudia operating domestic-only. All regional services halted.',
-      last_flight:'Saudia SV domestic service 01 Mar 20:00; reduced since',
     },
     news:[
       { dot:'a', text:'Hafr Al-Batin is Saudi Arabia\'s closest commercial airport to Kuwait. Kuwait\'s airspace closure and nearby strikes create elevated risk.', time:'02 Mar · 04:00' },
@@ -1421,12 +1392,11 @@ const AP = [
 
   // ── Oman — OPEN ──────────────────────────────────────────────
   { id:'MCT', name:'Muscat International',          city:'Muscat, Oman',           lat:23.5933, lon:58.2844, s:'open',
-    carrier:'Oman Air · Multiple',             res:'Key regional relief hub. Qatar Airways, BA, Lufthansa operating relief flights from here. Oman Air cancelling DXB/DOH/BAH/KWI routes to 8 Mar; all other routes normal.',
+    carrier:'Oman Air · Multiple',             res:'Primary regional relief hub, fully open 24/7. Qatar Airways, BA using MCT for relief flights. Oman Air cancels Gulf routes (DXB/DOH/BAH/KWI/DMM/AMM/BGW/CPH) 6–8 Mar. All other Oman Air routes normal with possible delays. Oman Airports waiving fees for diverted from here. Oman Air cancelling DXB/DOH/BAH/KWI routes to 8 Mar; all other routes normal.',
     detail:{
-      airspace:'Oman airspace fully open — not participating in conflict',
-      ops:'Fully operational — primary regional relief hub. Road crossings from UAE heavily congested; arrive 12hrs early if crossing by land. Oman FIR (OOMM) fully open and unaffected by conflict.',
+      airspace:'Oman FIR (OOMM) fully open. GNSS interference reported in region — extra fuel advisory. Oman not party to conflict.',
+      ops:'Fully operational 24/7, no slot constraints. Qatar Airways relief flights MCT–LHR/BER/CPH/MAD/FCO/AMS. BA special MCT–LHR flights. Land crossings from UAE/Saudi congested — allow 12hrs extra.',
       carrier_status:'Qatar Airways: relief flights MCT–LHR/BER/CPH/MAD/FCO/AMS from 5 Mar. BA: special MCT–LHR flights 6–7 Mar. Oman Air: DXB/DOH/BAH/KWI/DMM routes cancelled to 8 Mar; all others normal. flydubai resumed MCT service.',
-      last_flight:'Active — continuous operations. Handling diverted QR007, KU-diverts, others',
     },
     news:[
       { dot:'g', text:'Oman announced neutrality and kept airspace fully open. MCT is the nearest operational major airport to Dubai (~350 km via E11 highway).', time:'02 Mar · 03:00' },
@@ -1447,7 +1417,6 @@ const AP = [
       airspace:'Oman airspace fully open',
       ops:'Normal operations',
       carrier_status:'Oman Air and Air Arabia operating normally.',
-      last_flight:'Active — Oman Air WY 111 arrived 02 Mar 10:45',
     },
     news:[
       { dot:'g', text:'Salalah operating normally under Oman\'s neutral airspace policy.', time:'02 Mar · 03:00' },
@@ -1464,7 +1433,6 @@ const AP = [
       airspace:'Egypt airspace fully open — acting as regional diversion hub',
       ops:'Heavy elevated traffic. EgyptAir and all international carriers operating.',
       carrier_status:'EgyptAir operating all routes. Multiple diverted Gulf flights landed.',
-      last_flight:'Active — continuous operations including diverted Kuwait Airways aircraft',
     },
     news:[
       { dot:'g', text:'Cairo International receiving significant diverted traffic from Gulf, Israeli and Jordanian airspace closures.',                        time:'02 Mar · 04:00' },
@@ -1483,7 +1451,6 @@ const AP = [
       airspace:'Egypt airspace fully open',
       ops:'Normal charter and scheduled operations',
       carrier_status:'All operators normal. Some rerouting over Sinai due to Israeli airspace closure.',
-      last_flight:'Active operations',
     },
     news:[
       { dot:'g', text:'Sharm El-Sheikh operating normally. Some aircraft rerouting around southern Israel.', time:'02 Mar · 05:00' },
@@ -1500,7 +1467,6 @@ const AP = [
       airspace:'Turkey airspace fully open',
       ops:'Normal operations. Turkish Airlines cancelled some Middle East routes but IST hub fully operational.',
       carrier_status:'Turkish Airlines operating. Cancelled select Iran, Israel, Lebanon, Iraq routes.',
-      last_flight:'Active — continuous hub operations',
     },
     news:[
       { dot:'g', text:'Istanbul Airport fully operational. Turkish Airlines cancelled routes to IKA, TLV, BEY, BGW citing force majeure.', time:'02 Mar · 04:30' },
@@ -1519,7 +1485,6 @@ const AP = [
       airspace:'Turkey airspace fully open',
       ops:'Normal operations. Asia-side hub handling overflow from IST.',
       carrier_status:'Pegasus Airlines and SunExpress operating all routes normally.',
-      last_flight:'Active — continuous operations',
     },
     news:[
       { dot:'g', text:'Sabiha Gökçen fully operational. Pegasus Airlines operating all scheduled services.', time:'02 Mar · 05:00' },
@@ -1538,7 +1503,6 @@ const AP = [
       airspace:'Turkey airspace fully open',
       ops:'Normal operations. Charter-heavy airport operating as usual.',
       carrier_status:'All carriers operating. No disruptions reported.',
-      last_flight:'Active — continuous operations including high charter volumes',
     },
     news:[
       { dot:'g', text:'Antalya fully operational. Major European charter destination unaffected by Gulf crisis.', time:'02 Mar · 05:00' },
@@ -1555,7 +1519,6 @@ const AP = [
       airspace:'Turkey airspace fully open',
       ops:'Normal operations.',
       carrier_status:'All carriers operating normally.',
-      last_flight:'Active — continuous operations',
     },
     news:[
       { dot:'g', text:'Izmir Adnan Menderes fully operational. No disruptions reported.', time:'02 Mar · 05:00' },
@@ -1571,7 +1534,6 @@ const AP = [
       airspace:'Turkey airspace fully open',
       ops:'Normal operations. Capital city airport serving government and commercial traffic.',
       carrier_status:'Turkish Airlines and Pegasus operating full schedules.',
-      last_flight:'Active — continuous operations',
     },
     news:[
       { dot:'g', text:'Ankara Esenboğa fully operational. Turkish government monitoring Gulf situation closely; no airspace measures announced.', time:'02 Mar · 06:00' },
@@ -1589,7 +1551,6 @@ const AP = [
       airspace:'Turkey airspace fully open — southeast Turkey monitoring Syria border',
       ops:'Normal commercial operations. Turkish military on elevated readiness near Syrian border.',
       carrier_status:'All carriers operating normally.',
-      last_flight:'Active — continuous operations',
     },
     news:[
       { dot:'g', text:'Gaziantep airport operating normally despite proximity to Syrian border and regional tensions.', time:'02 Mar · 05:00' },
@@ -1606,7 +1567,6 @@ const AP = [
       airspace:'Turkey airspace fully open',
       ops:'Normal charter and scheduled operations.',
       carrier_status:'Pegasus and charter operators running normal schedules.',
-      last_flight:'Active — ongoing charter traffic',
     },
     news:[
       { dot:'g', text:'Alanya Gazipaşa fully operational. Tourist season charter traffic unaffected.', time:'02 Mar · 05:00' },
@@ -1622,7 +1582,6 @@ const AP = [
       airspace:'Turkey airspace fully open — Black Sea coast',
       ops:'Normal operations.',
       carrier_status:'Turkish Airlines and Pegasus operating normally.',
-      last_flight:'Active — continuous operations',
     },
     news:[
       { dot:'g', text:'Trabzon fully operational. Black Sea region unaffected by Gulf crisis.', time:'02 Mar · 05:00' },
@@ -1639,7 +1598,6 @@ const AP = [
       airspace:'Cyprus FIR open. Drone struck RAF Akrotiri 2 Mar — airspace unaffected per Cyprus CAA.',
       ops:'Operating normally for European routes. All Gulf, Israel, Jordan, Lebanon routes suspended. 65 flights operated vs normal on 4 Mar.',
       carrier_status:'Wizz Air: Israel/Dubai/AUH/Amman suspended to 15 Mar. easyJet: UK–LCA flights cancelled. British Airways: services disrupted. Ryanair/Jet2: operating. Cyprus Airways: evacuated 180 Cypriots from DXB 4 Mar.',
-      last_flight:'European routes ongoing. Last Gulf service 28 Feb.',
     },
     links:[
       { label:'✈ Hermes Airports LCA', url:'https://www.hermesairports.com/en/larnaka/flights/arrivals' },
@@ -1654,7 +1612,6 @@ const AP = [
       airspace:'Cyprus FIR open. Paphos evacuated briefly 2 Mar as precaution after drone hit near RAF Akrotiri — has since reopened fully.',
       ops:'Operating normally for European routes. All Gulf and Israel routes suspended. 38 flights operated 4 Mar.',
       carrier_status:'Ryanair and Jet2: operating UK routes. easyJet: Bristol/Manchester/Edinburgh–PFO cancelled. Wizz Air: Israel/Gulf routes suspended to 15 Mar. British Airways: services disrupted.',
-      last_flight:'European routes ongoing. Akrotiri area remains on heightened alert.',
     },
     links:[
       { label:'✈ Hermes Airports PFO', url:'https://www.hermesairports.com/en/paphos/flights/arrivals' },
@@ -1669,7 +1626,6 @@ const AP = [
       airspace:'Operates under Turkish FIR (LTAA). Not affected by Gulf/Israel FIR closures. All traffic routes via Turkey.',
       ops:'Limited disruption. Connections via IST/SAW operating. No direct Gulf routes operated from ECN.',
       carrier_status:'Pegasus: 8 delays 3 Mar. Turkish Airlines: operating IST routes. No Gulf carriers operate ECN.',
-      last_flight:'Ongoing via Turkey corridor.',
     },
     links:[
       { label:'📊 FlightAware ECN', url:'https://www.flightaware.com/live/airport/LCEN' },
