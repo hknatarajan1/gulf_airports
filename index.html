@@ -932,11 +932,11 @@ const AP = [
   },
 
   { id:'AUH', name:'Zayed International',           city:'Abu Dhabi, UAE',        lat:24.4330, lon:54.6511, s:'disrupted',
-    carrier:'Etihad Airways · Multiple',       res:'Etihad resumed limited commercial schedule from 06:00 6 Mar. Selling tickets to 25 destinations (6–19 Mar). Only travel with confirmed booking.',
+    carrier:'Etihad Airways · Multiple',       res:'Etihad resumed limited schedule from 06:00 6 Mar, flying to 70+ destinations through 19 Mar. Selling tickets — confirmed booking required. Flights subject to operational approvals.',
     detail:{
       airspace:'UAE FIR partially open. EASA high-risk advisory in effect.',
-      ops:'Etihad resumed limited schedule from 06:00 6 Mar — selling tickets to 25 destinations. Flights subject to operational and safety approvals.',
-      carrier_status:'Etihad: resumed from 06:00 6 Mar, selling tickets to 25 destinations (incl. London, Moscow, New York, Riyadh). Flights subject to safety approvals. Virgin Atlantic and Air India Express operating. Air Arabia suspended to 15:00 9 Mar. BA unable to operate AUH.',
+      ops:'Etihad resumed limited schedule from 06:00 6 Mar — selling tickets to 70+ destinations (incl. London, Moscow, New York, Riyadh). Flights subject to operational and safety approvals. Do not proceed to airport without confirmed booking or direct airline notification.',
+      carrier_status:'Etihad: resumed 06:00 6 Mar, selling tickets to 70+ destinations through 19 Mar. Flights subject to safety approvals. Virgin Atlantic and Air India Express operating. Air Arabia suspended to 15:00 9 Mar. BA unable to operate AUH.',
     },
     news:[
       { dot:'r', text:'Drone strike on AUH airfield at 02:38 local. 1 ground worker killed, 7 injured. Runway inspection ongoing.', time:'02 Mar · 02:38' },
@@ -998,11 +998,11 @@ const AP = [
   },
 
   // ── Qatar ────────────────────────────────────────────────────
-  { id:'DOH', name:'Hamad International',           city:'Doha, Qatar',            lat:25.2731, lon:51.6080, s:'closed',
-    carrier:'Qatar Airways · Multiple',        res:'Qatar FIR (OTDF) total closure — extended for 6th time. Qatar Airways fully suspended from DOH; next update 8 Mar 09:00 Doha time. No HAM commercial movements. Relief flights ex-Muscat to LHR/BER/CPH/MAD/FCO/AMS and ex-Riyadh to FRA.',
+  { id:'DOH', name:'Hamad International',           city:'Doha, Qatar',            lat:25.2731, lon:51.6080, s:'disrupted',
+    carrier:'Qatar Airways · Multiple',        res:'Qatar QCAA opened temporary safe corridor 7 Mar: Qatar Airways operating repatriation flights DOH→LHR/CDG/MAD/FCO/FRA. Priority: families, elderly, medical. Scheduled commercial ops still suspended. Next update 8 Mar 09:00 Doha time.',
     detail:{
       airspace:'Qatar FIR (OTDF) fully closed. No clearance for commercial operations. EASA CZIB 2026-03 updated 6 Mar, valid to 11 Mar.',
-      ops:'Total suspension. OTDF FIR closed — 6th consecutive NOTAM extension. No commercial movements at HAM. Qatar Airways reps in designated hotels assisting stranded passengers. Relief flights from Muscat to LHR/BER/CPH/MAD/FCO/AMS.',
+      ops:'Partial corridor activated 7 Mar: Qatar Airways operating limited repatriation flights DOH–LHR/CDG/MAD/FCO/FRA under temporary QCAA authorisation. No general commercial ops. Qatar Airways hotel reps assisting stranded passengers. Relief flights from Muscat to LHR/BER/CPH/MAD/FCO/AMS.',
       carrier_status:'Qatar Airways suspended all operations. CEO statement issued.',
     },
     news:[
@@ -1140,12 +1140,12 @@ const AP = [
   },
 
   // ── Israel ───────────────────────────────────────────────────
-  { id:'TLV', name:'Ben Gurion International',      city:'Tel Aviv, Israel',       lat:32.0055, lon:34.8854, s:'closed',
-    carrier:'El Al · Multiple',                res:'TBD — El Al suspended ticket sales to Mar 21',
+  { id:'TLV', name:'Ben Gurion International',      city:'Tel Aviv, Israel',       lat:32.0055, lon:34.8854, s:'disrupted',
+    carrier:'El Al · Multiple',                res:'Inbound repatriation flights resumed 5 Mar (El Al/Arkia/Israir, up to 2 flights/hr). Outbound departures restarting from 8 Mar — max 50 pax, no hold baggage, 1/hr. LLLL FIR remains PPR-only to 10:00 UTC 9 Mar.',
     detail:{
-      airspace:'Israeli airspace closed by Israel Airports Authority',
-      ops:'All commercial flights suspended. Iron Dome and Arrow systems active.',
-      carrier_status:'El Al grounded. All foreign carriers suspended Israel routes.',
+      airspace:'Israel FIR (LLLL) PPR-only to 10:00 UTC 9 Mar. Limited repatriation corridor active for Israeli carriers. EASA CZIB 2026-03 high-risk advisory in effect.',
+      ops:'Inbound repatriation: up to 2 flights/hr, El Al/Arkia/Israir from European cities. Outbound from 8 Mar: 1 flight/hr, max 50 pax, no hold baggage, early check-in required. El Al ticket sales suspended to 21 Mar to prioritise repatriated passengers. 28,000 tourists still in country.',
+      carrier_status:'El Al operating repatriation arrivals; sales closed to 21 Mar. Arkia and Israir operating repatriation flights. Foreign carriers (Delta, American, Lufthansa, BA) suspended until at least 22 Mar. Outbound sales open to general public only after all El Al/SunDor customers repatriated.',
     },
     news:[
       { dot:'r', text:'Israel Airports Authority closed TLV under emergency war regulations. Iron Dome batteries deployed around airport perimeter.', time:'01 Mar · 23:45' },
