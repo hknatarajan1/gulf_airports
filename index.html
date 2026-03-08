@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gulf Aviation Crisis — Live</title>
+<title>Gulf &amp; Middle East Aviation Crisis</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js">
 // ═══════════════════════════════════════════════════════════════════
@@ -448,6 +448,36 @@ If no specific news found, return items summarising the general border situation
   --font:'Inter',sans-serif; --mono:'JetBrains Mono',monospace;
   --hdr: 50px; --sbar: 28px;
 }
+
+.as-tip { background: rgba(8,14,28,0.95); border: 1px solid rgba(255,255,255,0.12); color: #dde6f0; font-size: 11px; line-height: 1.5; padding: 6px 9px; border-radius: 7px; max-width: 240px; }
+.as-tip::before { display:none; }
+
+/* ── AIRPORT STATUS LEGEND (bottom-right) ── */
+#map-legend {
+  position: fixed;
+  bottom: 36px; right: 12px;
+  z-index: 900;
+  background: rgba(8,14,28,0.90);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 10px;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  backdrop-filter: blur(8px);
+}
+.leg-item {
+  display: flex; align-items: center; gap: 7px;
+  cursor: pointer; font-size: 11px; color: var(--muted2);
+  transition: color .15s;
+}
+.leg-item:hover { color: var(--text); }
+.leg-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink:0; }
+.leg-dot.r { background: var(--red);   box-shadow: 0 0 5px rgba(239,68,68,.5); }
+.leg-dot.a { background: var(--amber); box-shadow: 0 0 5px rgba(245,158,11,.4); }
+.leg-dot.g { background: var(--green); box-shadow: 0 0 5px rgba(34,197,94,.4); }
+.leg-label { flex: 1; }
+.leg-count { font-family: var(--mono); font-size: 10px; color: var(--muted); }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { width: 100%; height: 100%; overflow: hidden; font-family: var(--font); background: var(--bg); color: var(--text); }
 
@@ -836,10 +866,9 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: var(--fon
     </div>
   </div>
   <div class="h-right">
-    <div class="live-pill"><div class="ldot"></div>Live</div>
-    <div class="stat-chip" onclick="setFilter('closed')"><div class="sc-dot r"></div><span id="cc">—</span></div>
-    <div class="stat-chip" onclick="setFilter('disrupted')"><div class="sc-dot a"></div><span id="cd">—</span></div>
-    <div class="stat-chip" onclick="setFilter('open')"><div class="sc-dot g"></div><span id="co">—</span></div>
+    <button id="as-btn" onclick="toggleAirspace()" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);color:#dde6f0;border-radius:6px;padding:3px 10px;font-size:10px;cursor:pointer;font-family:var(--font);">Airspace</button>
+    <button id="thm-light" onclick="setTheme('light')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.18);color:#dde6f0;border-radius:6px;padding:3px 10px;font-size:10px;cursor:pointer;">Light</button>
+    <button id="thm-dark"  onclick="setTheme('dark')"  style="background:rgba(59,130,246,0.20);border:1px solid rgba(59,130,246,0.40);color:#90baff;border-radius:6px;padding:3px 10px;font-size:10px;cursor:pointer;">Dark</button>
     <span id="hts">—</span>
   </div>
 </div>
@@ -897,8 +926,8 @@ const AP = [
   { id:'DXB', name:'Dubai International',           city:'Dubai, UAE',            lat:25.2532, lon:55.3657, s:'disrupted',
     carrier:'Emirates · flydubai · Multiple',  res:'Emirates targeting 106 daily return flights to 83 destinations (7 Mar) — ~60% of network restored. flydubai operating reduced schedule from T2/T3. Emirates expects 100% capacity within coming days, subject to airspace. Confirmed booking required.',
     detail:{
-      airspace:'UAE FIR (OMAE) partially open via strict waypoint corridors. EASA high-risk advisory in effect. GNSS jamming/spoofing reported across FIR.',
-      ops:'Emirates and flydubai selling tickets for operating flights. ~204 departures 6 Mar. Essential cargo (pharmaceuticals, perishables) also operating. Only travel with confirmed booking.',
+      airspace:'UAE FIR (OMAE) partially open via waypoint corridors; ESCAT extended to 12:00 UTC 9 Mar. Drone/missile activity caused holds and go-arounds at DXB morning 7 Mar. GNSS jamming/spoofing active. EASA CZIB 2026-03 in effect to 11 Mar.',
+      ops:'Drone/missile activity 7 Mar caused inbound holds and go-arounds. Emirates targeting 100% network capacity within coming days. ~204 departures 6 Mar; 106 daily return flights 7 Mar to 83 destinations (~60% network). Cargo operating. Confirmed booking required.',
       carrier_status:'Emirates: ~80 flights/day, selling tickets, reduced schedule. flydubai: ~71 flights/day, full network resuming. Virgin Atlantic: resumed DXB–LHR 4 Mar. flydubai: limited ops from T2/T3. Air Arabia: suspended until 15:00 9 Mar.',
     },
     news:[
@@ -999,10 +1028,10 @@ const AP = [
 
   // ── Qatar ────────────────────────────────────────────────────
   { id:'DOH', name:'Hamad International',           city:'Doha, Qatar',            lat:25.2731, lon:51.6080, s:'disrupted',
-    carrier:'Qatar Airways · Multiple',        res:'Qatar QCAA opened temporary safe corridor 7 Mar: Qatar Airways operating repatriation flights DOH→LHR/CDG/MAD/FCO/FRA. Priority: families, elderly, medical. Scheduled commercial ops still suspended. Next update 8 Mar 09:00 Doha time.',
+    carrier:'Qatar Airways · Multiple',        res:'Qatar QCAA temporary corridor active: Qatar Airways operating outbound repatriation (7 Mar: DOH→LHR/CDG/MAD/FCO/FRA) and inbound returns to Doha (8 Mar: LHR/CDG/MAD/FCO/FRA/BKK→DOH). Inbound for Doha-destination pax only. Scheduled commercial ops suspended. Next QCAA update 8 Mar 09:00 Doha.',
     detail:{
       airspace:'Qatar FIR (OTDF) fully closed. No clearance for commercial operations. EASA CZIB 2026-03 updated 6 Mar, valid to 11 Mar.',
-      ops:'Partial corridor activated 7 Mar: Qatar Airways operating limited repatriation flights DOH–LHR/CDG/MAD/FCO/FRA under temporary QCAA authorisation. No general commercial ops. Qatar Airways hotel reps assisting stranded passengers. Relief flights from Muscat to LHR/BER/CPH/MAD/FCO/AMS.',
+      ops:'Partial corridor active: QA operated 6 evacuation flights from DOH 7 Mar. On 8 Mar, inbound flights (LHR/CDG/MAD/FCO/FRA/BKK→DOH) for Doha-final-destination pax only. Qatar Airways reps in designated hotels for stranded pax. Do not proceed to airport without direct QA notification.',
       carrier_status:'Qatar Airways suspended all operations. CEO statement issued.',
     },
     news:[
@@ -1141,10 +1170,10 @@ const AP = [
 
   // ── Israel ───────────────────────────────────────────────────
   { id:'TLV', name:'Ben Gurion International',      city:'Tel Aviv, Israel',       lat:32.0055, lon:34.8854, s:'disrupted',
-    carrier:'El Al · Multiple',                res:'Inbound repatriation flights resumed 5 Mar (El Al/Arkia/Israir, up to 2 flights/hr). Outbound departures restarting from 8 Mar — max 50 pax, no hold baggage, 1/hr. LLLL FIR remains PPR-only to 10:00 UTC 9 Mar.',
+    carrier:'El Al · Multiple',                res:'Inbound repatriation active since 5 Mar (El Al/Arkia/Israir, up to 2/hr). Outbound now live from 8 Mar: 1/hr, max 50 pax, no hold baggage, early check-in required. LLLL FIR PPR-only to 10:00 UTC 9 Mar. ~28,000 tourists still in-country.',
     detail:{
       airspace:'Israel FIR (LLLL) PPR-only to 10:00 UTC 9 Mar. Limited repatriation corridor active for Israeli carriers. EASA CZIB 2026-03 high-risk advisory in effect.',
-      ops:'Inbound repatriation: up to 2 flights/hr, El Al/Arkia/Israir from European cities. Outbound from 8 Mar: 1 flight/hr, max 50 pax, no hold baggage, early check-in required. El Al ticket sales suspended to 21 Mar to prioritise repatriated passengers. 28,000 tourists still in country.',
+      ops:'Outbound now operating from 8 Mar: 1 flight/hr, max 50 pax, no checked baggage, mandatory pre-airport check-in. Inbound repatriation: 2 flights/hr (El Al/Arkia/Israir). El Al ticket sales suspended to 21 Mar; Israir to 18 Mar — priority to cancelled-booking holders. US bus service to Taba/Egypt border still operating. ~28,000 tourists remain in-country.',
       carrier_status:'El Al operating repatriation arrivals; sales closed to 21 Mar. Arkia and Israir operating repatriation flights. Foreign carriers (Delta, American, Lufthansa, BA) suspended until at least 22 Mar. Outbound sales open to general public only after all El Al/SunDor customers repatriated.',
     },
     news:[
@@ -1652,17 +1681,103 @@ const cartoLight = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/
 const osmStd     = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',             { attribution:'© OpenStreetMap contributors', maxZoom:19 });
 const satellite  = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution:'© Esri', maxZoom:19 });
 cartoDark.addTo(map);
+// ── Theme toggle ──
+function setTheme(t) {
+  const isDark = (t === 'dark');
+  if (isDark) { cartoDark.addTo(map); map.removeLayer(cartoLight); }
+  else         { cartoLight.addTo(map); map.removeLayer(cartoDark); }
+  document.getElementById('thm-light').style.background = isDark ? 'rgba(255,255,255,0.10)' : 'rgba(255,255,255,0.25)';
+  document.getElementById('thm-light').style.color      = isDark ? '#dde6f0' : '#08111f';
+  document.getElementById('thm-dark').style.background  = isDark ? 'rgba(59,130,246,0.20)' : 'rgba(255,255,255,0.10)';
+  document.getElementById('thm-dark').style.color       = isDark ? '#90baff' : '#dde6f0';
+}
+
 
 const lgC = L.layerGroup().addTo(map);
 const lgD = L.layerGroup().addTo(map);
 const lgO = L.layerGroup().addTo(map);
 const lgP = L.layerGroup().addTo(map);
 
-L.control.layers(
-  { '🌑 Dark (CartoDB)': cartoDark, '☀️ Light (CartoDB)': cartoLight, '🗺️ Street (OSM)': osmStd, '🛰️ Satellite (Esri)': satellite },
-  { '🔴 Closed': lgC, '🟡 Disrupted': lgD, '🟢 Open': lgO, '📍 My locations': lgP },
-  { position:'topright', collapsed:false }
-).addTo(map);
+// ══════════════════════════════════════════════════════════
+// AIRSPACE OVERLAY — simplified country polygons
+// Status as of 8 Mar 2026
+// ══════════════════════════════════════════════════════════
+const AIRSPACE = [
+  // CLOSED FIRs
+  { id:'OIIX', name:'Iran FIR (OIIX)', status:'closed',  note:'Total closure since 28 Feb. Multiple NOTAM extensions.',
+    coords:[[44.0,39.8],[48.0,39.8],[50.0,37.5],[54.0,37.7],[58.0,37.5],[63.5,36.5],[63.3,26.5],[61.0,25.3],[57.0,25.5],[54.5,23.5],[52.5,22.8],[44.5,25.0],[44.0,28.0],[44.0,33.0],[44.0,39.8]] },
+  { id:'ORBB', name:'Iraq FIR (ORBB)', status:'closed',  note:'Total closure. NOTAM extensions ongoing.',
+    coords:[[38.7,37.1],[42.4,37.1],[46.6,35.3],[48.8,30.0],[47.9,29.0],[46.5,29.0],[46.5,30.0],[44.7,29.3],[42.8,30.5],[40.0,32.4],[38.8,34.0],[38.7,37.1]] },
+  { id:'OTDF', name:'Qatar FIR (OTDF)', status:'closed',  note:'Closed. Temporary corridor opened 7–8 Mar for repatriation only.',
+    coords:[[50.75,24.55],[51.65,24.55],[51.65,26.18],[50.75,26.18],[50.75,24.55]] },
+  { id:'OBBB', name:'Bahrain FIR (OBBB)', status:'closed',  note:'Total closure. Gulf Air fully suspended.',
+    coords:[[50.3,25.5],[50.8,25.5],[50.8,26.3],[50.3,26.3],[50.3,25.5]] },
+  { id:'OKAC', name:'Kuwait FIR (OKAC)', status:'closed',  note:'Total closure. T1 struck by drone. Structural damage.',
+    coords:[[46.5,28.5],[48.4,28.5],[48.4,30.1],[46.5,30.1],[46.5,28.5]] },
+  { id:'OSTT', name:'Syria FIR (OSTT)', status:'closed',  note:'Total closure. NOTAM extended repeatedly.',
+    coords:[[35.7,32.7],[36.8,32.2],[38.8,33.4],[41.2,33.5],[42.4,37.1],[40.7,37.1],[38.7,37.1],[36.6,36.6],[35.9,36.2],[35.7,35.1],[35.7,32.7]] },
+  { id:'LLLL', name:'Israel FIR (LLLL)', status:'closed',  note:'PPR only. Inbound repatriation active. Outbound from 8 Mar (limited).',
+    coords:[[34.25,29.5],[34.95,29.5],[35.7,30.5],[35.55,31.5],[35.55,33.3],[35.1,33.1],[34.6,31.5],[34.25,31.0],[34.25,29.5]] },
+  { id:'OLBB', name:'Lebanon FIR (OLBB)', status:'closed',  note:'Closed. BEY airport suspended.',
+    coords:[[35.1,33.1],[36.6,33.3],[36.6,34.7],[35.9,34.7],[35.5,34.0],[35.1,33.5],[35.1,33.1]] },
+  // RESTRICTED / PARTIALLY OPEN
+  { id:'OMAE', name:'UAE FIR (OMAE)', status:'restricted', note:'Partially open via waypoint corridors. ESCAT zones active to 12:00 UTC 9 Mar. GNSS jamming reported.',
+    coords:[[51.5,22.6],[56.0,22.6],[56.4,23.0],[56.4,24.5],[55.8,25.9],[55.4,25.8],[54.0,24.1],[52.6,22.9],[51.5,22.6]] },
+  // OPEN
+  { id:'OOMM', name:'Oman FIR (OOMM)', status:'open',     note:'Fully open. Muscat is the primary regional evacuation hub.',
+    coords:[[51.5,22.6],[52.6,22.9],[54.0,24.1],[55.4,25.8],[55.8,25.9],[56.4,24.5],[58.0,22.0],[59.8,22.0],[59.0,18.0],[57.6,16.8],[54.0,17.0],[52.7,17.3],[51.6,19.0],[51.5,22.6]] },
+  { id:'OEJD', name:'Saudi Arabia FIR (OEJD)', status:'open', note:'Open for commercial ops. Some route restrictions near Iraq/Gulf border. Main southern bypass corridor.',
+    coords:[[36.5,29.2],[38.5,28.5],[40.0,26.0],[41.0,22.5],[43.0,16.5],[45.0,14.5],[48.0,16.5],[51.5,20.0],[51.5,22.6],[46.5,22.5],[44.0,22.5],[42.5,18.5],[41.5,21.0],[38.0,24.5],[36.5,27.0],[36.5,29.2]] },
+  { id:'OJAC', name:'Jordan FIR (OJAC)', status:'open',    note:'Open. Extra fuel advisory for transiting aircraft. Nighttime closure fully lifted.',
+    coords:[[34.9,29.5],[36.0,29.2],[36.5,29.2],[38.8,33.4],[36.8,32.2],[35.7,32.7],[34.95,31.5],[34.9,29.5]] },
+  { id:'HECC', name:'Egypt FIR (HECC)', status:'open',     note:'Fully open. Key node on southern Europe–Asia bypass route.',
+    coords:[[24.7,22.0],[34.9,22.0],[34.9,29.5],[34.0,31.0],[32.5,31.5],[31.5,30.5],[25.0,25.0],[24.7,22.0]] },
+  { id:'LCCC', name:'Cyprus FIR (LCCC)', status:'open',    note:'Open. European routes operating. Some Gulf route suspensions by carriers.',
+    coords:[[32.0,34.5],[34.6,34.5],[34.6,35.8],[32.0,35.8],[32.0,34.5]] },
+];
+
+// colour map
+const AS_COLOURS = { closed:'#ef4444', restricted:'#f59e0b', open:'#22c55e' };
+
+const lgAirspace = L.layerGroup();  // not added until toggled
+let airspaceOn = false;
+
+function buildAirspaceLayers() {
+  lgAirspace.clearLayers();
+  AIRSPACE.forEach(fir => {
+    const col = AS_COLOURS[fir.status] || '#888';
+    const latlngs = fir.coords.map(c => [c[1], c[0]]);
+    const poly = L.polygon(latlngs, {
+      color: col, weight: 1.5,
+      fillColor: col, fillOpacity: 0.18,
+      dashArray: fir.status === 'restricted' ? '5,4' : null
+    });
+    poly.bindTooltip(`<b>${fir.name}</b><br>${fir.status.toUpperCase()}<br><span style="font-size:10px;opacity:.8">${fir.note}</span>`, {
+      sticky: true, className: 'as-tip'
+    });
+    lgAirspace.addLayer(poly);
+  });
+}
+
+function toggleAirspace() {
+  airspaceOn = !airspaceOn;
+  const btn = document.getElementById('as-btn');
+  if (airspaceOn) {
+    buildAirspaceLayers();
+    lgAirspace.addTo(map);
+    btn.style.background = 'rgba(59,130,246,0.30)';
+    btn.style.borderColor = 'rgba(59,130,246,0.60)';
+    btn.style.color = '#90c8ff';
+  } else {
+    map.removeLayer(lgAirspace);
+    btn.style.background = 'rgba(255,255,255,0.08)';
+    btn.style.borderColor = 'rgba(255,255,255,0.18)';
+    btn.style.color = '#dde6f0';
+  }
+}
+
+
+// basemap layer control removed — Light/Dark in header
 
 // ═══════════════════════════════════════════════════════════════════
 // MARKERS
@@ -1882,9 +1997,15 @@ function setFilter(f, el) {
 }
 
 function updateStats() {
-  document.getElementById('cc').textContent = AP.filter(a=>a.s==='closed').length    + ' Closed';
-  document.getElementById('cd').textContent = AP.filter(a=>a.s==='disrupted').length + ' Disrupted';
-  document.getElementById('co').textContent = AP.filter(a=>a.s==='open').length      + ' Open';
+  const c = AP.filter(a=>a.s==='closed').length;
+  const d = AP.filter(a=>a.s==='disrupted').length;
+  const o = AP.filter(a=>a.s==='open').length;
+  document.getElementById('cc').textContent = c + ' Closed';
+  document.getElementById('cd').textContent = d + ' Disrupted';
+  document.getElementById('co').textContent = o + ' Open';
+  if(document.getElementById('lcc')) document.getElementById('lcc').textContent = c;
+  if(document.getElementById('lcd')) document.getElementById('lcd').textContent = d;
+  if(document.getElementById('lco')) document.getElementById('lco').textContent = o;
 }
 
 // ═══════════════════════════════════════════════════════════════════
@@ -2054,5 +2175,18 @@ setInterval(tick,1000);
 </script>
 
 
+
+<!-- AIRPORT STATUS LEGEND -->
+<div id="map-legend">
+  <div class="leg-item" onclick="setFilter('closed',  document.querySelector('.ftab.r'))">
+    <div class="leg-dot r"></div><span class="leg-label">Closed</span><span class="leg-count" id="lcc">—</span>
+  </div>
+  <div class="leg-item" onclick="setFilter('disrupted',document.querySelector('.ftab.a'))">
+    <div class="leg-dot a"></div><span class="leg-label">Disrupted</span><span class="leg-count" id="lcd">—</span>
+  </div>
+  <div class="leg-item" onclick="setFilter('open',    document.querySelector('.ftab.g'))">
+    <div class="leg-dot g"></div><span class="leg-label">Open</span><span class="leg-count" id="lco">—</span>
+  </div>
+</div>
 </body>
 </html>
