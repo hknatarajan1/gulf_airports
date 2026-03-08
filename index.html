@@ -452,32 +452,18 @@ If no specific news found, return items summarising the general border situation
 .as-tip { background: rgba(8,14,28,0.95); border: 1px solid rgba(255,255,255,0.12); color: #dde6f0; font-size: 11px; line-height: 1.5; padding: 6px 9px; border-radius: 7px; max-width: 240px; }
 .as-tip::before { display:none; }
 
-/* ── AIRPORT STATUS LEGEND (bottom-right) ── */
-#map-legend {
-  position: fixed;
-  bottom: 36px; right: 12px;
-  z-index: 900;
-  background: rgba(8,14,28,0.90);
-  border: 1px solid rgba(255,255,255,0.09);
-  border-radius: 10px;
-  padding: 8px 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  backdrop-filter: blur(8px);
-}
 .leg-item {
   display: flex; align-items: center; gap: 7px;
   cursor: pointer; font-size: 11px; color: var(--muted2);
   transition: color .15s;
 }
 .leg-item:hover { color: var(--text); }
-.leg-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink:0; }
-.leg-dot.r { background: var(--red);   box-shadow: 0 0 5px rgba(239,68,68,.5); }
-.leg-dot.a { background: var(--amber); box-shadow: 0 0 5px rgba(245,158,11,.4); }
-.leg-dot.g { background: var(--green); box-shadow: 0 0 5px rgba(34,197,94,.4); }
-.leg-label { flex: 1; }
-.leg-count { font-family: var(--mono); font-size: 10px; color: var(--muted); }
+.leg-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink:0; }
+.leg-dot.r { background: var(--red);   box-shadow: 0 0 4px rgba(239,68,68,.5); }
+.leg-dot.a { background: var(--amber); box-shadow: 0 0 4px rgba(245,158,11,.4); }
+.leg-dot.g { background: var(--green); box-shadow: 0 0 4px rgba(34,197,94,.4); }
+.leg-label { }
+.leg-count { font-family: var(--mono); font-size: 10px; color: var(--muted); margin-left:2px; }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { width: 100%; height: 100%; overflow: hidden; font-family: var(--font); background: var(--bg); color: var(--text); }
 
@@ -701,7 +687,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: var(--fon
 
 /* ── STATUS BAR ── */
 #sbar {
-  position: absolute; bottom: 0; left: 280px; right: 0; height: var(--sbar);
+  position: absolute; bottom: 0; left: 0; right: 0; height: var(--sbar);
   background: rgba(5,8,18,.97); border-top: 1px solid var(--border);
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 14px; z-index: 500; font-size: 10px; color: var(--muted);
@@ -902,6 +888,17 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: var(--fon
 
 <!-- STATUS BAR -->
 <div id="sbar">
+  <div style="display:flex;align-items:center;gap:14px;padding-left:4px">
+    <div class="leg-item" onclick="setFilter('closed',   document.querySelector('.ftab.r'))" style="gap:5px">
+      <div class="leg-dot r"></div><span class="leg-label">Closed</span><span class="leg-count" id="lcc">—</span>
+    </div>
+    <div class="leg-item" onclick="setFilter('disrupted',document.querySelector('.ftab.a'))" style="gap:5px">
+      <div class="leg-dot a"></div><span class="leg-label">Disrupted</span><span class="leg-count" id="lcd">—</span>
+    </div>
+    <div class="leg-item" onclick="setFilter('open',     document.querySelector('.ftab.g'))" style="gap:5px">
+      <div class="leg-dot g"></div><span class="leg-label">Open</span><span class="leg-count" id="lco">—</span>
+    </div>
+  </div>
   <div style="display:flex;align-items:center;gap:9px">
     <div class="prog-wrap"><div class="prog-fill" id="pf" style="width:100%"></div></div>
     <span id="pcd" style="font-family:var(--mono)">60s</span>
@@ -924,11 +921,11 @@ const AP = [
 
   // ── UAE — all closed ──────────────────────────────────────────
   { id:'DXB', name:'Dubai International',           city:'Dubai, UAE',            lat:25.2532, lon:55.3657, s:'disrupted',
-    carrier:'Emirates · flydubai · Multiple',  res:'Emirates targeting 106 daily return flights to 83 destinations (7 Mar) — ~60% of network restored. flydubai operating reduced schedule from T2/T3. Emirates expects 100% capacity within coming days, subject to airspace. Confirmed booking required.',
+    carrier:'Emirates · flydubai · Multiple',  res:'Emirates building toward 100% network recovery. Drone hit near DXB morning 7 Mar caused ~30min suspension — resumed same day. Virgin Atlantic suspending DXB from 9 Mar until 28 Mar. Air Arabia suspended to 15:00 UAE time 9 Mar. Confirmed booking required.',
     detail:{
       airspace:'UAE FIR (OMAE) partially open via waypoint corridors; ESCAT extended to 12:00 UTC 9 Mar. Drone/missile activity caused holds and go-arounds at DXB morning 7 Mar. GNSS jamming/spoofing active. EASA CZIB 2026-03 in effect to 11 Mar.',
-      ops:'Drone/missile activity 7 Mar caused inbound holds and go-arounds. Emirates targeting 100% network capacity within coming days. ~204 departures 6 Mar; 106 daily return flights 7 Mar to 83 destinations (~60% network). Cargo operating. Confirmed booking required.',
-      carrier_status:'Emirates: ~80 flights/day, selling tickets, reduced schedule. flydubai: ~71 flights/day, full network resuming. Virgin Atlantic: resumed DXB–LHR 4 Mar. flydubai: limited ops from T2/T3. Air Arabia: suspended until 15:00 9 Mar.',
+      ops:'Drone struck near DXB terminals morning 7 Mar — 30min suspension, then resumed. Emirates targeting full network recovery within days. 106 daily return flights to 83 destinations on 7 Mar (~60% network). Virgin Atlantic last DXB flight 9 Mar (VS401), then suspended to 28 Mar. Air Arabia suspended to 15:00 9 Mar. Only proceed with confirmed booking.',
+      carrier_status:'Emirates: ~106 daily return flights, building to 100% network. flydubai: reduced schedule T2/T3. Virgin Atlantic: last DXB dep VS401 9 Mar, then suspended to 28 Mar (insurance/safety concerns). Air Arabia: suspended to 15:00 9 Mar. Lufthansa Group: suspended to 10 Mar. Air France: suspended to 10 Mar. Saudia: partially resumed (2 daily).',
     },
     news:[
       { dot:'r', text:'Iranian ballistic missile struck Terminal 2 apron at 02:14 local. 4 airport workers injured, no casualties among passengers.',               time:'02 Mar · 02:14' },
@@ -980,7 +977,7 @@ const AP = [
   },
 
   { id:'SHJ', name:'Sharjah International',         city:'Sharjah, UAE',          lat:25.3286, lon:55.5172, s:'disrupted',
-    carrier:'Air Arabia · Cargo',              res:'Air Arabia restarted limited flights subject to approvals. Most Sharjah flights remain suspended. Entry for confirmed passengers only.',
+    carrier:'Air Arabia · Cargo',              res:'Air Arabia suspended all UAE flights to 15:00 UAE time 9 Mar. Wizz Air suspended all Israel/Dubai/AUH/Amman routes to 15 Mar. Entry restricted to confirmed passengers only.',
     detail:{
       airspace:'UAE FIR partially open. Sharjah accessible under OMAE partial NOTAM.',
       ops:'Limited ops. Air Arabia suspended until 15:00 9 Mar. Entry restricted to confirmed passengers only.',
@@ -1028,9 +1025,9 @@ const AP = [
 
   // ── Qatar ────────────────────────────────────────────────────
   { id:'DOH', name:'Hamad International',           city:'Doha, Qatar',            lat:25.2731, lon:51.6080, s:'disrupted',
-    carrier:'Qatar Airways · Multiple',        res:'Qatar QCAA temporary corridor active: Qatar Airways operating outbound repatriation (7 Mar: DOH→LHR/CDG/MAD/FCO/FRA) and inbound returns to Doha (8 Mar: LHR/CDG/MAD/FCO/FRA/BKK→DOH). Inbound for Doha-destination pax only. Scheduled commercial ops suspended. Next QCAA update 8 Mar 09:00 Doha.',
+    carrier:'Qatar Airways · Multiple',        res:'Qatar Airways rapidly expanding from DOH under QCAA temporary corridors. 9 Mar: 10 outbound destinations (Seoul/Moscow/LHR/Delhi/Madrid/Islamabad/Beijing/Perth/Nairobi/Istanbul). 10 Mar: 15 destinations. Inbound flights to Doha also resuming. Full scheduled commercial ops still suspended. Next update 9 Mar.',
     detail:{
-      airspace:'Qatar FIR (OTDF) fully closed. No clearance for commercial operations. EASA CZIB 2026-03 updated 6 Mar, valid to 11 Mar.',
+      airspace:'Qatar FIR (OTDF) closed to general commercial traffic. Temporary QCAA corridors in use for limited QA flights. EASA CZIB 2026-03 valid to 11 Mar. Iranian president apologised to neighbours 7 Mar but IRGC contradicted the order — conflict ongoing.',
       ops:'Partial corridor active: QA operated 6 evacuation flights from DOH 7 Mar. On 8 Mar, inbound flights (LHR/CDG/MAD/FCO/FRA/BKK→DOH) for Doha-final-destination pax only. Qatar Airways reps in designated hotels for stranded pax. Do not proceed to airport without direct QA notification.',
       carrier_status:'Qatar Airways suspended all operations. CEO statement issued.',
     },
@@ -1421,7 +1418,7 @@ const AP = [
 
   // ── Oman — OPEN ──────────────────────────────────────────────
   { id:'MCT', name:'Muscat International',          city:'Muscat, Oman',           lat:23.5933, lon:58.2844, s:'open',
-    carrier:'Oman Air · Multiple',             res:'Primary regional relief hub, fully open 24/7. Qatar Airways, BA, Lufthansa, British Airways using MCT for relief/repatriation flights. Oman Air cancelled routes to DXB/DOH/BAH/KWI/DMM/AMM/BGW/CPH/Khasab through 8 Mar; extra capacity added LHR/IST/BKK/KUL/CAI/BOM 7–16 Mar. BA MCT–LHR relief flights 9–12 Mar.',
+    carrier:'Oman Air · Multiple',             res:'Primary regional relief hub, fully open 24/7. BA MCT–LHR relief flights 9–12 Mar (for BA customers in Oman or UAE). Finnair MCT–HEL special flights from 10 Mar (~1,200 Dubai pax). Oman Air cancellations extended: AMM/DXB/BAH/DOH/DMM/KWI/CPH/BGW/KHS cancelled 9–11 Mar. Extra Oman Air capacity on LHR/IST/BKK/KUL/CAI/BOM 7–16 Mar.',
     detail:{
       airspace:'Oman FIR (OOMM) fully open. GNSS interference reported in region — extra fuel advisory. Oman not party to conflict.',
       ops:'Fully operational 24/7, no slot constraints. Qatar Airways relief flights MCT–LHR/BER/CPH/MAD/FCO/AMS. BA special MCT–LHR flights. Land crossings from UAE/Saudi congested — allow 12hrs extra.',
@@ -2176,17 +2173,6 @@ setInterval(tick,1000);
 
 
 
-<!-- AIRPORT STATUS LEGEND -->
-<div id="map-legend">
-  <div class="leg-item" onclick="setFilter('closed',  document.querySelector('.ftab.r'))">
-    <div class="leg-dot r"></div><span class="leg-label">Closed</span><span class="leg-count" id="lcc">—</span>
-  </div>
-  <div class="leg-item" onclick="setFilter('disrupted',document.querySelector('.ftab.a'))">
-    <div class="leg-dot a"></div><span class="leg-label">Disrupted</span><span class="leg-count" id="lcd">—</span>
-  </div>
-  <div class="leg-item" onclick="setFilter('open',    document.querySelector('.ftab.g'))">
-    <div class="leg-dot g"></div><span class="leg-label">Open</span><span class="leg-count" id="lco">—</span>
-  </div>
-</div>
+
 </body>
 </html>
