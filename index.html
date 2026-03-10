@@ -921,9 +921,9 @@ const AP = [
 
   // ── UAE — all closed ──────────────────────────────────────────
   { id:'DXB', name:'Dubai International',           city:'Dubai, UAE',            lat:25.2532, lon:55.3657, s:'disrupted',
-    carrier:'Emirates · flydubai · Multiple',  res:'Emirates at ~84 destinations (60% network) on 9 Mar; targeting full 140-dest network within coming days. Virgin Atlantic suspended DXB from 9 Mar until 28 Mar. Air Arabia suspension lifted 15:00 UAE 9 Mar — limited schedule resuming. Saudia DXB resumed from 7 Mar. LH Group / KLM / Air France suspended to 10 Mar. Norwegian suspended to 12 Mar. Only confirmed bookings should proceed to airport.',
+    carrier:'Emirates · flydubai · Multiple',  res:'Emirates at ~84 destinations (60% network) on 9 Mar; targeting full 140-dest network within coming days. Virgin Atlantic suspended DXB from 9 Mar until 28 Mar. Air Arabia suspension lifted 15:00 UAE 9 Mar — limited schedule resuming. Saudia DXB resumed from 7 Mar. LH Group / KLM / Air France suspensions to DXB expired 10 Mar — resumption expected. Norwegian suspended to 12 Mar. Only confirmed bookings should proceed to airport.',
     detail:{
-      airspace:'UAE FIR (OMAE) partially open via waypoint corridors; ESCAT NOTAM expired 12:00 UTC 9 Mar — extension likely. Drone/missile activity caused holds and go-arounds at DXB morning 7 Mar. GNSS jamming/spoofing active. EASA CZIB 2026-03 in effect to 11 Mar.',
+      airspace:'UAE FIR (OMAE) partially open via waypoint corridors; UAE FIR NOTAM A1008/26 partial closure extended to 12:00 UTC 16 Mar. Waypoint corridors only. Drone/missile activity caused holds and go-arounds at DXB morning 7 Mar. GNSS jamming/spoofing active. EASA CZIB 2026-03 in effect to 11 Mar.',
       ops:'Drone struck near DXB terminals morning 7 Mar — 30min suspension, then resumed. Emirates targeting full network recovery within days. 106 daily return flights to 83 destinations on 7 Mar (~60% network). Virgin Atlantic last DXB flight 9 Mar (VS401), then suspended to 28 Mar. Air Arabia suspended to 15:00 9 Mar. Only proceed with confirmed booking.',
       carrier_status:'Emirates: ~106 daily return flights, building to 100% network. flydubai: reduced schedule T2/T3. Virgin Atlantic: last DXB dep VS401 9 Mar, then suspended to 28 Mar (insurance/safety concerns). Air Arabia: suspended to 15:00 9 Mar. Lufthansa Group: suspended to 10 Mar. Air France: suspended to 10 Mar. Saudia: partially resumed (2 daily).',
     },
@@ -958,7 +958,7 @@ const AP = [
   },
 
   { id:'AUH', name:'Zayed International',           city:'Abu Dhabi, UAE',        lat:24.4330, lon:54.6511, s:'disrupted',
-    carrier:'Etihad Airways · Multiple',       res:'Etihad resumed limited commercial schedule from 6 Mar, serving ~25 international destinations. Selling tickets — confirmed booking required. Refunds available for flights through 10 Mar. LH Group suspended AUH to 10 Mar. Flights subject to operational approvals.',
+    carrier:'Etihad Airways · Multiple',       res:'Etihad resumed limited commercial schedule from 6 Mar, serving ~25 international destinations. Selling tickets — confirmed booking required. Refunds available for flights through 10 Mar. LH Group suspension to AUH expired 10 Mar — resumption expected. Flights subject to operational approvals.',
     detail:{
       airspace:'UAE FIR partially open. EASA high-risk advisory in effect.',
       ops:'Etihad resumed limited schedule from 06:00 6 Mar — selling tickets to 70+ destinations (incl. London, Moscow, New York, Riyadh). Flights subject to operational and safety approvals. Do not proceed to airport without confirmed booking or direct airline notification.',
@@ -1025,7 +1025,7 @@ const AP = [
 
   // ── Qatar ────────────────────────────────────────────────────
   { id:'DOH', name:'Hamad International',           city:'Doha, Qatar',            lat:25.2731, lon:51.6080, s:'disrupted',
-    carrier:'Qatar Airways · Multiple',        res:'Qatar FIR still closed for scheduled commercial ops. QCAA authorized limited corridors. QA operating relief flights: 9 Mar 10 outbound dest (Seoul/Moscow/LHR/Delhi/Madrid/Islamabad/Beijing/Perth/Nairobi/Istanbul); 10 Mar 15 dest. Inbound resuming on matching schedule. Not a full reopening — confirmed tickets only. Further QCAA update 9 Mar 09:00 Doha time.',
+    carrier:'Qatar Airways · Multiple',        res:'Qatar FIR still closed for scheduled commercial ops. QCAA authorized limited corridors. QA operating expanding relief schedule: 10 Mar 16 dest outbound (CAI/LHR/JED/MNL/COK/MCT/IST/BOM/DEL/NBO/ISB/MAD/FRA/CMB/MXP/SVO); 11 Mar adds Toronto/DFW/HKG/BKK/KUL/MEL. Inbound resuming on matching schedule. Not a full reopening — confirmed tickets only. Next QCAA update 10 Mar.',
     detail:{
       airspace:'Qatar FIR (OTDF) closed to general commercial traffic. Temporary QCAA corridors in use for limited QA flights. EASA CZIB 2026-03 valid to 11 Mar. Iranian president apologised to neighbours 7 Mar but IRGC contradicted the order — conflict ongoing.',
       ops:'Partial corridor active: QA operated 6 evacuation flights from DOH 7 Mar. On 8 Mar, inbound flights (LHR/CDG/MAD/FCO/FRA/BKK→DOH) for Doha-final-destination pax only. Qatar Airways reps in designated hotels for stranded pax. Do not proceed to airport without direct QA notification.',
@@ -1167,9 +1167,9 @@ const AP = [
 
   // ── Israel ───────────────────────────────────────────────────
   { id:'TLV', name:'Ben Gurion International',      city:'Tel Aviv, Israel',       lat:32.0055, lon:34.8854, s:'disrupted',
-    carrier:'El Al · Multiple',                res:'Inbound repatriation active since 5 Mar (El Al/Arkia/Israir, up to 2/hr). Outbound now live from 8 Mar: 1/hr, max 50 pax, no hold baggage, early check-in required. LLLL FIR PPR-only NOTAM expired 10:00 UTC 9 Mar — extension expected; check latest NOTAM. ~28,000 tourists still in-country.',
+    carrier:'El Al · Multiple',                res:'Inbound repatriation active since 5 Mar (El Al/Arkia/Israir, up to 2/hr). Outbound now live from 8 Mar: 1/hr, max 50 pax, no hold baggage, early check-in required. LLLL FIR PPR-only (extended). Check latest NOTAM for current validity. ~28,000 tourists still in-country.',
     detail:{
-      airspace:'Israel FIR (LLLL) PPR-only NOTAM expired 10:00 UTC 9 Mar — extension likely. Limited repat',
+      airspace:'Israel FIR (LLLL) PPR-only (extended beyond 9 Mar). Check latest NOTAM. Limited repat',
       ops:'Outbound now operating from 8 Mar: 1 flight/hr, max 50 pax, no checked baggage, mandatory pre-airport check-in. Inbound repatriation: 2 flights/hr (El Al/Arkia/Israir). El Al ticket sales suspended to 21 Mar; Israir to 18 Mar — priority to cancelled-booking holders. US bus service to Taba/Egypt border still operating. ~28,000 tourists remain in-country.',
       carrier_status:'El Al operating repatriation arrivals; sales closed to 21 Mar. Arkia and Israir operating repatriation flights. Foreign carriers (Delta, American, Lufthansa, BA) suspended until at least 22 Mar. Outbound sales open to general public only after all El Al/SunDor customers repatriated.',
     },
@@ -1225,7 +1225,7 @@ const AP = [
 
   // ── Saudi Arabia — disrupted ─────────────────────────────────
   { id:'RUH', name:'King Khalid International',     city:'Riyadh, Saudi Arabia',   lat:24.9579, lon:46.6988, s:'disrupted',
-    carrier:'Saudia · Multiple',               res:'Open and operational. Saudia ABU/KWI/DOH/BAH suspension expired 23:59 GMT 8 Mar — resumption expected; Moscow/Peshawar suspended to 15 Mar. Saudia DXB services resumed from 7 Mar. Flynas UAE/DOH/BAH/KWI/Iraq/Syria suspended to 23:59 local 9 Mar. Virgin Atlantic pausing RUH from 8 Mar (~2 weeks). LH Group / KLM / Air France RUH suspended to 10 Mar.',
+    carrier:'Saudia · Multiple',               res:'Open and operational. Saudia ABU/KWI/DOH/BAH suspension expired 23:59 GMT 8 Mar — resumption expected; Moscow/Peshawar suspended to 15 Mar. Saudia DXB services resumed from 7 Mar. Flynas UAE/DOH/BAH/KWI/Iraq/Syria suspension expired 23:59 local 9 Mar — resumption expected. Virgin Atlantic pausing RUH from 8 Mar (~2 weeks). LH Group / KLM / Air France RUH suspensions expired 10 Mar — resumption expected.',
     detail:{
       airspace:'Saudi FIR (OEJD) partially open. Route-level closures near Iraq border and Persian Gulf. GNSS interference reported.',
       ops:'Operating normally for most routes. Saudi partial airspace closure (near Iraq/Gulf coast) in effect. Saudia cancelling DXB/AUH/DOH/KWI/BAH/AMM/Peshawar until 23:59 6 Mar. Qatar Airways Riyadh–Frankfurt relief flight active.',
@@ -1267,7 +1267,7 @@ const AP = [
     detail:{
       airspace:'Saudi airspace open — Eastern Province under monitoring',
       ops:'Limited operations. Several European carriers suspended.',
-      carrier_status:'Saudia and flyadeal operating. Lufthansa Group / KLM suspended to 10 Mar. Norwegian suspended to 12 Mar.',
+      carrier_status:'Saudia and flyadeal operating. Lufthansa Group / KLM suspensions expired 10 Mar — resumption expected. Norwegian suspended to 12 Mar.',
     },
     news:[
       { dot:'a', text:'Dammam in Saudi\'s Eastern Province — close to Bahraini and Kuwaiti airspace closures. Risk elevated.',                       time:'02 Mar · 03:00' },
@@ -1718,7 +1718,7 @@ const AIRSPACE = [
   { id:'OLBB', name:'Lebanon FIR (OLBB)', status:'closed',  note:'Closed. BEY airport suspended.',
     coords:[[35.1,33.1],[36.6,33.3],[36.6,34.7],[35.9,34.7],[35.5,34.0],[35.1,33.5],[35.1,33.1]] },
   // RESTRICTED / PARTIALLY OPEN
-  { id:'OMAE', name:'UAE FIR (OMAE)', status:'restricted', note:'Partially open via waypoint corridors. ESCAT NOTAM expired 12:00 UTC 9 Mar — extension likely. GNSS jamming reported.',
+  { id:'OMAE', name:'UAE FIR (OMAE)', status:'restricted', note:'Partially open via waypoint corridors. UAE FIR NOTAM A1008/26 partial closure to 12:00 UTC 16 Mar. GNSS jamming reported.',
     coords:[[51.5,22.6],[56.0,22.6],[56.4,23.0],[56.4,24.5],[55.8,25.9],[55.4,25.8],[54.0,24.1],[52.6,22.9],[51.5,22.6]] },
   // OPEN
   { id:'OOMM', name:'Oman FIR (OOMM)', status:'open',     note:'Fully open. Muscat is the primary regional evacuation hub.',
