@@ -921,13 +921,14 @@ const AP = [
 
   // ── UAE — all closed ──────────────────────────────────────────
   { id:'DXB', name:'Dubai International',           city:'Dubai, UAE',            lat:25.2532, lon:55.3657, s:'disrupted',
-    carrier:'Emirates · flydubai · Multiple',  res:'Emirates at ~84 destinations as of 11 Mar, targeting 100% of 140-dest network within days. Air Arabia operating limited schedule (SHJ/AUH/RKT, 40+ dest, through 22 Mar). Saudia DXB resumed from 7 Mar. Lufthansa Group suspended DXB to 15 Mar. KLM suspended DXB to 11 Mar. Air France suspended DXB to 12 Mar (today, last day — check extension). Norwegian suspended to 12 Mar (today, last day). Turkish Airlines suspended UAE to 13 Mar. Cathay Pacific suspended to 31 Mar. Singapore Airlines suspended to 15 Mar. BA suspended DXB until later this month. Virgin Atlantic suspended to 28 Mar. Only confirmed bookings — do not proceed to airport without airline confirmation.',
+    carrier:'Emirates · flydubai · Multiple',  res:'Emirates targeting full 140-dest network imminently (~84 as of 11 Mar). Air Arabia: SHJ/AUH/RKT, 40+ dest, through 22 Mar. Saudia: DXB resumed. Lufthansa Group: DXB to 15 Mar. KLM: DXB to 28 Mar (extended 11 Mar). Virgin Atlantic: DXB to 28 Mar (rest of winter). Air France: DXB to 12 Mar (today, last day — check extension). Norwegian suspended to 12 Mar (today, last day). Turkish Airlines suspended UAE to 13 Mar. Cathay Pacific suspended to 31 Mar. Singapore Airlines suspended to 15 Mar. BA suspended DXB until later this month. Virgin Atlantic suspended to 28 Mar. Only confirmed bookings — do not proceed to airport without airline confirmation.',
     detail:{
-      airspace:'UAE FIR (OMAE) partially open via waypoint corridors; UAE FIR NOTAM A1008/26 partial closure extended to 12:00 UTC 16 Mar. Waypoint corridors only. Drone/missile activity caused holds and go-arounds at DXB morning 7 Mar. GNSS jamming/spoofing active. EASA CZIB 2026-03 valid to 11 Mar — extension under review today.',
-      ops:'Emirates expanding from ~84 destinations — targeting full network within days. flydubai reduced schedule T2/T3. Air Arabia limited ops UAE→40+ dest through 22 Mar. ACL (slot coordinator) has deleted DXB schedule to 28 Mar; manual slot coordination in effect. Overnight 9-10 Mar missile wave: UAE air defences active, no new airport strikes. Drone hit Ruwais industrial area. Only proceed with confirmed booking and airline notification.',
-      carrier_status:'Emirates: ~84 dest, targeting 100% soon. flydubai: reduced T2/T3. Air Arabia: limited (UAE→40+ dest, to 22 Mar). Virgin Atlantic: suspended to 28 Mar. Lufthansa Group: suspended to 15 Mar. KLM: suspended to 11 Mar. Air France: suspended to 12 Mar. Norwegian: suspended to 12 Mar. Cathay Pacific: suspended to 31 Mar. Singapore Airlines: suspended to 15 Mar. BA: suspended until later this month. Wizz Air: suspended to 15 Mar. Turkish Airlines: UAE/DXB suspended to 13 Mar. Saudia: DXB resumed; ABU/KWI/DOH/BAH suspended to 23:59 GMT 12 Mar (check extension).',
+      airspace:'UAE FIR (OMAE) NOTAM A1008/26 partial closure to 12:00 UTC 16 Mar. ESCAT waypoint corridors only. EASA CZIB 2026-03-R3 valid to 18 Mar (extended 11 Mar). 11 Mar: two drones fell near DXB — 4 injured (minor/moderate), minor concourse structural damage, ops resumed. UAE air defences: 1,475 drones detected since 28 Feb; 1,385 intercepted, 90 impacted. GNSS jamming/spoofing active. Extension under review today.',
+      ops:'Emirates targeting full 140-dest network imminently. flydubai: reduced schedule T2/T3. Air Arabia: limited UAE ops through 22 Mar. ACL: DXB schedule deleted to 28 Mar — manual coordination. 11 Mar: two drones landed near DXB — 4 injured, minor concourse damage, ops resumed. Confirmed bookings only — do not proceed without airline confirmation. Remote city check-in closed. UAE air defences active, no new airport strikes. Drone hit Ruwais industrial area. Only proceed with confirmed booking and airline notification.',
+      carrier_status:'Emirates: ~84 dest, targeting full network imminently. flydubai: reduced T2/T3. Air Arabia: UAE to 22 Mar. Lufthansa Group: DXB to 15 Mar. KLM: DXB to 28 Mar (extended 11 Mar). Air France: DXB to 12 Mar (today — final day). Norwegian: last day today 12 Mar. Cathay Pacific: to 31 Mar. Singapore Airlines: to 15 Mar. Finnair: to 29 Mar. Virgin Atlantic: to 28 Mar (rest of winter). BA: until later this month. Wizz Air: UAE to 15 Mar. Turkish Airlines: UAE to 13 Mar. Saudia: DXB resumed; ABU/KWI/DOH/BAH to 23:59 GMT 12 Mar (check ext). Cathay Pacific: suspended to 31 Mar. Singapore Airlines: suspended to 15 Mar. BA: suspended until later this month. Wizz Air: suspended to 15 Mar. Turkish Airlines: UAE/DXB suspended to 13 Mar. Saudia: DXB resumed; ABU/KWI/DOH/BAH suspended to 23:59 GMT 12 Mar (check extension).',
     },
     news:[
+      { dot:'r', text:'11 Mar: Two drones fell near DXB — 4 injured. Minor concourse structural damage. Ops resumed. KLM extends DXB to 28 Mar.', time:'11 Mar · 09:00' },
       { dot:'r', text:'Iranian ballistic missile struck Terminal 2 apron at 02:14 local. 4 airport workers injured, no casualties among passengers.',               time:'02 Mar · 02:14' },
       { dot:'r', text:'UAE GCAA declared national airspace closure with immediate effect following strikes on DXB and AUH.',                                        time:'02 Mar · 02:45' },
       { dot:'a', text:'Emirates issued statement: "All Emirates flights are suspended until further notice. Customers may rebook free of charge for travel to 20 Mar."', time:'02 Mar · 04:10' },
@@ -960,11 +961,12 @@ const AP = [
   { id:'AUH', name:'Zayed International',           city:'Abu Dhabi, UAE',        lat:24.4330, lon:54.6511, s:'disrupted',
     carrier:'Etihad Airways · Multiple',       res:'Etihad resumed limited schedule from 6 Mar — selling tickets to 70+ destinations through 19 Mar. Confirmed booking required. BA cancelled AUH until later this year (announced 10 Mar). Lufthansa Group suspended AUH to 15 Mar. Wizz Air suspended AUH to 15 Mar. Saudia ABU suspension extended to 23:59 GMT 12 Mar. Flynas AUH suspended to 23:59 local 15 Mar.',
     detail:{
-      airspace:'UAE FIR partially open. EASA high-risk advisory in effect.',
-      ops:'Etihad resumed limited schedule from 6 Mar — 70+ destinations to 19 Mar. ACL: airlines to contact AUH airport directly for ops to 28 Mar. BA cancelled AUH until later this year. Do not proceed to airport without confirmed booking or direct airline notification.',
-      carrier_status:'Etihad: limited schedule, 70+ dest to 19 Mar — confirmed booking required. BA: AUH cancelled until later this year (long-term suspension). Lufthansa Group: AUH suspended to 15 Mar. Wizz Air: suspended to 15 Mar. Saudia: AUH suspended to 23:59 GMT 12 Mar (check for extension today). Flynas: AUH suspended to 15 Mar. Air Arabia: limited ops AUH→40+ dest through 22 Mar.',
+      airspace:'UAE FIR partially open. EASA CZIB 2026-03-R3 valid to 18 Mar. 11 Mar: fire at old Abu Dhabi airport after air defence intercept — quickly controlled, no injuries. New Zayed International (AUH) unaffected.',
+      ops:'Etihad limited schedule — 70+ destinations to 19 Mar. ACL: airlines to contact AUH directly for ops to 28 Mar. BA cancelled AUH until later this year. Do not proceed to airport without confirmed booking or direct airline notification.',
+      carrier_status:'Etihad: limited schedule, 70+ dest to 19 Mar — confirmed booking required. BA: AUH cancelled until later this year. Lufthansa Group: AUH suspended to 15 Mar. Turkish Airlines: UAE suspended to 13 Mar. Wizz Air: suspended to 15 Mar. Saudia: AUH suspended to 23:59 GMT 12 Mar (check for extension today). Flynas: AUH suspended to 15 Mar. Air Arabia: limited ops AUH→40+ dest through 22 Mar.',
     },
     news:[
+      { dot:'r', text:'11 Mar: Fire at old Abu Dhabi airport after air defence intercept — contained, no injuries. Zayed International (AUH) unaffected.', time:'11 Mar · 11:00' },
       { dot:'r', text:'Drone strike on AUH airfield at 02:38 local. 1 ground worker killed, 7 injured. Runway inspection ongoing.', time:'02 Mar · 02:38' },
       { dot:'r', text:'Etihad issued statement suspending all flights with immediate effect.',                                        time:'02 Mar · 03:15' },
       { dot:'a', text:'Abu Dhabi Executive Council announced emergency measures; UAE Armed Forces on highest alert.',                 time:'02 Mar · 05:00' },
@@ -981,7 +983,7 @@ const AP = [
     detail:{
       airspace:'UAE FIR partially open. Sharjah accessible under OMAE partial NOTAM.',
       ops:'Limited ops resuming. Air Arabia lifted suspension at 15:00 UAE 9 Mar — resuming limited schedule.',
-      carrier_status:'Air Arabia: limited ops SHJ/AUH/RKT to 40+ destinations, through 22 Mar. Wizz Air: UAE suspended to 15 Mar. Flynas: SHJ suspended to 15 Mar.',
+      carrier_status:'Air Arabia: limited ops SHJ/AUH/RKT to 40+ destinations through 22 Mar. Wizz Air: UAE suspended to 15 Mar. Turkish Airlines: UAE suspended to 13 Mar. Flynas: SHJ suspended to 15 Mar.',
     },
     news:[
       { dot:'r', text:'UAE-wide airspace closure grounded Air Arabia\'s entire fleet at Sharjah.',    time:'02 Mar · 02:45' },
@@ -1025,10 +1027,10 @@ const AP = [
 
   // ── Qatar ────────────────────────────────────────────────────
   { id:'DOH', name:'Hamad International',           city:'Doha, Qatar',            lat:25.2731, lon:51.6080, s:'disrupted',
-    carrier:'Qatar Airways · Multiple',        res:'Qatar FIR closed for scheduled commercial ops. QCAA limited corridors active. QA confirmed: 12 Mar — CAI/DFW/LHR/CDG/MAD/FCO/DEL/JED/MCT/HKG/ICN/BKK/KUL/MEL + inbound CMN/JNB/GRU/JFK/FRA/PKX/BOM/ISB/CMB/CGK/MNL. 13 Mar — CAI/CMN/JNB/GRU/JFK/FRA/MAD/LHR/PKX/BOM/DEL/ISB/CMB/CGK/MNL. Not a full resumption — confirmed QA ticket required only. BA/Saudia/Finnair cancelled DOH. Up to 8,000 pax were stranded in Qatar; govt covered hotel costs.',
+    carrier:'Qatar Airways · Multiple',        res:'Qatar FIR closed — QCAA authorised limited corridors only. QA operating ~15 flights/day via relief schedule confirmed through 17 Mar. Today (12 Mar) outbound: CAI/DFW/LHR/CDG/MAD/FCO/DEL/JED/MCT/HKG/ICN/BKK/KUL/MEL. Inbound: CAI/CMN/JNB/GRU/JFK/FRA/MAD/LHR/PKX/BOM/ISB/CMB/CGK/MNL. 13-17 Mar also published. Not a full resumption — confirmed QA ticket required only. BA/Saudia/Finnair cancelled DOH. Up to 8,000 pax were stranded in Qatar; govt covered hotel costs.',
     detail:{
-      airspace:'Qatar FIR (OTDF) closed — ESCAT NOTAM extended (past 11 Mar). Temporary QCAA corridors authorised for limited QA relief flights only. EASA CZIB 2026-03 extended to 18 Mar (confirmed 11 Mar).',
-      ops:'QCAA limited corridors active — expanding daily. 12 Mar: 15 outbound (LHR/CAI/DFW/CDG/MAD/FCO/DEL/JED/MCT/HKG/ICN/BKK/KUL/MEL + inbound). 13 Mar: CAI/CMN/JNB/GRU/JFK/FRA/MAD/LHR/PKX/BOM/DEL/ISB/CMB/CGK/MNL. Qatar govt covered hotel costs for ~8,000 stranded pax. Do not proceed without confirmed QA ticket.',
+      airspace:'Qatar FIR (OTDF) closed — ESCAT NOTAM extended (past 11 Mar). Temporary QCAA corridors authorised for limited QA relief flights only. EASA CZIB 2026-03-R3 valid to 18 Mar (confirmed 11 Mar).',
+      ops:'QCAA limited corridors active. QA relief schedule confirmed 12-17 Mar (~15 dest/day): 13 Mar PER/ICN/DAC/JED/KUL/BKK/COK/ALG/MIA/IST/CAI/AMS/LHR/MXP/CDG. 14 Mar RUH/MCT/PVG/MNL/JNB/DFW/YYZ/CMB/CAI/ISB/BOM/LHR/FCO/MAD/FRA. Not full resumption — QA confirmed booking required. Qatar govt covered hotel costs ~8,000 pax. Do not proceed without confirmed QA ticket.',
       carrier_status:'Qatar Airways: 12 Mar 29 flights; 13 Mar similar — not full resumption. Confirmed ticket required. BA: DOH cancelled until later this month. Finnair: DOH cancelled to 29 Mar. Saudia: DOH suspended to 23:59 GMT 12 Mar (check extension). Rebooking: free ±14 day change or refund, 28 Feb–22 Mar bookings.',
     },
     news:[
@@ -1048,7 +1050,7 @@ const AP = [
   { id:'BAH', name:'Bahrain International',         city:'Manama, Bahrain',        lat:26.2708, lon:50.6336, s:'closed',
     carrier:'Gulf Air · Multiple',             res:'Bahrain FIR (OBBB) total closure — ongoing. Gulf Air fully suspended from BAH — resume only when BCAA confirms safe. King Fahd Causeway OPEN — Saudi transit visa required. Overland departure to Dammam/Riyadh possible via Nuwaisib and Salmi crossings. Gulf Air now operating daily return flights from Dammam (DMM): LHR, BKK and BOM from 11 Mar. Iranian strike on Manama residential building overnight 9-10 Mar: 1 killed, 8 injured. Gulf Air update expected 11:00 BHT 11 Mar.',
     detail:{
-      airspace:'Bahrain FIR (OBBB) fully closed — total closure ongoing with NOTAM extensions. EASA CZIB 2026-03 extended to 18 Mar (confirmed today).',
+      airspace:'Bahrain FIR (OBBB) fully closed — ongoing. King Fahd Causeway OPEN — Saudi transit visa required (Nuwaisib/Salmi crossings 24/7). EASA CZIB 2026-03-R3 valid to 18 Mar.',
       ops:'Total suspension. Gulf Air grounded — will resume only when BCAA confirms safe reopening. King Fahd Causeway OPEN — Saudi transit visa required. Overland departure to Dammam/Riyadh possible via Nuwaisib and Salmi crossings. Gulf Air operating limited charter via Dammam for Bahraini nationals (e.g. SGN→DMM, LHR→DMM). No commercial movements at BAH.',
       carrier_status:'Gulf Air: BAH fully suspended — resume when BCAA confirms safe. Gulf Air now flying daily return services from Dammam (DMM) to London, Bangkok and Mumbai from 11 Mar — eligible passengers only. Next BAH update: 11 Mar 08:00 UTC.',
     },
@@ -1068,8 +1070,8 @@ const AP = [
   { id:'KWI', name:'Kuwait International',          city:'Kuwait City, Kuwait',    lat:29.2267, lon:47.9689, s:'closed',
     carrier:'Kuwait Airways · Jazeera Airways',res:'Kuwait FIR (OKAC) total closure — no confirmed reopening date. Terminal 1 struck by drone 28 Feb; structural assessment required before ops can resume. Kuwait Airways and Jazeera fully suspended.',
     detail:{
-      airspace:'Kuwait FIR (OKAC) fully closed. No reopening date announced. EASA CZIB 2026-03 extended to 18 Mar (confirmed today).',
-      ops:'Total suspension. Terminal 1 struck by drone 28 Feb; fuel storage also hit by subsequent drone 8 Mar. Full structural assessment and airspace clearance required before reopening. Kuwait Airways running land+air repatriation via Dammam. No movements at KWI.',
+      airspace:'Kuwait FIR (OKAC) fully closed. No reopening date announced. EASA CZIB 2026-03-R3 valid to 18 Mar (confirmed today).',
+      ops:'Total suspension. Terminal 1 struck by drone 28 Feb. Fuel storage fire 8 Mar. No air options — overland only: Nuwaisib & Salmi crossings to Saudi Arabia open 24/7. Kuwait Airways charters via DMM for nationals. forage also hit by subsequent drone 8 Mar. Full structural assessment and airspace clearance required before reopening. Kuwait Airways running land+air repatriation via Dammam. No movements at KWI.',
       carrier_status:'Kuwait Airways and Jazeera Airways fully grounded. Kuwait Airways running special charter flights via Dammam for Kuwaiti nationals: IST-SAW→DMM (10 Mar), CAI→DMM (11 Mar). Passengers must contact KU directly; Saudi transit visa required.',
     },
     news:[
@@ -1109,7 +1111,7 @@ const AP = [
     },
     news:[
       { dot:'r', text:'Iraqi airspace closure included Erbil. Kurdish regional government on security alert.', time:'02 Mar · 03:30' },
-      { dot:'a', text:'Lufthansa Group suspended all Erbil flights until at least 8 March.',                    time:'02 Mar · 05:00' },
+      { dot:'a', text:'Lufthansa Group suspended EBL to 15 March (confirmed).',                                 time:'02 Mar · 05:00' },
     ],
     links:[
       { label:'📊 FlightAware EBL', url:'https://www.flightaware.com/live/airport/ORER' },
@@ -1169,9 +1171,9 @@ const AP = [
   { id:'TLV', name:'Ben Gurion International',      city:'Tel Aviv, Israel',       lat:32.0055, lon:34.8854, s:'disrupted',
     carrier:'El Al · Multiple',                res:'Inbound repatriation active since 5 Mar (El Al/Arkia/Israir, up to 2/hr). Outbound now live from 8 Mar: 1/hr, max 50 pax, no hold baggage, early check-in required. LLLL FIR PPR-only (extended). Check latest NOTAM for current validity. ~28,000 tourists still in-country.',
     detail:{
-      airspace:'Israel FIR (LLLL) PPR-only (NOTAM extended, check latest). Overnight alert: El Al repat flight aborted TLV landing during Iranian missile alert, held, then returned for second approach. EASA CZIB 2026-03 extended to 18 Mar (confirmed today).',
+      airspace:'Israel FIR (LLLL) PPR-only (NOTAM extended, check latest). Overnight alert: El Al repat flight aborted TLV landing during Iranian missile alert, held, then returned for second approach. EASA CZIB 2026-03-R3 valid to 18 Mar (confirmed today).',
       ops:'Outbound now operating from 8 Mar: 1 flight/hr, max 50 pax, no checked baggage, mandatory pre-airport check-in. Inbound repatriation: 2 flights/hr (El Al/Arkia/Israir). El Al ticket sales suspended to 21 Mar; Israir to 18 Mar — priority to cancelled-booking holders. US bus service to Taba/Egypt border still operating. ~28,000 tourists remain in-country.',
-      carrier_status:'El Al operating repatriation arrivals; sales closed to 21 Mar. Arkia and Israir operating repatriation flights. Foreign carriers (Delta, American, Lufthansa, BA) suspended until at least 22 Mar. Outbound sales open to general public only after all El Al/SunDor customers repatriated.',
+      carrier_status:'El Al: repat arrivals; ticket sales closed to 21 Mar. Arkia/Israir: repatriation ops. Lufthansa Group: TLV suspended to 2 Apr. BA: TLV suspended until later this month. KLM: TLV suspended for remainder of winter season. Air Canada: TLV suspended to 23 Mar. fst 22 Mar. Outbound sales open to general public only after all El Al/SunDor customers repatriated.',
     },
     news:[
       { dot:'r', text:'Israel Airports Authority closed TLV under emergency war regulations. Iron Dome batteries deployed around airport perimeter.', time:'01 Mar · 23:45' },
@@ -1189,9 +1191,9 @@ const AP = [
   { id:'BEY', name:'Beirut–Rafic Hariri International', city:'Beirut, Lebanon',  lat:33.8208, lon:35.4884, s:'closed',
     carrier:'Middle East Airlines',            res:'Lebanon FIR (OLBB) closed. MEA all scheduled ops suspended. MEA operating charter BEY–DXB (ME1428/1429) on 9 Mar as connectivity lifeline. Lufthansa BEY suspended to 28 Mar.',
     detail:{
-      airspace:'Lebanon airspace closed',
+      airspace:'Lebanon FIR (OLBB) closed. EASA CZIB 2026-03-R3 valid to 18 Mar. Smoke from Israeli airstrikes near BEY airport 4 Mar. No commercial operations — MEA charters only.',
       ops:'MEA all scheduled ops suspended. MEA operated charter BEY–DXB (ME1428/1429) 9 Mar. Airport closed to general commercial traffic. Lufthansa Group suspended BEY to 28 Mar. Air France suspended BEY to 11 Mar.',
-      carrier_status:'MEA: all scheduled ops suspended — limited charter flights only. Lufthansa Group: suspended to 28 Mar. Air France: suspended to 11 Mar.',
+      carrier_status:'MEA: all scheduled ops suspended — limited charters only (BEY–DXB charter 9 Mar). Air France: BEY suspended to 13 Mar. Lufthansa Group: BEY suspended to 28 Mar. Turkish Airlines: Lebanon suspended to 31 Mar. BA: suspended until later this month.',
     },
     news:[
       { dot:'r', text:'Lebanon CAA closed airspace. Beirut airport shut following regional escalation.', time:'02 Mar · 01:30' },
@@ -1225,11 +1227,11 @@ const AP = [
 
   // ── Saudi Arabia — disrupted ─────────────────────────────────
   { id:'RUH', name:'King Khalid International',     city:'Riyadh, Saudi Arabia',   lat:24.9579, lon:46.6988, s:'disrupted',
-    carrier:'Saudia · Multiple',               res:'Open and operational. Lufthansa Group and KLM operating RUH/JED services (not suspended to Saudi). Saudia DXB resumed; ABU/KWI/DOH/BAH suspended to 23:59 GMT 12 Mar (check extension today); Moscow/Peshawar to 15 Mar. Flynas AUH/SHJ/DOH/BAH/KWI/Iraq/Syria suspended to 23:59 local 15 Mar. Air France suspended RUH to 12 Mar (today — check extension). Virgin Atlantic paused RUH ~2 weeks from 8 Mar. Turkish Airlines suspended to 31 Mar. Saudi FIR partial closure near Iraq/Gulf to 23:59 UTC 13 Mar.',
+    carrier:'Saudia · Multiple',               res:'Open and operational. Lufthansa Group and KLM operating RUH/JED services (not suspended to Saudi). Saudia DXB resumed; ABU/KWI/DOH/BAH suspended to 23:59 GMT 12 Mar (check extension today); Moscow/Peshawar to 15 Mar. Flynas AUH/SHJ/DOH/BAH/KWI/Iraq/Syria suspended to 23:59 local 15 Mar. Air France suspended RUH to 12 Mar (today — check extension). Virgin Atlantic: RUH paused to 25 Mar. Turkish Airlines suspended to 31 Mar. Saudi FIR partial closure near Iraq/Gulf to 23:59 UTC 13 Mar.',
     detail:{
       airspace:'Saudi FIR (OEJD) partially open — partial closure near Iraq border/Persian Gulf expires 23:59 UTC 13 Mar. GNSS interference reported.',
       ops:'Operating normally for most routes. Saudi partial FIR closure near Iraq/Gulf coast ongoing to 23:59 13 Mar. Saudia ABU/KWI/DOH/BAH suspension expired 23:59 GMT 8 Mar. Moscow/Peshawar suspended to 15 Mar. Flynas Gulf/Iraq/Syria routes resumed from 9 Mar. LH Group / KLM / AF suspensions expired 10 Mar. Turkish Airlines suspended to 31 Mar. Virgin Atlantic paused ~2 weeks from 8 Mar.',
-      carrier_status:'Saudia: DXB/JED resumed; ABU/KWI/DOH/BAH suspended to 12 Mar GMT; Moscow/Peshawar to 15 Mar. Flynas: AUH/SHJ/DOH/BAH/KWI/Iraq/Syria suspended to 15 Mar. Lufthansa/KLM: RUH/JED operating. Air France: RUH suspended to 12 Mar (today — check extension). Turkish Airlines: suspended to 31 Mar. Virgin Atlantic: RUH paused ~2 weeks from 8 Mar. Air India: operating.',
+      carrier_status:'Saudia: DXB/JED resumed; ABU/KWI/DOH/BAH suspended to 12 Mar GMT; Moscow/Peshawar to 15 Mar. Flynas: AUH/SHJ/DOH/BAH/KWI/Iraq/Syria suspended to 15 Mar. Lufthansa/KLM: RUH/JED operating. Air France: RUH suspended to 12 Mar (today — check extension). Turkish Airlines: suspended to 31 Mar. Virgin Atlantic: RUH paused to 25 Mar. Air India: operating.',
     },
     news:[
       { dot:'a', text:'Saudi GACA keeping airspace open but restricting routes over eastern border. Eastbound departures rerouted south.',              time:'02 Mar · 04:00' },
@@ -1263,11 +1265,11 @@ const AP = [
   },
 
   { id:'DMM', name:'King Fahd International',       city:'Dammam, Saudi Arabia',   lat:26.4712, lon:49.7979, s:'disrupted',
-    carrier:'Saudia · flyadeal · Multiple',    res:'Operational (reduced). Lufthansa Group DMM suspended to 15 Mar. KLM no scheduled DMM 11 Mar. Air France suspended to 12 Mar.',
+    carrier:'Saudia · flyadeal · Multiple',    res:'Operational. Gulf Air operating daily return DMM→LHR/BKK/BOM from 11 Mar (eligible pax only). Lufthansa Group: DMM to 15 Mar. KLM: DMM to 28 Mar (extended 11 Mar). Air France: DMM to 12 Mar (today). Norwegian: last day 12 Mar.',
     detail:{
       airspace:'Saudi airspace open — Eastern Province under monitoring. Proximity to closed Bahrain/Kuwait FIRs elevates risk.',
       ops:'Limited operations. Several European carriers still suspended. Overnight 9-10 Mar: Saudi air defences intercepted drones/missiles in eastern region.',
-      carrier_status:'Saudia and flyadeal operating. Lufthansa Group: DMM suspended to 15 Mar. KLM: no scheduled DMM flights 11 Mar. Air France: DMM suspended to 12 Mar. Norwegian: suspended to 12 Mar. Singapore Airlines: DXB/regional suspended to 15 Mar.',
+      carrier_status:'Saudia and flyadeal operating. Gulf Air: daily return DMM→LHR/BKK/BOM from 11 Mar (eligible pax only). Lufthansa Group: DMM to 15 Mar. KLM: DMM suspended to 28 Mar. Air France: DMM to 12 Mar (today). Norwegian: last day 12 Mar. Singapore Airlines: DXB/regional suspended to 15 Mar.',
     },
     news:[
       { dot:'a', text:'Dammam in Saudi\'s Eastern Province — close to Bahraini and Kuwaiti airspace closures. Risk elevated.',                       time:'02 Mar · 03:00' },
@@ -1420,9 +1422,9 @@ const AP = [
   { id:'MCT', name:'Muscat International',          city:'Muscat, Oman',           lat:23.5933, lon:58.2844, s:'open',
     carrier:'Oman Air · Multiple',             res:'Key regional relief hub. ACL restriction: no additional diversions from 7 Mar — scheduled services and embassy-sponsored repatriation only (prior approval required). Oman Air: 97,000+ pax helped home; cancellations AMM/DXB/BAH/DOH/DMM/KWI/CPH/BGW/KHS confirmed to 15 Mar. SalamAir: KWI/SHJ/DOH/DMM suspended to 20 Mar; Iraq/LEB/IKA suspended to 28 Mar. BA MCT–LHR final repat flights 11 & 12 Mar. Finnair MCT–HEL special flights from 10 Mar.',
     detail:{
-      airspace:'Oman FIR (OOMM) fully open. GNSS interference reported in region — extra fuel advisory. Oman not party to conflict. MCT NOTAM: no additional diversions — scheduled and embassy repatriation flights only from 7 Mar.',
+      airspace:'Oman FIR (OOMM) open but EASA CZIB 2026-03-R3 covers at all altitudes to 18 Mar. GNSS interference active. MCT NOTAM: scheduled + embassy repatriation only from 7 Mar. 11 Mar: Iranian drones struck Port of Salalah — Oman now directly attacked despite neutral stance. Sultan called Pezeshkian to condemn flights only from 7 Mar.',
       ops:'Fully operational 24/7, no slot constraints. Qatar Airways relief flights MCT–LHR/BER/CPH/MAD/FCO/AMS. BA special MCT–LHR flights. Land crossings from UAE/Saudi congested — allow 12hrs extra.',
-      carrier_status:'Qatar Airways: relief flights MCT–LHR/BER/CPH/MAD/FCO/AMS from 5 Mar. BA: special MCT–LHR flights 6–7 Mar. Oman Air: DXB/DOH/BAH/KWI/DMM routes cancelled to 8 Mar; all others normal. flydubai resumed MCT service.',
+      carrier_status:'Oman Air: operating — cancellations AMM/DXB/BAH/DOH/DMM/KWI/CPH/BGW/KHS confirmed to 15 Mar. SalamAir: KWI/SHJ/DOH/DMM suspended to 20 Mar; Iraq/LEB/IKA to 28 Mar. BA: final MCT–LHR repat 11 & 12 Mar. Finnair: MCT–HEL specials from 10 Mar. QA: MCT on 11-13 Mar limited schedule. flydubai resumed MCT service.',
     },
     news:[
       { dot:'g', text:'Oman announced neutrality and kept airspace fully open. MCT is the nearest operational major airport to Dubai (~350 km via E11 highway).', time:'02 Mar · 03:00' },
@@ -1437,15 +1439,16 @@ const AP = [
     ]
   },
 
-  { id:'SLL', name:'Salalah Airport',               city:'Salalah, Oman',          lat:17.0387, lon:54.0913, s:'open',
-    carrier:'Oman Air · Air Arabia',           res:'N/A — Fully operational',
+  { id:'SLL', name:'Salalah Airport',               city:'Salalah, Oman',          lat:17.0387, lon:54.0913, s:'disrupted',
+    carrier:'Oman Air · Air Arabia',           res:'Airport open — ELEVATED RISK. 11 Mar: Iranian drones struck Port of Salalah oil storage tanks — major fire ongoing, Maersk suspended port. FCDO advises British nationals within 100km of Salalah to leave. Airport itself operating.',
     detail:{
-      airspace:'Oman airspace fully open',
-      ops:'Normal operations',
-      carrier_status:'Oman Air and Air Arabia operating normally.',
+      airspace:'Oman FIR (OOMM) open. EASA CZIB 2026-03-R3 covers all altitudes to 18 Mar. 11 Mar: drones struck Port of Salalah fuel storage — major blaze, fire still burning 12 Mar. Airport not struck.',
+      ops:'Airport operational. Port of Salalah suspended by Maersk after drone strike 11 Mar. Fire ongoing 12 Mar. SalamAir: KWI/SHJ/DOH/DMM to 20 Mar; Iraq/LEB/IKA to 28 Mar. Sultan called Iran president to condemn attack.',
+      carrier_status:'Oman Air: operating with regional cancellations to 15 Mar. SalamAir: KWI/SHJ/DOH/DMM to 20 Mar; Iraq/LEB/IKA to 28 Mar. Air India Express: Salalah–Kozhikode operating.',
     },
     news:[
-      { dot:'g', text:'Salalah operating normally under Oman\'s neutral airspace policy.', time:'02 Mar · 03:00' },
+      { dot:'r', text:'11 Mar: Iranian drones struck Port of Salalah fuel tanks — major fire, Maersk suspended port ops. Airport unaffected. FCDO advises departure.', time:'11 Mar · 18:00' },
+      { dot:'a', text:'12 Mar: Fire continues at Salalah port. Airport open but elevated risk — check airline status before travelling.', time:'12 Mar · 08:00' }
     ],
     links:[
       { label:'📊 FlightAware SLL', url:'https://www.flightaware.com/live/airport/OOSA' },
